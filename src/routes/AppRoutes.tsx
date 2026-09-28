@@ -8,6 +8,9 @@ import Dashboard from '../pages/Dashboard';
 import Productos from '../pages/Productos';
 import Categorias from '../pages/Categorias';
 import Ventas from '../pages/Ventas';
+import HistorialVentas from '../pages/HistorialVentas';
+import Devoluciones from '../pages/Devoluciones';
+import Clientes from '../pages/Clientes';
 import Compras from '../pages/Compras';
 import MovimientosStock from '../pages/MovimientosStock';
 import Usuarios from '../pages/Usuarios';
@@ -79,6 +82,66 @@ export default function AppRoutes() {
           <ProtectedRoute>
             <AppShell>
               <Ventas />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/comprobantes"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <HistorialVentas />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/historial-ventas"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <HistorialVentas />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/devoluciones"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <Devoluciones />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/returns"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <Devoluciones />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/clientes"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <Clientes />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/customers"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <Clientes />
             </AppShell>
           </ProtectedRoute>
         }

@@ -13,18 +13,21 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { to: '/',          icon: '⊞', label: 'Dashboard'    },
-  { to: '/inventory', icon: '📦', label: 'Inventario'   },
-  { to: '/sales',     icon: '◈',  label: 'Ventas'       },
-  { to: '/movements', icon: '↕',  label: 'Movimientos'  },
-  { to: '/profile',   icon: '👤', label: 'Mi Perfil'    },
+  { to: '/',             icon: '⊞', label: 'Dashboard'    },
+  { to: '/inventory',    icon: '📦', label: 'Inventario'   },
+  { to: '/sales',        icon: '◈',  label: 'Ventas (POS)' },
+  { to: '/comprobantes', icon: '🧾', label: 'Comprobantes' },
+  { to: '/devoluciones', icon: '🔄', label: 'Devoluciones' },
+  { to: '/clientes',     icon: '👥', label: 'Clientes'     },
+  { to: '/movements',    icon: '↕',  label: 'Movimientos'  },
+  { to: '/profile',      icon: '👤', label: 'Mi Perfil'    },
 ];
 
 const ADMIN_NAV: NavItem[] = [
   { to: '/purchase',   icon: '🛒', label: 'Compras'       },
   { to: '/register',   icon: '✚',  label: 'Reg. Producto' },
   { to: '/categories', icon: '🏷',  label: 'Categorías'    },
-  { to: '/users',      icon: '👥', label: 'Usuarios'      },
+  { to: '/users',      icon: '🛡',  label: 'Usuarios'      },
   { to: '/reports',    icon: '📊', label: 'Reportes'      },
 ];
 
