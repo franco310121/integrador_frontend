@@ -8,30 +8,32 @@ import './Navbar.css';
 interface PageInfo {
   title: string;
   sub: string;
+  icon: string;
+  tag?: string;
 }
 
 const TITLES: Record<string, PageInfo> = {
-  '/':           { title: 'Dashboard',         sub: 'Resumen general del sistema'                     },
-  '/dashboard':  { title: 'Dashboard',         sub: 'Resumen general del sistema'                     },
-  '/inventory':  { title: 'Inventario',         sub: 'Gestión de productos y existencias'              },
-  '/productos':  { title: 'Inventario',         sub: 'Gestión de productos y existencias'              },
-  '/sales':      { title: 'Ventas',             sub: 'Emisión de boletas y control comercial'          },
-  '/ventas':     { title: 'Ventas',             sub: 'Emisión de boletas y control comercial'          },
-  '/movements':  { title: 'Movimientos',        sub: 'Trazabilidad y auditoría de existencias (Kardex)'},
-  '/movimientos':{ title: 'Movimientos',        sub: 'Trazabilidad y auditoría de existencias (Kardex)'},
-  '/auditoria':  { title: 'Auditoría y Kardex', sub: 'Trazabilidad y libro de movimientos'            },
-  '/profile':    { title: 'Mi Perfil',          sub: 'Configuración de cuenta e información personal'  },
-  '/perfil':     { title: 'Mi Perfil',          sub: 'Configuración de cuenta e información personal'  },
-  '/purchase':   { title: 'Compras',            sub: 'Órdenes de compra y gestión de proveedores'     },
-  '/compras':    { title: 'Compras',            sub: 'Órdenes de compra y gestión de proveedores'     },
-  '/register':   { title: 'Registrar Producto', sub: 'Configura precios de productos ingresados'      },
-  '/registrar':  { title: 'Registrar Producto', sub: 'Configura precios de productos ingresados'      },
-  '/categories': { title: 'Categorías',         sub: 'Gestión y segmentación del catálogo'            },
-  '/categorias': { title: 'Categorías',         sub: 'Gestión y segmentación del catálogo'            },
-  '/users':      { title: 'Usuarios',           sub: 'Control de accesos y administración de roles'    },
-  '/usuarios':   { title: 'Usuarios',           sub: 'Control de accesos y administración de roles'    },
-  '/reports':    { title: 'Reportes',           sub: 'Análisis financiero, rentabilidad y balance'     },
-  '/reportes':   { title: 'Reportes',           sub: 'Análisis financiero, rentabilidad y balance'     },
+  '/':           { title: 'Dashboard',         sub: 'Resumen general del sistema',                      icon: '⊞', tag: 'Principal' },
+  '/dashboard':  { title: 'Dashboard',         sub: 'Resumen general del sistema',                      icon: '⊞', tag: 'Principal' },
+  '/inventory':  { title: 'Inventario',         sub: 'Gestión de productos y existencias',               icon: '📦', tag: 'Catálogo'  },
+  '/productos':  { title: 'Inventario',         sub: 'Gestión de productos y existencias',               icon: '📦', tag: 'Catálogo'  },
+  '/sales':      { title: 'Ventas',             sub: 'Emisión de boletas y control comercial',           icon: '◈', tag: 'Comercial' },
+  '/ventas':     { title: 'Ventas',             sub: 'Emisión de boletas y control comercial',           icon: '◈', tag: 'Comercial' },
+  '/movements':  { title: 'Movimientos',        sub: 'Trazabilidad y auditoría de existencias (Kardex)', icon: '↕', tag: 'Kardex'    },
+  '/movimientos':{ title: 'Movimientos',        sub: 'Trazabilidad y auditoría de existencias (Kardex)', icon: '↕', tag: 'Kardex'    },
+  '/auditoria':  { title: 'Auditoría y Kardex', sub: 'Trazabilidad y libro de movimientos',             icon: '↕', tag: 'Kardex'    },
+  '/profile':    { title: 'Mi Perfil',          sub: 'Configuración de cuenta e información personal',   icon: '👤', tag: 'Cuenta'    },
+  '/perfil':     { title: 'Mi Perfil',          sub: 'Configuración de cuenta e información personal',   icon: '👤', tag: 'Cuenta'    },
+  '/purchase':   { title: 'Compras',            sub: 'Órdenes de compra y gestión de proveedores',      icon: '🛒', tag: 'Gestión'   },
+  '/compras':    { title: 'Compras',            sub: 'Órdenes de compra y gestión de proveedores',      icon: '🛒', tag: 'Gestión'   },
+  '/register':   { title: 'Registrar Producto', sub: 'Configura precios de productos ingresados',       icon: '✚', tag: 'Catálogo'  },
+  '/registrar':  { title: 'Registrar Producto', sub: 'Configura precios de productos ingresados',       icon: '✚', tag: 'Catálogo'  },
+  '/categories': { title: 'Categorías',         sub: 'Gestión y segmentación del catálogo',             icon: '🏷', tag: 'Catálogo'  },
+  '/categorias': { title: 'Categorías',         sub: 'Gestión y segmentación del catálogo',             icon: '🏷', tag: 'Catálogo'  },
+  '/users':      { title: 'Usuarios',           sub: 'Control de accesos y administración de roles',     icon: '👥', tag: 'Seguridad' },
+  '/usuarios':   { title: 'Usuarios',           sub: 'Control de accesos y administración de roles',     icon: '👥', tag: 'Seguridad' },
+  '/reports':    { title: 'Reportes',           sub: 'Análisis financiero, rentabilidad y balance',      icon: '📊', tag: 'Finanzas'  },
+  '/reportes':   { title: 'Reportes',           sub: 'Análisis financiero, rentabilidad y balance',      icon: '📊', tag: 'Finanzas'  },
 };
 
 interface NavbarProps {
@@ -43,88 +45,95 @@ export default function Navbar({ lowStockCount = 0, onToggleSidebar }: NavbarPro
   const { pathname } = useLocation();
   const { session, isAdmin } = useAuth();
   const { isDark, toggleTheme } = useTheme();
-  const page = TITLES[pathname] || { title: 'StockMaster', sub: 'Gestión de Inventario y Operaciones' };
+
+  const page = TITLES[pathname] || {
+    title: 'StockMaster',
+    sub: 'Gestión de Inventario y Operaciones',
+    icon: '⚡',
+    tag: 'ERP',
+  };
+
   const initial = (session?.displayName || session?.username || '?').charAt(0).toUpperCase();
 
   return (
-    <header className="app-navbar navbar sticky-top p-2 px-3 px-md-4 d-flex align-items-center justify-content-between">
-      {/* Brand & Page Info */}
+    <header className="app-navbar navbar sticky-top px-3 px-md-4 py-2 d-flex align-items-center justify-content-between">
       <div className="d-flex align-items-center gap-2 gap-sm-3 overflow-hidden">
         {onToggleSidebar && (
           <button
             type="button"
-            className="btn btn-light d-lg-none p-1.5 border text-dark rounded-3 shadow-none"
+            className="btn btn-sm btn-nav-toggle border rounded-3 p-1.5 shadow-none d-lg-none"
             onClick={onToggleSidebar}
-            aria-label="Abrir navegación móvil"
+            aria-label="Menú"
           >
             <Menu size={20} />
           </button>
         )}
 
-        {/* Brand Logo in Navbar */}
-        <Link to="/" className="navbar-brand d-flex align-items-center gap-2 text-decoration-none me-1 me-md-2 flex-shrink-0">
+        <Link to="/" className="navbar-brand d-flex d-lg-none align-items-center gap-2 text-decoration-none me-1 flex-shrink-0">
           <div className="navbar-logo-badge d-flex align-items-center justify-content-center">
-            <img
-              src={logoIcon}
-              alt="StockMaster Logo"
-              className="navbar-logo-img"
-            />
+            <img src={logoIcon} alt="Logo" className="navbar-logo-img" />
           </div>
           <span className="navbar-brand-name fw-bold d-none d-sm-inline">
             Stock<span className="text-gold">Master</span>
           </span>
         </Link>
 
-        {/* Separador vertical */}
-        <div className="navbar-vr d-none d-md-block flex-shrink-0" />
+        <div className="navbar-vr d-none d-sm-block d-lg-none flex-shrink-0" />
 
-        {/* Título de módulo actual */}
-        <div className="d-flex flex-column overflow-hidden">
-          <h5 className="mb-0 fw-bold navbar-page-title text-truncate">{page.title}</h5>
-          <p className="navbar-page-sub mb-0 d-none d-lg-block text-truncate">{page.sub}</p>
+        <div className="d-flex align-items-center gap-2.5 overflow-hidden">
+          <div className="navbar-module-icon-badge d-none d-lg-flex align-items-center justify-content-center flex-shrink-0">
+            <span>{page.icon}</span>
+          </div>
+          <div className="d-flex flex-column overflow-hidden">
+            <div className="d-flex align-items-center gap-2">
+              <h5 className="mb-0 fw-bold navbar-page-title text-truncate">{page.title}</h5>
+              {page.tag && (
+                <span className="badge badge-module-subtle text-uppercase d-none d-xl-inline-block">
+                  {page.tag}
+                </span>
+              )}
+            </div>
+            <p className="navbar-page-sub mb-0 d-none d-md-block text-truncate">{page.sub}</p>
+          </div>
         </div>
       </div>
 
-      {/* Right Controls: Stock Alert, Theme Toggle & Profile Chip */}
       <div className="d-flex align-items-center gap-2 gap-sm-3 flex-shrink-0">
-        {/* Stock Alert Badge */}
         {lowStockCount > 0 && (
           <Link
             to="/inventory"
-            className="badge badge-stock-alert text-decoration-none d-inline-flex align-items-center gap-1.5 py-1.5 px-3 rounded-pill"
-            title="Ver artículos con existencias críticas"
+            className="badge badge-stock-alert text-decoration-none d-inline-flex align-items-center gap-1.5 py-1.5 px-2.5 px-sm-3 rounded-pill"
+            title="Existencias críticas"
           >
             <span className="stock-alert-dot" />
-            <span>⚠ {lowStockCount} stock bajo</span>
+            <span className="fw-semibold">⚠ {lowStockCount} stock bajo</span>
           </Link>
         )}
 
-        {/* Botón para alternar tema Claro / Oscuro */}
         <button
           type="button"
           className="btn btn-sm theme-toggle-btn rounded-circle d-flex align-items-center justify-content-center p-0 shadow-none"
           onClick={toggleTheme}
-          title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro azulado'}
-          aria-label="Alternar tema claro y oscuro"
+          title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+          aria-label="Alternar tema"
         >
           {isDark ? (
-            <Sun size={18} className="text-warning" />
+            <Sun size={17} className="text-warning" />
           ) : (
-            <Moon size={18} style={{ color: '#102a45' }} />
+            <Moon size={17} style={{ color: '#102a45' }} />
           )}
         </button>
 
-        {/* Profile Card Chip */}
         <Link
           to="/profile"
-          className="navbar-user-chip d-flex align-items-center gap-2 text-decoration-none rounded-pill border"
-          title="Ver Mi Perfil"
+          className="navbar-user-chip d-flex align-items-center gap-2 text-decoration-none rounded-pill"
+          title="Mi Perfil"
         >
           <div className="navbar-avatar rounded-circle d-flex align-items-center justify-content-center text-white fw-bold">
             {initial}
           </div>
-          <div className="d-none d-sm-flex flex-column text-start">
-            <span className="navbar-user-name fw-semibold text-truncate" style={{ maxWidth: 130 }}>
+          <div className="d-none d-md-flex flex-column text-start">
+            <span className="navbar-user-name fw-semibold text-truncate" style={{ maxWidth: 220 }}>
               {session?.displayName || session?.username || 'Usuario'}
             </span>
             <span className="navbar-user-role">

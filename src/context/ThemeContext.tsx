@@ -18,7 +18,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     try {
       const saved = localStorage.getItem(THEME_KEY);
       if (saved === 'light' || saved === 'dark') return saved;
-      return 'dark'; // Predeterminado en modo oscuro azulado solicitado
+      return 'dark';
     } catch {
       return 'dark';
     }

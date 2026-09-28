@@ -26,12 +26,10 @@ export default function AppShell({ children }: AppShellProps) {
       .catch(() => {});
   }, []);
 
-  // Update on route transition
   useEffect(() => {
     refreshLowStock();
   }, [location.pathname, refreshLowStock]);
 
-  // Update on event dispatch, window focus, and background polling every 5 seconds
   useEffect(() => {
     const handleStockUpdate = () => refreshLowStock();
     window.addEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
@@ -51,21 +49,18 @@ export default function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="d-flex w-100 min-vh-100 bg-app">
-      {/* Mobile Backdrop */}
       <div
         className={`sidebar-backdrop ${sidebarOpen ? 'show' : ''}`}
         onClick={closeSidebar}
         aria-hidden="true"
       />
 
-      {/* Sidebar Component */}
       <Sidebar
         lowStockCount={lowStockCount}
         isOpen={sidebarOpen}
         onClose={closeSidebar}
       />
 
-      {/* Main Content Area */}
       <div className="d-flex flex-column flex-grow-1 min-w-0" style={{ minHeight: '100vh' }}>
         <Navbar
           lowStockCount={lowStockCount}

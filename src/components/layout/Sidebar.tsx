@@ -52,16 +52,11 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
   const initial = (session?.displayName || session?.username || '?').charAt(0).toUpperCase();
 
   return (
-    <aside className={`app-sidebar vh-100 p-3 d-flex flex-column ${isOpen ? 'open' : ''}`}>
-      {/* Brand Header */}
-      <div className="d-flex align-items-center justify-content-between mb-3 px-1">
+    <aside className={`app-sidebar p-3 d-flex flex-column ${isOpen ? 'open' : ''}`}>
+      <div className="sidebar-header d-flex align-items-center justify-content-between mb-3 px-1 flex-shrink-0">
         <Link to="/" onClick={handleNavClick} className="sidebar-brand d-flex align-items-center gap-2.5 text-decoration-none">
           <div className="sidebar-logo-badge d-flex align-items-center justify-content-center">
-            <img
-              src={logoIcon}
-              alt="StockMaster"
-              className="sidebar-logo-img"
-            />
+            <img src={logoIcon} alt="StockMaster" className="sidebar-logo-img" />
           </div>
           <div>
             <div className="sidebar-brand-name fw-bold">
@@ -73,23 +68,21 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
           </div>
         </Link>
 
-        {/* Mobile close button */}
         <button
           type="button"
           className="btn btn-sm btn-light border-0 d-lg-none p-1 text-muted"
           onClick={onClose}
-          aria-label="Cerrar menú"
+          aria-label="Cerrar"
         >
           <X size={20} />
         </button>
       </div>
 
-      {/* User Badge Card */}
       <Link
         to="/profile"
         onClick={handleNavClick}
-        className="sidebar-user-card d-flex align-items-center mb-3 p-2 text-decoration-none gap-2 shadow-sm"
-        title="Ver Mi Perfil"
+        className="sidebar-user-card d-flex align-items-center mb-3 p-2 text-decoration-none gap-2 shadow-sm flex-shrink-0"
+        title="Mi Perfil"
       >
         <div className="sidebar-avatar rounded-circle text-white d-inline-flex align-items-center justify-content-center fw-bold">
           {initial}
@@ -104,8 +97,7 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
         </div>
       </Link>
 
-      {/* Nav */}
-      <nav className="nav flex-column flex-grow-1 overflow-y-auto">
+      <nav className="sidebar-nav d-flex flex-column flex-nowrap flex-grow-1 overflow-y-auto mb-2">
         {NAV.map(item => (
           <NavLink
             key={item.to}
@@ -119,7 +111,7 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
             }
           >
             <div className="d-flex align-items-center gap-2">
-              <span>{item.icon}</span>
+              <span className="sidebar-item-icon">{item.icon}</span>
               <span>{item.label}</span>
             </div>
             {item.to === '/inventory' && lowStockCount > 0 && (
@@ -144,17 +136,16 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
                   }`
                 }
               >
-                <span>{item.icon}</span>
+                <span className="sidebar-item-icon">{item.icon}</span>
                 <span>{item.label}</span>
               </NavLink>
             ))}
           </>
         )}
+      </nav>
 
-        <div className="flex-grow-1" style={{ minHeight: 16 }} />
-
-        {/* Theme Switcher in Sidebar */}
-        <div className="sidebar-theme-container d-flex align-items-center justify-content-between p-2 rounded-3 mt-2">
+      <div className="sidebar-footer flex-shrink-0 pt-2 border-top">
+        <div className="sidebar-theme-container d-flex align-items-center justify-content-between p-2 rounded-3 mb-2">
           <span className="text-muted d-flex align-items-center gap-1.5" style={{ fontSize: '.76rem' }}>
             {isDark ? '🌙 Modo Oscuro' : '☀️ Modo Claro'}
           </span>
@@ -162,7 +153,7 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
             type="button"
             className="btn btn-sm p-1 rounded-circle border-0 theme-toggle-btn d-flex align-items-center justify-content-center shadow-none"
             onClick={toggleTheme}
-            title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro azulado'}
+            title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
             aria-label="Alternar tema"
           >
             {isDark ? <Sun size={15} className="text-warning" /> : <Moon size={15} className="text-primary" />}
@@ -171,18 +162,17 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
 
         <button
           type="button"
-          className="btn btn-outline-danger w-100 mt-2 text-start d-flex align-items-center gap-2 rounded-3 py-2 btn-sm"
+          className="btn sidebar-logout-btn w-100 text-start d-flex align-items-center justify-content-center gap-2 rounded-3 py-2 btn-sm mb-2"
           onClick={handleLogout}
         >
           <LogOut size={15} />
           <span>Cerrar Sesión</span>
         </button>
-      </nav>
 
-      {/* Footer Connectivity Info */}
-      <div className="mt-2 text-muted d-flex align-items-center gap-1.5 pt-2 border-top" style={{ fontSize: '.75rem' }}>
-        <span className="rounded-circle bg-success d-inline-block" style={{ width: 7, height: 7 }} />
-        <span>Servidor Conectado</span>
+        <div className="text-muted d-flex align-items-center justify-content-center gap-1.5 pt-1" style={{ fontSize: '.75rem' }}>
+          <span className="rounded-circle bg-success d-inline-block" style={{ width: 7, height: 7 }} />
+          <span>Servidor Conectado</span>
+        </div>
       </div>
     </aside>
   );

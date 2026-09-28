@@ -22,7 +22,7 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/login" element={isLogged() ? <Navigate to="/" replace /> : <Login />} />
 
-      {/* Rutas accesibles para todo usuario autenticado */}
+      {/* Rutas protegidas */}
       <Route
         path="/"
         element={
@@ -134,7 +134,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Rutas exclusivas para administrador */}
+      {/* Rutas admin */}
       <Route
         path="/purchase"
         element={

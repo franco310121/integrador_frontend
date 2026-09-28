@@ -1,4 +1,3 @@
-/* StockMaster Enterprise ERP - Brand Stylesheet (Navy & Gold with Light/Dark Themes) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
@@ -18,7 +17,7 @@
   --sidebar-width: 260px;
 }
 
-/* Modo Oscuro Azulado (Deep Navy / Midnight Slate Blue Theme) */
+/* Dark mode */
 [data-theme="dark"],
 [data-bs-theme="dark"],
 .theme-dark {
@@ -65,7 +64,7 @@ html, body {
   width: 100%;
 }
 
-/* Custom Scrollbars */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -94,14 +93,14 @@ html, body {
   background: #2b578a;
 }
 
-/* Typography Adjustments */
+/* Typography */
 h1, h2, h3, h4, h5, h6 {
   color: var(--text-main);
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 
-/* Bootstrap Card Enhancements */
+/* Cards */
 .card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -116,7 +115,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
-/* Global utility overrides for Dark Mode */
+/* Dark mode overrides */
 [data-theme="dark"] .bg-white,
 .theme-dark .bg-white {
   background-color: var(--bg-card) !important;
@@ -400,7 +399,7 @@ h1, h2, h3, h4, h5, h6 {
   border-color: rgba(245, 197, 49, 0.45);
 }
 
-/* Responsive Sidebar Backdrop */
+/* Backdrop */
 .sidebar-backdrop {
   position: fixed;
   top: 0;
@@ -420,7 +419,7 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: auto;
 }
 
-/* Sidebar Drawer on Mobile */
+/* Mobile */
 @media (max-width: 991.98px) {
   .app-sidebar {
     position: fixed !important;
