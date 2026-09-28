@@ -12,16 +12,19 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { to: '/',          icon: '⊞', label: 'Dashboard'   },
-  { to: '/inventory', icon: '📦', label: 'Inventario'  },
-  { to: '/sales',     icon: '◈',  label: 'Ventas'      },
-  { to: '/movements', icon: '↕',  label: 'Movimientos' },
+  { to: '/',          icon: '⊞', label: 'Dashboard'    },
+  { to: '/inventory', icon: '📦', label: 'Inventario'   },
+  { to: '/sales',     icon: '◈',  label: 'Ventas'       },
+  { to: '/movements', icon: '↕',  label: 'Movimientos'  },
+  { to: '/profile',   icon: '👤', label: 'Mi Perfil'    },
 ];
 
 const ADMIN_NAV: NavItem[] = [
-  { to: '/purchase',   icon: '🛒', label: 'Compras'    },
-  { to: '/categories', icon: '🏷',  label: 'Categorías' },
-  { to: '/users',      icon: '👥', label: 'Usuarios'   },
+  { to: '/purchase',   icon: '🛒', label: 'Compras'       },
+  { to: '/register',   icon: '✚',  label: 'Reg. Producto' },
+  { to: '/categories', icon: '🏷',  label: 'Categorías'    },
+  { to: '/users',      icon: '👥', label: 'Usuarios'      },
+  { to: '/reports',    icon: '📊', label: 'Reportes'      },
 ];
 
 interface SidebarProps {

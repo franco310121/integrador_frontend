@@ -20,6 +20,7 @@ import type { ProductoDB } from '../types/producto';
 import type { VentaDB, MetodoPagoDB, CarritoVentaItem } from '../types/venta';
 import Loader from '../components/feedback/Loader';
 import { formatCurrency, formatDateTime } from '../utils/formatters';
+import { notifyStockUpdated } from '../utils/stockEvents';
 
 const PAGE_SIZE = 8;
 
@@ -104,12 +105,13 @@ export default function Ventas() {
       setCarrito(prev => [
         ...prev,
         {
-          productoId:     selectedProd.id!,
-          productoNombre: selectedProd.nombre,
-          sku:            selectedProd.sku,
-          precioUnitario: Number(selectedProd.precio_venta || 0),
-          cantidad:       qty,
-          stockMax:       stockAvailable,
+          productoId:      selectedProd.id!,
+          productoNombre:  selectedProd.nombre,
+          sku:             selectedProd.sku || null,
+          precioUnitario:  Number(selectedProd.precio_venta || 0),
+          cantidad:        qty,
+          stockDisponible: stockAvailable,
+          stockMax:        stockAvailable,
         },
       ]);
     }
@@ -120,7 +122,8 @@ export default function Ventas() {
 
   const handleUpdateQuantity = (idx: number, newQty: number) => {
     const item = carrito[idx];
-    const clamped = Math.max(1, Math.min(Number(newQty) || 1, item.stockMax));
+    const maxStock = item.stockMax ?? item.stockDisponible;
+    const clamped = Math.max(1, Math.min(Number(newQty) || 1, maxStock));
     const updated = [...carrito];
     updated[idx].cantidad = clamped;
     setCarrito(updated);
@@ -184,6 +187,7 @@ export default function Ventas() {
       const updated = [nuevaVenta, ...sales];
       setSales(updated);
       setFiltHist(updated);
+      notifyStockUpdated();
       handleClearCart();
       showNotification(`Comprobante ${nuevaVenta.numero_boleta} emitido exitosamente.`, 'success');
     } catch (err: any) {
@@ -390,7 +394,7 @@ export default function Ventas() {
                                   className="btn btn-light btn-sm p-0 d-flex align-items-center justify-content-center border"
                                   style={{ width: 20, height: 20 }}
                                   onClick={() => handleUpdateQuantity(idx, item.cantidad + 1)}
-                                  disabled={item.cantidad >= item.stockMax}
+                                  disabled={item.cantidad >= (item.stockMax ?? item.stockDisponible)}
                                 >
                                   <Plus size={10} />
                                 </button>

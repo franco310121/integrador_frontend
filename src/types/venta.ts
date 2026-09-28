@@ -49,4 +49,5 @@ export interface CarritoVentaItem {
   cantidad: number;
   precioUnitario: number;
   stockDisponible: number;
+  stockMax?: number;
 }

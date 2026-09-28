@@ -125,13 +125,22 @@ export async function getCategoryById(id: number): Promise<CategoriaDB> {
   return normalizeCategory(data);
 }
 
-export async function createCategory(cat: { nombre: string; descripcion?: string | null }): Promise<CategoriaDB> {
-  const { data } = await api.post('/categorias', cat);
+export async function createCategory(
+  catOrName: { nombre: string; descripcion?: string | null } | string,
+  desc?: string | null
+): Promise<CategoriaDB> {
+  const payload = typeof catOrName === 'string' ? { nombre: catOrName, descripcion: desc || null } : catOrName;
+  const { data } = await api.post('/categorias', payload);
   return normalizeCategory(data);
 }
 
-export async function updateCategory(id: number, cat: { nombre: string; descripcion?: string | null }): Promise<CategoriaDB> {
-  const { data } = await api.put(`/categorias/${id}`, cat);
+export async function updateCategory(
+  id: number,
+  catOrName: { nombre: string; descripcion?: string | null } | string,
+  desc?: string | null
+): Promise<CategoriaDB> {
+  const payload = typeof catOrName === 'string' ? { nombre: catOrName, descripcion: desc || null } : catOrName;
+  const { data } = await api.put(`/categorias/${id}`, payload);
   return normalizeCategory(data);
 }
 

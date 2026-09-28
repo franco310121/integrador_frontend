@@ -16,6 +16,7 @@ import type { ProductoDB } from '../types/producto';
 import type { CompraDB, ProveedorDB, CarritoCompraItem } from '../types/compra';
 import Loader from '../components/feedback/Loader';
 import { formatCurrency, formatDateTime } from '../utils/formatters';
+import { notifyStockUpdated } from '../utils/stockEvents';
 
 const PAGE_SIZE = 10;
 
@@ -173,6 +174,7 @@ export default function Compras() {
       );
 
       setPurchases(prev => [compra, ...prev]);
+      notifyStockUpdated();
       handleClearForm();
       showNotification(`Orden de compra registrada exitosamente (${formatCurrency(compra.total)}).`, 'success');
     } catch (err: any) {

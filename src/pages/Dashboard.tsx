@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   DollarSign,
@@ -14,7 +14,9 @@ import {
   Tags,
   Users,
   Clock,
-  Sparkles
+  Sparkles,
+  BarChart3,
+  PlusCircle
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { getProducts } from '../services/productoService';
@@ -23,6 +25,7 @@ import type { ProductoDB } from '../types/producto';
 import type { VentaDB } from '../types/venta';
 import Loader from '../components/feedback/Loader';
 import { formatCurrency, formatDateTime } from '../utils/formatters';
+import { STOCK_UPDATED_EVENT } from '../utils/stockEvents';
 
 export default function Dashboard() {
   const { session, isAdmin } = useAuth();
@@ -31,14 +34,34 @@ export default function Dashboard() {
   const [sales, setSales]       = useState<VentaDB[]>([]);
   const [loading, setLoading]   = useState<boolean>(true);
 
-  useEffect(() => {
+  const reloadData = useCallback(() => {
     Promise.all([getProducts(), getSales()])
       .then(([p, s]) => {
         setProducts(p);
         setSales(s);
       })
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    reloadData();
+  }, [reloadData]);
+
+  // Actualización en tiempo real ante eventos, cambio de pestaña o polling cada 6s
+  useEffect(() => {
+    const handleStockUpdate = () => reloadData();
+    window.addEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+    window.addEventListener('focus', handleStockUpdate);
+
+    const interval = setInterval(reloadData, 6000);
+
+    return () => {
+      window.removeEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+      window.removeEventListener('focus', handleStockUpdate);
+      clearInterval(interval);
+    };
+  }, [reloadData]);
 
   if (loading) return <Loader />;
 
@@ -337,15 +360,34 @@ export default function Dashboard() {
                     <button
                       type="button"
                       className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex flex-column gap-2 h-100 transition-all shadow-none"
-                      onClick={() => navigate('/usuarios')}
+                      onClick={() => navigate('/register')}
                     >
                       <div className="d-flex align-items-center justify-content-between w-100">
-                        <Users size={20} className="text-secondary" />
+                        <PlusCircle size={20} className="text-secondary" />
                         <ArrowRight size={14} className="text-muted" />
                       </div>
                       <div>
-                        <div className="fw-bold small text-dark">Usuarios</div>
-                        <small className="text-muted d-block" style={{ fontSize: '.72rem' }}>Roles y accesos</small>
+                        <div className="fw-bold small text-dark">Reg. Producto</div>
+                        <small className="text-muted d-block" style={{ fontSize: '.72rem' }}>Pendientes de precio</small>
+                      </div>
+                    </button>
+                  </div>
+                )}
+
+                {isAdmin() && (
+                  <div className="col-6">
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex flex-column gap-2 h-100 transition-all shadow-none"
+                      onClick={() => navigate('/reports')}
+                    >
+                      <div className="d-flex align-items-center justify-content-between w-100">
+                        <BarChart3 size={20} className="text-secondary" />
+                        <ArrowRight size={14} className="text-muted" />
+                      </div>
+                      <div>
+                        <div className="fw-bold small text-dark">Reportes</div>
+                        <small className="text-muted d-block" style={{ fontSize: '.72rem' }}>Rentabilidad y CSV</small>
                       </div>
                     </button>
                   </div>

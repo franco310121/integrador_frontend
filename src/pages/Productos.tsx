@@ -15,6 +15,7 @@ import { getProducts, getCategories, createProduct, updateProduct, deleteProduct
 import type { ProductoDB, CategoriaDB } from '../types/producto';
 import Loader from '../components/feedback/Loader';
 import { formatCurrency } from '../utils/formatters';
+import { notifyStockUpdated, STOCK_UPDATED_EVENT } from '../utils/stockEvents';
 
 const PAGE_SIZE = 10;
 
@@ -53,6 +54,18 @@ export default function Productos() {
         setCategories(c);
       })
       .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const handleStockUpdate = () => {
+      getProducts().then(setProducts).catch(() => {});
+    };
+    window.addEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+    window.addEventListener('focus', handleStockUpdate);
+    return () => {
+      window.removeEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+      window.removeEventListener('focus', handleStockUpdate);
+    };
   }, []);
 
   useEffect(() => {
@@ -137,6 +150,7 @@ export default function Productos() {
       setShowModal(false);
       const updated = await getProducts();
       setProducts(updated);
+      notifyStockUpdated();
     } catch (err: any) {
       showNotification(err?.message || 'Error al persistir los cambios.', 'danger');
     } finally {
@@ -149,6 +163,7 @@ export default function Productos() {
     try {
       await deleteProduct(id);
       setProducts(prev => prev.filter(p => p.id !== id));
+      notifyStockUpdated();
       showNotification('El ítem fue desactivado del catálogo activo.', 'success');
     } catch {
       showNotification('Error al intentar desactivar el producto.', 'danger');

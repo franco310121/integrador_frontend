@@ -1,7 +1,9 @@
-import { useState, useEffect, type ReactNode } from 'react';
+import { useState, useEffect, useCallback, type ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import { getProducts } from '../../services/productoService';
+import { STOCK_UPDATED_EVENT } from '../../utils/stockEvents';
 
 interface AppShellProps {
   children: ReactNode;
@@ -10,17 +12,39 @@ interface AppShellProps {
 export default function AppShell({ children }: AppShellProps) {
   const [lowStockCount, setLowStockCount] = useState<number>(0);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const location = useLocation();
 
-  useEffect(() => {
+  const refreshLowStock = useCallback(() => {
     getProducts()
       .then(products => {
         const count = products.filter(
-          p => Number(p.stock ?? 0) <= Number(p.stock_minimo ?? 5)
+          p => (p.estado === 'activo' || !p.estado) &&
+               Number(p.stock ?? 0) <= Number(p.stock_minimo ?? p.stockMinimo ?? 5)
         ).length;
         setLowStockCount(count);
       })
       .catch(() => {});
   }, []);
+
+  // Update on route transition
+  useEffect(() => {
+    refreshLowStock();
+  }, [location.pathname, refreshLowStock]);
+
+  // Update on event dispatch, window focus, and background polling every 5 seconds
+  useEffect(() => {
+    const handleStockUpdate = () => refreshLowStock();
+    window.addEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+    window.addEventListener('focus', handleStockUpdate);
+
+    const interval = setInterval(refreshLowStock, 5000);
+
+    return () => {
+      window.removeEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+      window.removeEventListener('focus', handleStockUpdate);
+      clearInterval(interval);
+    };
+  }, [refreshLowStock]);
 
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
   const closeSidebar = () => setSidebarOpen(false);
