@@ -41,6 +41,16 @@ export default function AppRoutes() {
         }
       />
       <Route
+        path="/inventory"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <Productos />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/productos"
         element={
           <ProtectedRoute>
@@ -51,11 +61,31 @@ export default function AppRoutes() {
         }
       />
       <Route
+        path="/sales"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <Ventas />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/ventas"
         element={
           <ProtectedRoute>
             <AppShell>
               <Ventas />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/movements"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <MovimientosStock />
             </AppShell>
           </ProtectedRoute>
         }
@@ -73,6 +103,16 @@ export default function AppRoutes() {
 
       {/* Rutas exclusivas para administrador */}
       <Route
+        path="/purchase"
+        element={
+          <ProtectedRoute adminOnly>
+            <AppShell>
+              <Compras />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/compras"
         element={
           <ProtectedRoute adminOnly>
@@ -83,11 +123,31 @@ export default function AppRoutes() {
         }
       />
       <Route
+        path="/categories"
+        element={
+          <ProtectedRoute adminOnly>
+            <AppShell>
+              <Categorias />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/categorias"
         element={
           <ProtectedRoute adminOnly>
             <AppShell>
               <Categorias />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute adminOnly>
+            <AppShell>
+              <Usuarios />
             </AppShell>
           </ProtectedRoute>
         }

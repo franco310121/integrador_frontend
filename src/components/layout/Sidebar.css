@@ -1,0 +1,19 @@
+/* Sidebar.css */
+.app-sidebar {
+  width: var(--sidebar-width, 260px);
+  min-height: 100vh;
+}
+
+.app-sidebar .nav-link {
+  transition: all 0.15s ease-in-out;
+  font-weight: 500;
+}
+
+.app-sidebar .nav-link:hover {
+  background-color: #f1f5f9;
+}
+
+.app-sidebar .nav-link.active {
+  background-color: var(--primary-color, #102a45) !important;
+  color: #ffffff !important;
+}

@@ -1,0 +1,14 @@
+/* Navbar.css */
+.navbar {
+  transition: all 0.2s ease-in-out;
+}
+
+.navbar h5 {
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+
+.navbar .badge {
+  font-weight: 500;
+  font-size: 0.8rem;
+}

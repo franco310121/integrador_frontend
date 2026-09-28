@@ -55,3 +55,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     </AuthContext.Provider>
   );
 }
+
+export { useAuth } from '../hooks/useAuth';

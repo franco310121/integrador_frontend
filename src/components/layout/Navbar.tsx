@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
-import { Menu, AlertTriangle, ShieldCheck, User } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
+import { Menu } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import './Navbar.css';
 
 interface PageInfo {
   title: string;
@@ -8,14 +9,23 @@ interface PageInfo {
 }
 
 const TITLES: Record<string, PageInfo> = {
-  '/':            { title: 'Panel de Control',       sub: 'Resumen consolidado de operaciones'   },
-  '/dashboard':   { title: 'Panel de Control',       sub: 'Resumen consolidado de operaciones'   },
-  '/productos':   { title: 'Catálogo de Productos',  sub: 'Inventario, listas de precios y stock' },
-  '/categorias':  { title: 'Gestión de Categorías',  sub: 'Clasificación y taxonomía de productos' },
-  '/ventas':      { title: 'Punto de Venta (POS)',   sub: 'Emisión de comprobantes y facturación' },
-  '/compras':     { title: 'Órdenes de Compra',      sub: 'Gestión de proveedores y abastecimiento' },
-  '/movimientos': { title: 'Kardex de Inventario',   sub: 'Trazabilidad y auditoría de existencias' },
-  '/usuarios':    { title: 'Control de Usuarios',    sub: 'Gestión de accesos, credenciales y roles' },
+  '/':           { title: 'Dashboard',         sub: 'Resumen general del sistema'           },
+  '/dashboard':  { title: 'Dashboard',         sub: 'Resumen general del sistema'           },
+  '/inventory':  { title: 'Inventario',         sub: 'Gestión de productos y stock'          },
+  '/productos':  { title: 'Inventario',         sub: 'Gestión de productos y stock'          },
+  '/sales':      { title: 'Ventas',             sub: 'Registra y consulta ventas'            },
+  '/ventas':     { title: 'Ventas',             sub: 'Registra y consulta ventas'            },
+  '/movements':  { title: 'Movimientos',        sub: 'Trazabilidad de stock'                 },
+  '/movimientos':{ title: 'Movimientos',        sub: 'Trazabilidad de stock'                 },
+  '/profile':    { title: 'Mi Perfil',          sub: 'Configuración de cuenta'               },
+  '/purchase':   { title: 'Compras',            sub: 'Órdenes de compra a proveedores'       },
+  '/compras':    { title: 'Compras',            sub: 'Órdenes de compra a proveedores'       },
+  '/register':   { title: 'Registrar Producto', sub: 'Configura productos comprados'         },
+  '/categories': { title: 'Categorías',         sub: 'Gestión de categorías'                 },
+  '/categorias': { title: 'Categorías',         sub: 'Gestión de categorías'                 },
+  '/users':      { title: 'Usuarios',           sub: 'Gestión de usuarios y accesos'         },
+  '/usuarios':   { title: 'Usuarios',           sub: 'Gestión de usuarios y accesos'         },
+  '/reports':    { title: 'Reportes',           sub: 'Análisis de ventas y rentabilidad'     },
 };
 
 interface NavbarProps {
@@ -25,54 +35,36 @@ interface NavbarProps {
 
 export default function Navbar({ lowStockCount = 0, onToggleSidebar }: NavbarProps) {
   const { pathname } = useLocation();
-  const { session, isAdmin } = useAuth();
+  const { isAdmin } = useAuth();
   const page = TITLES[pathname] || { title: 'StockMaster', sub: '' };
 
   return (
-    <header className="navbar navbar-expand bg-white border-bottom py-2.5 px-3 px-md-4 sticky-top shadow-sm">
+    <header className="navbar navbar-expand-lg navbar-light bg-white border-bottom p-2 px-3 px-md-4 sticky-top shadow-sm d-flex align-items-center justify-content-between">
       <div className="d-flex align-items-center gap-3">
-        {/* Mobile Hamburger Button */}
-        <button
-          type="button"
-          className="btn btn-light d-lg-none p-1.5 border text-dark rounded-3"
-          onClick={onToggleSidebar}
-          aria-label="Abrir navegación"
-        >
-          <Menu size={20} />
-        </button>
-
+        {onToggleSidebar && (
+          <button
+            type="button"
+            className="btn btn-light d-lg-none p-1.5 border text-dark rounded-3"
+            onClick={onToggleSidebar}
+            aria-label="Abrir navegación"
+          >
+            <Menu size={20} />
+          </button>
+        )}
         <div>
-          <h1 className="h5 mb-0 fw-bold text-dark lh-sm">{page.title}</h1>
-          <p className="text-muted small mb-0 d-none d-sm-block" style={{ fontSize: '.78rem' }}>
-            {page.sub}
-          </p>
+          <h5 className="h5 mb-0 fw-bold text-dark">{page.title}</h5>
+          <p className="text-muted small mb-0 d-none d-sm-block">{page.sub}</p>
         </div>
       </div>
-
-      <div className="ms-auto d-flex align-items-center gap-2.5">
+      <div className="d-flex align-items-center gap-2">
         {lowStockCount > 0 && (
-          <span className="badge badge-soft-danger d-inline-flex align-items-center gap-1.5 py-1.5 px-2.5 rounded-pill fw-medium">
-            <AlertTriangle size={14} className="text-danger" />
-            <span className="d-none d-sm-inline">{lowStockCount} ítems con stock crítico</span>
-            <span className="d-inline d-sm-none">{lowStockCount} alertas</span>
+          <span className="badge bg-danger py-1.5 px-2.5 rounded-pill">
+            ⚠ {lowStockCount} stock bajo
           </span>
         )}
-
-        <div className="d-flex align-items-center gap-2 border-start ps-2.5 ms-1">
-          <div
-            className={`d-inline-flex align-items-center gap-1.5 py-1 px-2.5 rounded-pill small fw-medium ${
-              isAdmin() ? 'badge-soft-primary' : 'badge-soft-success'
-            }`}
-          >
-            {isAdmin() ? (
-              <ShieldCheck size={14} />
-            ) : (
-              <User size={14} />
-            )}
-            <span className="d-none d-md-inline">{session?.displayName || (isAdmin() ? 'Administrador' : 'Vendedor')}</span>
-            <span className="d-inline d-md-none">{isAdmin() ? 'Admin' : 'Ventas'}</span>
-          </div>
-        </div>
+        <span className={`badge ${isAdmin() ? 'bg-primary' : 'bg-secondary'} py-1.5 px-2.5 rounded-pill`}>
+          {isAdmin() ? '👑 Admin' : '🔧 Vendedor'}
+        </span>
       </div>
     </header>
   );
