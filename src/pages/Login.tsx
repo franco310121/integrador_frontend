@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/authService';
 import { useAuth } from '../hooks/useAuth';
+import logoImg from '../assets/images/logo.png';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -71,12 +72,12 @@ export default function Login() {
       >
         {/* Cabecera / Identidad */}
         <div className="d-flex align-items-center gap-3">
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
-            <rect width="40" height="40" rx="10" fill="#2563eb" />
-            <path d="M20 9L29 14.2V25.8L20 31L11 25.8V14.2L20 9Z" stroke="#93c5fd" strokeWidth="2" strokeLinejoin="round" />
-            <path d="M20 9V20M20 20L29 14.2M20 20L11 14.2" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M20 20V31" stroke="#bfdbfe" strokeWidth="2" strokeLinecap="round" />
-          </svg>
+          <img
+            src={logoImg}
+            alt="StockMaster Logo"
+            className="rounded-3 shadow-sm flex-shrink-0"
+            style={{ width: 44, height: 44, objectFit: 'cover', objectPosition: 'left center' }}
+          />
           <div>
             <div className="h4 mb-0 fw-bold text-white lh-1">StockMaster</div>
             <span className="text-secondary small" style={{ fontSize: '.75rem', letterSpacing: '.04em' }}>
@@ -137,9 +138,7 @@ export default function Login() {
         <div className="d-flex align-items-center justify-content-between text-secondary pt-2" style={{ fontSize: '.75rem', color: '#64748b' }}>
           <div className="d-flex align-items-center gap-2">
             <span className="rounded-circle bg-success" style={{ width: 7, height: 7 }}></span>
-            <span>Servidor operativo</span>
           </div>
-          <span>Versión 1.0.0</span>
         </div>
       </div>
 
@@ -154,12 +153,12 @@ export default function Login() {
         <div style={{ maxWidth: 380, width: '100%' }}>
           {/* Logo móvil (visible solo en celulares/tablets) */}
           <div className="d-flex d-lg-none align-items-center gap-3 mb-4">
-            <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="40" height="40" rx="10" fill="#2563eb" />
-              <path d="M20 9L29 14.2V25.8L20 31L11 25.8V14.2L20 9Z" stroke="#93c5fd" strokeWidth="2" strokeLinejoin="round" />
-              <path d="M20 9V20M20 20L29 14.2M20 20L11 14.2" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M20 20V31" stroke="#bfdbfe" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+            <img
+              src={logoImg}
+              alt="StockMaster Logo"
+              className="rounded-3 shadow-sm flex-shrink-0"
+              style={{ width: 40, height: 40, objectFit: 'cover', objectPosition: 'left center' }}
+            />
             <div>
               <div className="h5 mb-0 fw-bold text-dark">StockMaster</div>
               <small className="text-muted">Plataforma de Gestión</small>
@@ -305,7 +304,6 @@ export default function Login() {
                 <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
-              <span>Acceso seguro cifrado con TLS</span>
             </div>
             <span>StockMaster &copy; {new Date().getFullYear()} &bull; Todos los derechos reservados</span>
           </div>

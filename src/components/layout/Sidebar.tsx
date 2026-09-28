@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { logout } from '../../services/authService';
+import logoImg from '../../assets/images/logo.png';
 
 interface NavItem {
   to: string;
@@ -62,13 +63,13 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
     >
       {/* Brand Header */}
       <div className="d-flex align-items-center justify-content-between mb-4 px-1 pt-1">
-        <div className="d-flex align-items-center gap-2">
-          <div
-            className="rounded-3 bg-primary text-white d-flex align-items-center justify-content-center shadow-sm"
-            style={{ width: 38, height: 38 }}
-          >
-            <Boxes size={22} strokeWidth={2.2} />
-          </div>
+        <div className="d-flex align-items-center gap-2.5">
+          <img
+            src={logoImg}
+            alt="StockMaster Logo"
+            className="rounded-3 shadow-sm flex-shrink-0"
+            style={{ width: 38, height: 38, objectFit: 'cover', objectPosition: 'left center' }}
+          />
           <div>
             <div className="h6 mb-0 fw-bold text-dark" style={{ letterSpacing: '-0.02em' }}>StockMaster</div>
             <div className="text-muted fw-semibold" style={{ fontSize: '.65rem', letterSpacing: '.06em' }}>
