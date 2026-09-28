@@ -61,88 +61,29 @@ export default function Login() {
         backgroundColor: '#ffffff',
       }}
     >
-      {/* Panel Izquierdo: Presentación Institucional (ocupa el alto completo sin scroll) */}
+      {/* Panel Izquierdo: Fondo azulado con el logo principal grande y centrado */}
       <div
-        className="d-none d-lg-flex col-lg-6 col-xl-7 flex-column justify-content-between p-4 p-xl-5 text-white"
+        className="d-none d-lg-flex col-lg-6 col-xl-7 align-items-center justify-content-center p-4 p-xl-5"
         style={{
-          background: 'linear-gradient(135deg, #090e17 0%, #0f172a 60%, #1e293b 100%)',
-          borderRight: '1px solid #1e293b',
+          background: 'radial-gradient(circle at center, #1b3a5c 0%, #102a45 60%, #0a192f 100%)',
           height: '100vh',
+          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
-        {/* Cabecera / Identidad */}
-        <div className="d-flex align-items-center gap-3">
-          <img
-            src={logoImg}
-            alt="StockMaster Logo"
-            className="rounded-3 shadow-sm flex-shrink-0"
-            style={{ width: 44, height: 44, objectFit: 'cover', objectPosition: 'left center' }}
-          />
-          <div>
-            <div className="h4 mb-0 fw-bold text-white lh-1">StockMaster</div>
-            <span className="text-secondary small" style={{ fontSize: '.75rem', letterSpacing: '.04em' }}>
-              Sistema de Gestión Comercial y Almacén
-            </span>
-          </div>
-        </div>
-
-        {/* Contenido Central: Propuesta de Valor */}
-        <div style={{ maxWidth: 480 }}>
-          <h1 className="h3 fw-bold text-white mb-3" style={{ letterSpacing: '-0.02em', lineHeight: 1.3 }}>
-            Control integral de inventario, compras y punto de venta.
-          </h1>
-          <p className="text-secondary small mb-4" style={{ color: '#94a3b8', lineHeight: 1.6 }}>
-            Plataforma diseñada para optimizar los procesos de almacén, emisión rápida de comprobantes y auditoría de operaciones en tiempo real.
-          </p>
-
-          <div className="d-flex flex-column gap-3">
-            <div className="d-flex align-items-center gap-3">
-              <div
-                className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                style={{ width: 28, height: 28, backgroundColor: 'rgba(37, 99, 235, 0.2)', color: '#60a5fa' }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <span className="small text-light">Supervisión de stock y alertas automáticas de reposición</span>
-            </div>
-
-            <div className="d-flex align-items-center gap-3">
-              <div
-                className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                style={{ width: 28, height: 28, backgroundColor: 'rgba(37, 99, 235, 0.2)', color: '#60a5fa' }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <span className="small text-light">Módulo POS de facturación con desglose tributario (IGV)</span>
-            </div>
-
-            <div className="d-flex align-items-center gap-3">
-              <div
-                className="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                style={{ width: 28, height: 28, backgroundColor: 'rgba(37, 99, 235, 0.2)', color: '#60a5fa' }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <span className="small text-light">Kardex valorizado y auditoría de entradas y salidas</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Pie del Panel Izquierdo */}
-        <div className="d-flex align-items-center justify-content-between text-secondary pt-2" style={{ fontSize: '.75rem', color: '#64748b' }}>
-          <div className="d-flex align-items-center gap-2">
-            <span className="rounded-circle bg-success" style={{ width: 7, height: 7 }}></span>
-          </div>
-        </div>
+        <img
+          src={logoImg}
+          alt="StockMaster Logo"
+          className="img-fluid"
+          style={{
+            maxWidth: '560px',
+            width: '85%',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4))',
+          }}
+        />
       </div>
 
-      {/* Panel Derecho: Formulario de Login (compacto, sin scrollbar vertical) */}
+      {/* Panel Derecho: Formulario de Login */}
       <div
         className="col-12 col-lg-6 col-xl-5 d-flex flex-column justify-content-center align-items-center p-3 p-sm-4 p-md-5"
         style={{
@@ -150,24 +91,24 @@ export default function Login() {
           backgroundColor: '#ffffff',
         }}
       >
-        <div style={{ maxWidth: 380, width: '100%' }}>
-          {/* Logo móvil (visible solo en celulares/tablets) */}
-          <div className="d-flex d-lg-none align-items-center gap-3 mb-4">
+        <div style={{ maxWidth: 390, width: '100%' }}>
+          {/* Logo móvil con fondo azulado institucional */}
+          <div
+            className="d-flex d-lg-none align-items-center justify-content-center p-3 mb-4 rounded-3 shadow-sm"
+            style={{
+              background: 'linear-gradient(135deg, #0a192f 0%, #102a45 100%)',
+            }}
+          >
             <img
               src={logoImg}
-              alt="StockMaster Logo"
-              className="rounded-3 shadow-sm flex-shrink-0"
-              style={{ width: 40, height: 40, objectFit: 'cover', objectPosition: 'left center' }}
+              alt="StockMaster"
+              style={{ maxHeight: 48, maxWidth: '85%', objectFit: 'contain' }}
             />
-            <div>
-              <div className="h5 mb-0 fw-bold text-dark">StockMaster</div>
-              <small className="text-muted">Plataforma de Gestión</small>
-            </div>
           </div>
 
           {/* Título */}
           <div className="mb-4">
-            <h2 className="h4 fw-bold text-dark mb-1" style={{ letterSpacing: '-0.01em' }}>
+            <h2 className="h4 fw-bold text-dark mb-1" style={{ letterSpacing: '-0.01em', color: '#0f2744' }}>
               Iniciar Sesión
             </h2>
             <p className="text-muted small mb-0">
@@ -177,7 +118,7 @@ export default function Login() {
 
           {/* Alerta de Error */}
           {error && (
-            <div className="alert alert-danger py-2 px-3 small d-flex align-items-center gap-2 mb-3" role="alert">
+            <div className="alert alert-danger py-2 px-3 small d-flex align-items-center gap-2 mb-3 rounded-3" role="alert">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="12" x2="12" y1="8" y2="12" />
@@ -211,7 +152,7 @@ export default function Login() {
                   autoFocus
                   disabled={loading}
                   required
-                  style={{ height: 42, fontSize: '0.9rem' }}
+                  style={{ height: 44, fontSize: '0.9rem' }}
                 />
               </div>
             </div>
@@ -236,7 +177,7 @@ export default function Login() {
                   autoComplete="current-password"
                   disabled={loading}
                   required
-                  style={{ height: 42, fontSize: '0.9rem' }}
+                  style={{ height: 44, fontSize: '0.9rem' }}
                 />
                 <button
                   type="button"
@@ -279,12 +220,24 @@ export default function Login() {
               </div>
             </div>
 
-            {/* Botón de Envío */}
+            {/* Botón de Envío con el tono azulado corporativo */}
             <button
               type="submit"
-              className="btn btn-primary w-100 fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm"
+              className="btn w-100 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm rounded-3 text-white"
               disabled={loading}
-              style={{ height: 42, fontSize: '0.92rem' }}
+              style={{
+                height: 44,
+                fontSize: '0.94rem',
+                backgroundColor: '#102a45',
+                borderColor: '#102a45',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.backgroundColor = '#0a192f';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.backgroundColor = '#102a45';
+              }}
             >
               {loading ? (
                 <>
@@ -304,6 +257,7 @@ export default function Login() {
                 <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
+              <span>Acceso seguro cifrado con TLS</span>
             </div>
             <span>StockMaster &copy; {new Date().getFullYear()} &bull; Todos los derechos reservados</span>
           </div>

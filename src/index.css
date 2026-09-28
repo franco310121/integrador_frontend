@@ -8,9 +8,10 @@
   --border-color: #e2e8f0;
   --text-main: #0f172a;
   --text-muted: #64748b;
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
-  --primary-light: #eff6ff;
+  --primary-color: #102a45;
+  --primary-hover: #0a192f;
+  --primary-light: #eaf1f8;
+  --accent-gold: #f3ce55;
   --sidebar-width: 260px;
 }
 
@@ -121,15 +122,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .form-control:focus, .form-select:focus {
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: #102a45;
+  box-shadow: 0 0 0 3px rgba(16, 42, 69, 0.15);
 }
 
 /* Soft Badges */
 .badge-soft-primary {
-  background-color: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
+  background-color: #eaf1f8;
+  color: #102a45;
+  border: 1px solid #c2d6ea;
 }
 
 .badge-soft-success {
