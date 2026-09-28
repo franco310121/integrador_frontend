@@ -1,4 +1,13 @@
 import { useState, useEffect, type FormEvent } from 'react';
+import {
+  ArrowLeftRight,
+  ArrowUpRight,
+  ArrowDownRight,
+  Sliders,
+  CheckCircle2,
+  AlertCircle,
+  BookOpen
+} from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { getProducts } from '../services/productoService';
 import { getMovements, createMovement } from '../services/movimientoService';
@@ -119,24 +128,32 @@ export default function MovimientosStock() {
     <>
       <div className="d-flex align-items-center justify-content-between mb-4">
         <div>
-          <h1 className="h4 mb-0 fw-semibold text-dark">Movimientos de Stock</h1>
+          <h1 className="h4 mb-0 fw-bold text-dark">Movimientos de Stock</h1>
           <p className="text-muted mb-0 small">Kardex de existencias, ajustes de inventario y trazabilidad</p>
         </div>
       </div>
 
-      {msg && <div className={`alert alert-${msgType} py-2 small`}>{msg}</div>}
+      {msg && (
+        <div className={`alert alert-${msgType} py-2.5 px-3 small border-0 shadow-sm rounded-3 mb-3 d-flex align-items-center gap-2`}>
+          {msgType === 'success' ? <CheckCircle2 size={16} className="text-success" /> : <AlertCircle size={16} className="text-danger" />}
+          <span>{msg}</span>
+        </div>
+      )}
 
       <div className="row g-4">
         {/* Formulario */}
-        <div className="col-lg-4">
-          <div className="card shadow-sm border-0">
-            <div className="card-header bg-white py-3 border-bottom">
-              <span className="fw-semibold text-secondary small text-uppercase">Registrar Ajuste / Movimiento</span>
+        <div className="col-12 col-lg-4">
+          <div className="card border-0 shadow-sm rounded-3">
+            <div className="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
+              <Sliders size={18} className="text-primary" />
+              <span className="fw-bold text-dark small text-uppercase">Registrar Ajuste / Movimiento</span>
             </div>
-            <div className="card-body">
+            <div className="card-body p-3 p-sm-4">
               <form onSubmit={handleRegisterMovement}>
                 <div className="mb-3">
-                  <label className="form-label small text-muted text-uppercase fw-semibold">Tipo de Movimiento</label>
+                  <label className="form-label small text-muted text-uppercase fw-semibold" style={{ fontSize: '.7rem' }}>
+                    Tipo de Movimiento
+                  </label>
                   <div className="btn-group w-100" role="group">
                     {(['entrada', 'ajuste', 'salida'] as TipoMovimiento[]).map(t => (
                       <button
@@ -145,16 +162,21 @@ export default function MovimientosStock() {
                         className={`btn btn-sm ${adjTipo === t ? 'btn-primary' : 'btn-outline-secondary'}`}
                         onClick={() => setAdjTipo(t)}
                       >
-                        {t.charAt(0).toUpperCase() + t.slice(1)}
+                        {t === 'entrada' && <ArrowUpRight size={13} className="me-1" />}
+                        {t === 'salida' && <ArrowDownRight size={13} className="me-1" />}
+                        {t === 'ajuste' && <ArrowLeftRight size={13} className="me-1" />}
+                        <span>{t.charAt(0).toUpperCase() + t.slice(1)}</span>
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label small text-muted text-uppercase fw-semibold">Producto *</label>
+                  <label className="form-label small text-muted text-uppercase fw-semibold" style={{ fontSize: '.7rem' }}>
+                    Producto *
+                  </label>
                   <select
-                    className="form-select form-select-sm"
+                    className="form-select"
                     value={adjProdId}
                     onChange={e => setAdjProdId(e.target.value)}
                     required
@@ -162,17 +184,19 @@ export default function MovimientosStock() {
                     <option value="">Seleccione un producto</option>
                     {products.map(p => (
                       <option key={p.id} value={p.id}>
-                        {p.nombre} (Stock actual: {p.stock})
+                        {p.nombre} (Stock: {p.stock})
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label small text-muted text-uppercase fw-semibold">Cantidad Unitaria *</label>
+                  <label className="form-label small text-muted text-uppercase fw-semibold" style={{ fontSize: '.7rem' }}>
+                    Cantidad Unitaria *
+                  </label>
                   <input
                     type="number"
-                    className="form-control form-control-sm"
+                    className="form-control"
                     value={adjCant}
                     min="1"
                     onChange={e => setAdjCant(e.target.value)}
@@ -181,19 +205,26 @@ export default function MovimientosStock() {
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label small text-muted text-uppercase fw-semibold">Justificación / Motivo *</label>
+                  <label className="form-label small text-muted text-uppercase fw-semibold" style={{ fontSize: '.7rem' }}>
+                    Justificación / Motivo *
+                  </label>
                   <input
                     type="text"
-                    className="form-control form-control-sm"
+                    className="form-control"
                     value={adjMotivo}
                     onChange={e => setAdjMotivo(e.target.value)}
-                    placeholder="Ejemplo: Conteo físico periódico, merma justificada..."
+                    placeholder="Ejemplo: Conteo físico periódico..."
                     required
                   />
                 </div>
 
-                <button type="submit" className="btn btn-primary w-100 btn-sm py-2" disabled={adjLoading}>
-                  {adjLoading ? 'Procesando...' : 'Asentar Movimiento'}
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100 py-2.5 fw-bold d-inline-flex align-items-center justify-content-center gap-2 rounded-3 shadow-sm"
+                  disabled={adjLoading}
+                >
+                  <ArrowLeftRight size={16} />
+                  <span>{adjLoading ? 'Procesando...' : 'Asentar Movimiento'}</span>
                 </button>
               </form>
             </div>
@@ -201,12 +232,15 @@ export default function MovimientosStock() {
         </div>
 
         {/* Historial Kardex */}
-        <div className="col-lg-8">
-          <div className="card shadow-sm border-0">
-            <div className="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-              <span className="fw-semibold text-secondary small text-uppercase">
-                Libro de Movimientos ({filtered.length})
-              </span>
+        <div className="col-12 col-lg-8">
+          <div className="card border-0 shadow-sm rounded-3">
+            <div className="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+              <div className="d-flex align-items-center gap-2">
+                <BookOpen size={18} className="text-primary" />
+                <span className="fw-bold text-dark small text-uppercase">
+                  Libro de Movimientos ({filtered.length})
+                </span>
+              </div>
               <select
                 className="form-select form-select-sm"
                 value={fTipo}
@@ -234,21 +268,21 @@ export default function MovimientosStock() {
                   {pagedMovements.map(m => (
                     <tr key={m.id}>
                       <td className="text-muted small">{formatDateTime(m.fecha_movimiento)}</td>
-                      <td className="fw-semibold small">{m.productos?.nombre || `Ítem #${m.producto_id}`}</td>
+                      <td className="fw-semibold small text-dark">{m.productos?.nombre || `Ítem #${m.producto_id}`}</td>
                       <td>
                         <span
-                          className={`badge ${
+                          className={`badge py-1 px-2.5 rounded-pill ${
                             m.tipo === 'entrada'
-                              ? 'bg-success'
+                              ? 'badge-soft-success'
                               : m.tipo === 'salida'
-                              ? 'bg-danger'
-                              : 'bg-primary'
+                              ? 'badge-soft-danger'
+                              : 'badge-soft-warning'
                           }`}
                         >
-                          {m.tipo}
+                          {m.tipo.toUpperCase()}
                         </span>
                       </td>
-                      <td className={`small fw-semibold text-center ${m.tipo === 'salida' ? 'text-danger' : 'text-success'}`}>
+                      <td className="text-center fw-bold small text-dark">
                         {m.tipo === 'salida' ? `-${m.cantidad}` : `+${m.cantidad}`}
                       </td>
                       <td className="text-muted small">{m.motivo || '—'}</td>
@@ -256,8 +290,8 @@ export default function MovimientosStock() {
                   ))}
                   {filtered.length === 0 && (
                     <tr>
-                      <td colSpan={5} className="text-center text-muted py-4 small">
-                        No se registran movimientos para los criterios seleccionados.
+                      <td colSpan={5} className="text-center text-muted py-5 small">
+                        No hay movimientos registrados para el filtro seleccionado.
                       </td>
                     </tr>
                   )}
@@ -267,7 +301,7 @@ export default function MovimientosStock() {
             {totalPages > 1 && (
               <div className="d-flex align-items-center justify-content-between p-3 border-top">
                 <small className="text-muted">Página {page} de {totalPages}</small>
-                <div className="d-flex gap-1">
+                <div className="d-flex gap-1.5">
                   <button
                     type="button"
                     className="btn btn-sm btn-outline-secondary"

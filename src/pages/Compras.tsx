@@ -1,4 +1,14 @@
 import { useState, useEffect, type FormEvent } from 'react';
+import {
+  Truck,
+  Plus,
+  Trash2,
+  Receipt,
+  RotateCcw,
+  CheckCircle2,
+  AlertCircle,
+  Clock
+} from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { getProducts } from '../services/productoService';
 import { getPurchases, createPurchase, getSuppliers, createSupplier, calcularTotalesCompra } from '../services/compraService';
@@ -100,17 +110,20 @@ export default function Compras() {
     setSelectedProdId('');
     setCantidad('');
     setCosto('');
+    setSuppMode('existing');
   };
 
-  const { subtotal, igv, total } = calcularTotalesCompra(carrito);
+  const { subtotal, igv, total } = calcularTotalesCompra(
+    carrito.map(item => ({ costoUnitario: item.costoUnitario, cantidad: item.cantidad }))
+  );
 
   const handleSubmitOrder = async (e: FormEvent) => {
     e.preventDefault();
-    let providerId = suppId ? Number(suppId) : null;
+    let providerId: number | null = suppId ? Number(suppId) : null;
 
     if (suppMode === 'new') {
       if (!newRazon.trim()) {
-        showNotification('Ingrese la razón social del proveedor.', 'danger');
+        showNotification('Debe ingresar la razón social del proveedor.', 'danger');
         return;
       }
       try {
@@ -176,26 +189,39 @@ export default function Compras() {
     <>
       <div className="d-flex align-items-center justify-content-between mb-4">
         <div>
-          <h1 className="h4 mb-0 fw-semibold text-dark">Gestión de Compras</h1>
+          <h1 className="h4 mb-0 fw-bold text-dark">Gestión de Compras</h1>
           <p className="text-muted mb-0 small">Emisión de órdenes de abastecimiento y recepción de mercadería</p>
         </div>
       </div>
 
-      {msg && <div className={`alert alert-${msgType} py-2 small`}>{msg}</div>}
+      {msg && (
+        <div className={`alert alert-${msgType} py-2.5 px-3 small border-0 shadow-sm rounded-3 mb-3 d-flex align-items-center gap-2`}>
+          {msgType === 'success' ? <CheckCircle2 size={16} className="text-success" /> : <AlertCircle size={16} className="text-danger" />}
+          <span>{msg}</span>
+        </div>
+      )}
 
       <div className="row g-4">
         {/* Formulario de Compra */}
-        <div className="col-lg-5">
-          <div className="card shadow-sm border-0">
+        <div className="col-12 col-lg-5">
+          <div className="card border-0 shadow-sm rounded-3">
             <div className="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-              <span className="fw-semibold text-secondary small text-uppercase">Nueva Orden de Compra</span>
+              <div className="d-flex align-items-center gap-2">
+                <Truck size={18} className="text-primary" />
+                <span className="fw-bold text-dark small text-uppercase">Nueva Orden de Compra</span>
+              </div>
               {carrito.length > 0 && (
-                <button type="button" className="btn btn-sm btn-link text-decoration-none text-muted p-0" onClick={handleClearForm}>
-                  Limpiar formulario
+                <button
+                  type="button"
+                  className="btn btn-sm btn-link text-decoration-none text-muted p-0 d-inline-flex align-items-center gap-1"
+                  onClick={handleClearForm}
+                >
+                  <RotateCcw size={12} />
+                  <span>Limpiar</span>
                 </button>
               )}
             </div>
-            <div className="card-body">
+            <div className="card-body p-3 p-sm-4">
               <div className="btn-group w-100 mb-3" role="group">
                 <button
                   type="button"
@@ -215,9 +241,11 @@ export default function Compras() {
 
               {suppMode === 'existing' ? (
                 <div className="mb-3">
-                  <label className="form-label small text-muted text-uppercase fw-semibold">Proveedor</label>
+                  <label className="form-label small text-muted text-uppercase fw-semibold" style={{ fontSize: '.7rem' }}>
+                    Proveedor *
+                  </label>
                   <select
-                    className="form-select form-select-sm"
+                    className="form-select"
                     value={suppId}
                     onChange={e => setSuppId(e.target.value)}
                   >
@@ -230,34 +258,40 @@ export default function Compras() {
                   </select>
                 </div>
               ) : (
-                <div className="row g-2 mb-3">
+                <div className="row g-2.5 mb-3">
                   <div className="col-8">
-                    <label className="form-label small text-muted text-uppercase fw-semibold">Razón Social</label>
+                    <label className="form-label small text-muted text-uppercase fw-semibold" style={{ fontSize: '.7rem' }}>
+                      Razón Social *
+                    </label>
                     <input
                       type="text"
-                      className="form-control form-control-sm"
+                      className="form-control"
                       value={newRazon}
                       onChange={e => setNewRazon(e.target.value)}
-                      placeholder="Empresa o Razón Comercial"
+                      placeholder="Empresa o Distribuidor"
                     />
                   </div>
                   <div className="col-4">
-                    <label className="form-label small text-muted text-uppercase fw-semibold">RUC</label>
+                    <label className="form-label small text-muted text-uppercase fw-semibold" style={{ fontSize: '.7rem' }}>
+                      RUC
+                    </label>
                     <input
                       type="text"
-                      className="form-control form-control-sm"
+                      className="form-control"
                       value={newRuc}
                       onChange={e => setNewRuc(e.target.value)}
-                      placeholder="Identificador fiscal"
+                      placeholder="11 dígitos"
                     />
                   </div>
                 </div>
               )}
 
               <div className="mb-3">
-                <label className="form-label small text-muted text-uppercase fw-semibold">Producto</label>
+                <label className="form-label small text-muted text-uppercase fw-semibold" style={{ fontSize: '.7rem' }}>
+                  Producto *
+                </label>
                 <select
-                  className="form-select form-select-sm"
+                  className="form-select"
                   value={selectedProdId}
                   onChange={e => {
                     setSelectedProdId(e.target.value);
@@ -276,38 +310,47 @@ export default function Compras() {
                 </select>
               </div>
 
-              <div className="row g-2 mb-3">
+              <div className="row g-2.5 mb-3">
                 <div className="col-5">
-                  <label className="form-label small text-muted text-uppercase fw-semibold">Cantidad</label>
+                  <label className="form-label small text-muted text-uppercase fw-semibold" style={{ fontSize: '.7rem' }}>
+                    Cantidad *
+                  </label>
                   <input
                     type="number"
-                    className="form-control form-control-sm"
+                    className="form-control"
                     value={cantidad}
                     min="1"
                     onChange={e => setCantidad(e.target.value)}
                   />
                 </div>
                 <div className="col-5">
-                  <label className="form-label small text-muted text-uppercase fw-semibold">Costo Unit. (PEN)</label>
+                  <label className="form-label small text-muted text-uppercase fw-semibold" style={{ fontSize: '.7rem' }}>
+                    Costo Unit. (PEN) *
+                  </label>
                   <input
                     type="number"
                     step="0.01"
-                    className="form-control form-control-sm"
+                    className="form-control"
                     value={costo}
                     min="0"
                     onChange={e => setCosto(e.target.value)}
                   />
                 </div>
                 <div className="col-2 d-flex align-items-end">
-                  <button type="button" className="btn btn-sm btn-outline-primary w-100" onClick={handleAddItem}>
-                    Agregar
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary w-100 p-2 d-flex align-items-center justify-content-center"
+                    onClick={handleAddItem}
+                    title="Agregar al pedido"
+                  >
+                    <Plus size={18} />
                   </button>
                 </div>
               </div>
 
               {carrito.length > 0 && (
                 <>
-                  <div className="table-responsive mb-3 border rounded">
+                  <div className="table-responsive mb-3 border rounded-3 overflow-hidden">
                     <table className="table table-sm align-middle mb-0">
                       <thead className="table-light">
                         <tr>
@@ -315,16 +358,16 @@ export default function Compras() {
                           <th style={{ width: 60 }} className="text-center">Cant.</th>
                           <th style={{ width: 80 }} className="text-end">Costo</th>
                           <th style={{ width: 90 }} className="text-end">Subtotal</th>
-                          <th style={{ width: 30 }}></th>
+                          <th style={{ width: 34 }}></th>
                         </tr>
                       </thead>
                       <tbody>
                         {carrito.map((item, index) => (
                           <tr key={index}>
-                            <td className="small fw-semibold">{item.productoNombre}</td>
-                            <td className="small text-center">{item.cantidad}</td>
-                            <td className="small text-end">{formatCurrency(item.costoUnitario)}</td>
-                            <td className="small text-end fw-semibold">
+                            <td className="small fw-semibold text-dark">{item.productoNombre}</td>
+                            <td className="small text-center fw-bold">{item.cantidad}</td>
+                            <td className="small text-end text-muted">{formatCurrency(item.costoUnitario)}</td>
+                            <td className="small text-end fw-bold text-dark">
                               {formatCurrency(item.cantidad * item.costoUnitario)}
                             </td>
                             <td className="text-center">
@@ -332,8 +375,9 @@ export default function Compras() {
                                 type="button"
                                 className="btn btn-sm btn-link text-danger text-decoration-none p-0"
                                 onClick={() => handleRemoveItem(index)}
+                                title="Eliminar ítem"
                               >
-                                &times;
+                                <Trash2 size={14} />
                               </button>
                             </td>
                           </tr>
@@ -342,24 +386,29 @@ export default function Compras() {
                     </table>
                   </div>
 
-                  <div className="bg-light p-3 rounded mb-3">
-                    <div className="d-flex justify-content-between small text-muted mb-1">
+                  <div className="bg-light p-3 rounded-3 mb-3 border">
+                    <div className="d-flex justify-content-between small text-muted mb-1.5">
                       <span>Subtotal imponible</span>
                       <span>{formatCurrency(subtotal)}</span>
                     </div>
-                    <div className="d-flex justify-content-between small text-muted mb-1">
+                    <div className="d-flex justify-content-between small text-muted mb-1.5">
                       <span>IGV (18%)</span>
                       <span>{formatCurrency(igv)}</span>
                     </div>
-                    <hr className="my-2" />
-                    <div className="d-flex justify-content-between fw-bold text-dark">
+                    <hr className="my-2 border-secondary-subtle" />
+                    <div className="d-flex justify-content-between fw-bold text-dark fs-6">
                       <span>Total Liquidado</span>
                       <span className="text-primary">{formatCurrency(total)}</span>
                     </div>
                   </div>
 
-                  <button type="button" className="btn btn-primary w-100" onClick={handleSubmitOrder}>
-                    Confirmar Orden de Compra
+                  <button
+                    type="button"
+                    className="btn btn-primary w-100 py-2.5 fw-bold d-inline-flex align-items-center justify-content-center gap-2 rounded-3 shadow-sm"
+                    onClick={handleSubmitOrder}
+                  >
+                    <Receipt size={18} />
+                    <span>Confirmar Orden de Compra</span>
                   </button>
                 </>
               )}
@@ -368,10 +417,11 @@ export default function Compras() {
         </div>
 
         {/* Registro Histórico */}
-        <div className="col-lg-7">
-          <div className="card shadow-sm border-0">
-            <div className="card-header bg-white py-3 border-bottom">
-              <span className="fw-semibold text-secondary small text-uppercase">
+        <div className="col-12 col-lg-7">
+          <div className="card border-0 shadow-sm rounded-3">
+            <div className="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
+              <Clock size={18} className="text-primary" />
+              <span className="fw-bold text-dark small text-uppercase">
                 Registro de Órdenes Recientes ({purchases.length})
               </span>
             </div>
@@ -379,7 +429,7 @@ export default function Compras() {
               <table className="table table-hover align-middle mb-0">
                 <thead className="table-light">
                   <tr>
-                    <th style={{ width: 70 }}>Folio</th>
+                    <th style={{ width: 80 }}>Folio</th>
                     <th>Proveedor</th>
                     <th className="text-end">Subtotal</th>
                     <th className="text-end">IGV</th>
@@ -390,13 +440,13 @@ export default function Compras() {
                 <tbody>
                   {pagedPurchases.map(purchase => (
                     <tr key={purchase.id}>
-                      <td className="text-muted small">#{purchase.id}</td>
-                      <td className="fw-semibold small">
+                      <td className="text-muted small font-monospace fw-semibold">#{purchase.id}</td>
+                      <td className="fw-semibold small text-dark">
                         {purchase.proveedores?.razon_social || `Proveedor #${purchase.proveedor_id}`}
                       </td>
                       <td className="text-muted small text-end">{formatCurrency(Number(purchase.subtotal || 0))}</td>
                       <td className="text-muted small text-end">{formatCurrency(Number(purchase.igv || 0))}</td>
-                      <td className="text-end fw-semibold text-primary small">
+                      <td className="text-end fw-bold text-primary small">
                         {formatCurrency(Number(purchase.total || 0))}
                       </td>
                       <td className="text-muted small">{formatDateTime(purchase.fecha_compra)}</td>
@@ -404,7 +454,7 @@ export default function Compras() {
                   ))}
                   {purchases.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="text-center text-muted py-4 small">
+                      <td colSpan={6} className="text-center text-muted py-5 small">
                         No se registran compras registradas en el período.
                       </td>
                     </tr>
@@ -415,7 +465,7 @@ export default function Compras() {
             {totalPages > 1 && (
               <div className="d-flex align-items-center justify-content-between p-3 border-top">
                 <small className="text-muted">Página {page} de {totalPages}</small>
-                <div className="d-flex gap-1">
+                <div className="d-flex gap-1.5">
                   <button
                     type="button"
                     className="btn btn-sm btn-outline-secondary"

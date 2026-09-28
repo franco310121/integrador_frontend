@@ -1,4 +1,12 @@
 import { useState, useEffect, type FormEvent } from 'react';
+import {
+  Tags,
+  Plus,
+  Trash2,
+  AlertTriangle,
+  CheckCircle2,
+  FolderPlus
+} from 'lucide-react';
 import { getCategories, createCategory, deleteCategory } from '../services/productoService';
 import type { CategoriaDB } from '../types/producto';
 import Loader from '../components/feedback/Loader';
@@ -70,27 +78,35 @@ export default function Categorias() {
     <>
       <div className="d-flex align-items-center justify-content-between mb-4">
         <div>
-          <h1 className="h4 mb-0 fw-semibold text-dark">Clasificación de Categorías</h1>
+          <h1 className="h4 mb-0 fw-bold text-dark">Clasificación de Categorías</h1>
           <p className="text-muted mb-0 small">Estructuración y jerarquía taxonómica de los artículos del inventario</p>
         </div>
       </div>
 
-      {msg && <div className={`alert alert-${msgType} py-2 small`}>{msg}</div>}
+      {msg && (
+        <div className={`alert alert-${msgType} py-2.5 px-3 small border-0 shadow-sm rounded-3 mb-3 d-flex align-items-center gap-2`}>
+          {msgType === 'success' ? <CheckCircle2 size={16} className="text-success" /> : <AlertTriangle size={16} className="text-danger" />}
+          <span>{msg}</span>
+        </div>
+      )}
 
       <div className="row g-4">
         {/* Formulario */}
-        <div className="col-md-4">
-          <div className="card shadow-sm border-0">
-            <div className="card-header bg-white py-3 border-bottom">
-              <span className="fw-semibold text-secondary small text-uppercase">Nueva Categoría</span>
+        <div className="col-12 col-lg-4">
+          <div className="card border-0 shadow-sm rounded-3">
+            <div className="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
+              <FolderPlus size={18} className="text-primary" />
+              <span className="fw-bold text-dark small text-uppercase">Nueva Categoría</span>
             </div>
-            <div className="card-body">
+            <div className="card-body p-3 p-sm-4">
               <form onSubmit={handleAddCategory}>
                 <div className="mb-3">
-                  <label className="form-label small fw-semibold text-muted text-uppercase">Nombre de la Categoría *</label>
+                  <label className="form-label small fw-semibold text-muted text-uppercase" style={{ fontSize: '.7rem' }}>
+                    Nombre de la Categoría *
+                  </label>
                   <input
                     type="text"
-                    className="form-control form-control-sm"
+                    className="form-control"
                     value={nombre}
                     onChange={e => setNombre(e.target.value)}
                     placeholder="Ejemplo: Dispositivos de Red"
@@ -98,17 +114,24 @@ export default function Categorias() {
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label small fw-semibold text-muted text-uppercase">Descripción Funcional</label>
+                  <label className="form-label small fw-semibold text-muted text-uppercase" style={{ fontSize: '.7rem' }}>
+                    Descripción Funcional
+                  </label>
                   <textarea
-                    className="form-control form-control-sm"
+                    className="form-control"
                     rows={3}
                     value={descripcion}
                     onChange={e => setDescripcion(e.target.value)}
                     placeholder="Detalles sobre los productos de este grupo..."
                   />
                 </div>
-                <button type="submit" className="btn btn-primary w-100 btn-sm py-2" disabled={saving}>
-                  {saving ? 'Guardando...' : 'Crear Categoría'}
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100 py-2.5 fw-bold d-inline-flex align-items-center justify-content-center gap-2 rounded-3 shadow-sm"
+                  disabled={saving}
+                >
+                  <Plus size={16} />
+                  <span>{saving ? 'Guardando...' : 'Crear Categoría'}</span>
                 </button>
               </form>
             </div>
@@ -116,15 +139,16 @@ export default function Categorias() {
         </div>
 
         {/* Listado */}
-        <div className="col-md-8">
-          <div className="card shadow-sm border-0">
-            <div className="card-header bg-white py-3 border-bottom">
-              <span className="fw-semibold text-secondary small text-uppercase">
+        <div className="col-12 col-lg-8">
+          <div className="card border-0 shadow-sm rounded-3">
+            <div className="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
+              <Tags size={18} className="text-primary" />
+              <span className="fw-bold text-dark small text-uppercase">
                 Categorías en Catálogo ({categories.length})
               </span>
             </div>
             {categories.length === 0 ? (
-              <div className="card-body text-center text-muted py-4 small">
+              <div className="card-body text-center text-muted py-5 small">
                 No existen categorías configuradas en la base de datos.
               </div>
             ) : (
@@ -132,7 +156,7 @@ export default function Categorias() {
                 <table className="table table-hover align-middle mb-0">
                   <thead className="table-light">
                     <tr>
-                      <th style={{ width: 80 }}>Identificador</th>
+                      <th style={{ width: 80 }}>Código</th>
                       <th>Nombre</th>
                       <th>Descripción</th>
                       <th>Fecha de Registro</th>
@@ -149,10 +173,11 @@ export default function Categorias() {
                         <td className="text-end">
                           <button
                             type="button"
-                            className="btn btn-sm btn-outline-danger py-1 px-2"
+                            className="btn btn-outline-danger btn-sm p-1.5 rounded-2 d-inline-flex align-items-center"
                             onClick={() => setConfirmDelId(cat.id!)}
+                            title="Eliminar categoría"
                           >
-                            Eliminar
+                            <Trash2 size={14} />
                           </button>
                         </td>
                       </tr>
@@ -167,22 +192,27 @@ export default function Categorias() {
 
       {/* Modal de confirmación */}
       {confirmDelId !== null && (
-        <div className="modal d-block" tabIndex={-1} style={{ background: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal d-block" tabIndex={-1} style={{ background: 'rgba(15, 23, 42, 0.5)', backdropFilter: 'blur(2px)' }}>
           <div className="modal-dialog modal-dialog-centered modal-sm">
-            <div className="modal-content shadow border-0">
-              <div className="modal-header border-bottom py-3">
-                <h5 className="modal-title fs-6 fw-semibold text-dark">Confirmar Eliminación</h5>
-                <button type="button" className="btn-close" onClick={() => setConfirmDelId(null)} />
+            <div className="modal-content shadow-lg border-0 rounded-4 overflow-hidden">
+              <div className="modal-header bg-light border-bottom py-3 px-4">
+                <h5 className="modal-title fs-6 fw-bold text-dark mb-0">Confirmar Eliminación</h5>
+                <button
+                  type="button"
+                  className="btn-close p-1"
+                  onClick={() => setConfirmDelId(null)}
+                  aria-label="Cerrar modal"
+                />
               </div>
-              <div className="modal-body small p-3">
-                ¿Está seguro de eliminar la categoría <strong>"{selectedCategory?.nombre}"</strong>? Esta acción fallará si cuenta con productos vinculados.
+              <div className="modal-body small p-4">
+                ¿Está seguro de eliminar la categoría <strong>"{selectedCategory?.nombre}"</strong>? Esta acción no se podrá realizar si cuenta con productos vinculados.
               </div>
-              <div className="modal-footer border-top py-2">
+              <div className="modal-footer bg-light border-top py-2.5 px-4">
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setConfirmDelId(null)}>
                   Cancelar
                 </button>
-                <button type="button" className="btn btn-sm btn-danger" onClick={handleDeleteCategory}>
-                  Confirmar
+                <button type="button" className="btn btn-sm btn-danger px-3" onClick={handleDeleteCategory}>
+                  Confirmar Eliminación
                 </button>
               </div>
             </div>

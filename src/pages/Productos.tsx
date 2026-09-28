@@ -1,4 +1,15 @@
 import { useState, useEffect, type FormEvent } from 'react';
+import {
+  Search,
+  Plus,
+  Edit2,
+  Trash2,
+  SlidersHorizontal,
+  PackageCheck,
+  AlertCircle,
+  PackageX,
+  X
+} from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { getProducts, getCategories, createProduct, updateProduct, deleteProduct } from '../services/productoService';
 import type { ProductoDB, CategoriaDB } from '../types/producto';
@@ -151,55 +162,77 @@ export default function Productos() {
 
   return (
     <>
-      <div className="d-flex align-items-center justify-content-between mb-4">
+      <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
         <div>
-          <h1 className="h4 mb-0 fw-semibold text-dark">Catálogo Maestro de Productos</h1>
+          <h1 className="h4 mb-0 fw-bold text-dark">Catálogo Maestro de Productos</h1>
           <p className="text-muted mb-0 small">Administración de inventario, precios de venta y umbrales de reabastecimiento</p>
         </div>
         {isAdmin() && (
-          <button type="button" className="btn btn-primary btn-sm px-3" onClick={openNew}>
-            Nuevo Producto
+          <button
+            type="button"
+            className="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm"
+            onClick={openNew}
+          >
+            <Plus size={16} />
+            <span>Nuevo Producto</span>
           </button>
         )}
       </div>
 
-      {msg && <div className={`alert alert-${msgType} py-2 small`}>{msg}</div>}
+      {msg && (
+        <div className={`alert alert-${msgType} py-2.5 px-3 small border-0 shadow-sm rounded-3 mb-3 d-flex align-items-center gap-2`}>
+          {msgType === 'success' ? <PackageCheck size={18} className="text-success" /> : <AlertCircle size={18} className="text-danger" />}
+          <span>{msg}</span>
+        </div>
+      )}
 
-      {/* Barra de Filtros */}
-      <div className="card card-body mb-3 shadow-sm border-0 d-flex flex-wrap gap-2 flex-row align-items-center">
-        <input
-          type="text"
-          className="form-control form-control-sm"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Filtrar por nombre o SKU..."
-          style={{ maxWidth: 260 }}
-        />
-        <select
-          className="form-select form-select-sm"
-          value={filterCat}
-          onChange={e => setFilterCat(e.target.value)}
-          style={{ maxWidth: 200 }}
-        >
-          <option value="">Todas las categorías</option>
-          {categories.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
-        </select>
-        <select
-          className="form-select form-select-sm"
-          value={filterStock}
-          onChange={e => setFilterStock(e.target.value)}
-          style={{ maxWidth: 170 }}
-        >
-          <option value="">Todos los estados</option>
-          <option value="ok">Existencias óptimas</option>
-          <option value="low">Stock crítico / bajo</option>
-          <option value="out">Sin existencias</option>
-        </select>
-        <span className="ms-auto text-muted small">{filtered.length} ítems en vista</span>
+      {/* Filter Toolbar */}
+      <div className="card border-0 shadow-sm rounded-3 mb-4">
+        <div className="card-body p-3 d-flex flex-wrap gap-2.5 align-items-center">
+          <div className="position-relative flex-grow-1" style={{ minWidth: 220, maxWidth: 320 }}>
+            <Search size={16} className="position-absolute text-muted" style={{ top: '50%', transform: 'translateY(-50%)', left: 12 }} />
+            <input
+              type="text"
+              className="form-control form-control-sm ps-5"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Buscar por nombre o SKU..."
+            />
+          </div>
+
+          <div className="d-flex align-items-center gap-2 flex-grow-1 flex-sm-grow-0">
+            <select
+              className="form-select form-select-sm"
+              value={filterCat}
+              onChange={e => setFilterCat(e.target.value)}
+              style={{ minWidth: 170 }}
+            >
+              <option value="">Todas las categorías</option>
+              {categories.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+            </select>
+
+            <select
+              className="form-select form-select-sm"
+              value={filterStock}
+              onChange={e => setFilterStock(e.target.value)}
+              style={{ minWidth: 160 }}
+            >
+              <option value="">Todos los estados</option>
+              <option value="ok">Existencias óptimas</option>
+              <option value="low">Stock crítico / bajo</option>
+              <option value="out">Sin existencias</option>
+            </select>
+          </div>
+
+          <div className="ms-auto text-muted small fw-medium">
+            <SlidersHorizontal size={14} className="me-1" />
+            <span>{filtered.length} ítems encontrados</span>
+          </div>
+        </div>
       </div>
 
-      {/* Tabla de Productos */}
-      <div className="card shadow-sm border-0">
+      {/* Table Card */}
+      <div className="card border-0 shadow-sm rounded-3">
         <div className="table-responsive">
           <table className="table table-hover align-middle mb-0">
             <thead className="table-light">
@@ -211,8 +244,8 @@ export default function Productos() {
                 <th className="text-end">Precio Venta</th>
                 {isAdmin() && <th className="text-end">Costo Compra</th>}
                 <th className="text-center">Existencias</th>
-                <th style={{ width: 130 }}>Condición</th>
-                <th className="text-end" style={{ width: 140 }}>Acciones</th>
+                <th style={{ width: 140 }}>Condición</th>
+                {isAdmin() && <th className="text-end" style={{ width: 140 }}>Acciones</th>}
               </tr>
             </thead>
             <tbody>
@@ -228,48 +261,49 @@ export default function Productos() {
                     <td className="text-muted small font-monospace">{p.sku || '—'}</td>
                     <td className="fw-semibold small text-dark">{p.nombre}</td>
                     <td className="small">
-                      <span className="badge bg-light text-dark border">
+                      <span className="badge bg-light text-secondary border px-2 py-1">
                         {p.categorias?.nombre || 'General'}
                       </span>
                     </td>
-                    <td className="fw-semibold small text-end">{formatCurrency(Number(p.precio_venta || 0))}</td>
+                    <td className="fw-bold small text-end text-dark">{formatCurrency(Number(p.precio_venta || 0))}</td>
                     {isAdmin() && (
                       <td className="text-muted small text-end">{formatCurrency(Number(p.precio_compra || 0))}</td>
                     )}
                     <td className="small text-center fw-semibold">{stock}</td>
                     <td>
-                      <span className={`badge ${isOut ? 'bg-danger' : isLow ? 'bg-warning text-dark' : 'bg-success'}`}>
+                      <span className={`badge py-1 px-2.5 rounded-pill ${isOut ? 'badge-soft-danger' : isLow ? 'badge-soft-warning' : 'badge-soft-success'}`}>
                         {isOut ? 'Agotado' : isLow ? 'Stock Crítico' : 'Disponible'}
                       </span>
                     </td>
-                    <td className="text-end">
-                      {isAdmin() && (
+                    {isAdmin() && (
+                      <td className="text-end">
                         <div className="d-flex justify-content-end gap-1">
                           <button
                             type="button"
-                            className="btn btn-outline-secondary btn-sm py-1 px-2"
+                            className="btn btn-outline-secondary btn-sm p-1.5 rounded-2 d-inline-flex align-items-center"
                             onClick={() => openEdit(p)}
-                            title="Editar"
+                            title="Editar ficha de producto"
                           >
-                            Editar
+                            <Edit2 size={14} />
                           </button>
                           <button
                             type="button"
-                            className="btn btn-outline-danger btn-sm py-1 px-2"
+                            className="btn btn-outline-danger btn-sm p-1.5 rounded-2 d-inline-flex align-items-center"
                             onClick={() => handleDelete(p.id!)}
-                            title="Desactivar"
+                            title="Desactivar producto"
                           >
-                            Baja
+                            <Trash2 size={14} />
                           </button>
                         </div>
-                      )}
-                    </td>
+                      </td>
+                    )}
                   </tr>
                 );
               })}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="text-center text-muted py-4 small">
+                  <td colSpan={isAdmin() ? 9 : 8} className="text-center text-muted py-5 small">
+                    <PackageX size={36} className="mx-auto mb-2 text-muted opacity-50 d-block" />
                     No se encontraron productos que coincidan con los criterios establecidos.
                   </td>
                 </tr>
@@ -281,7 +315,7 @@ export default function Productos() {
         {totalPages > 1 && (
           <div className="d-flex align-items-center justify-content-between p-3 border-top">
             <small className="text-muted">Página {page} de {totalPages}</small>
-            <div className="d-flex gap-1">
+            <div className="d-flex gap-1.5">
               <button
                 type="button"
                 className="btn btn-sm btn-outline-secondary"
@@ -305,33 +339,42 @@ export default function Productos() {
 
       {/* Modal Alta / Edición */}
       {showModal && (
-        <div className="modal d-block" tabIndex={-1} style={{ background: 'rgba(0,0,0,0.5)' }}>
+        <div className="modal d-block" tabIndex={-1} style={{ background: 'rgba(15, 23, 42, 0.5)', backdropFilter: 'blur(2px)' }}>
           <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content shadow border-0">
-              <div className="modal-header border-bottom py-3">
-                <h5 className="modal-title fs-6 fw-semibold text-dark">
+            <div className="modal-content shadow-lg border-0 rounded-4 overflow-hidden">
+              <div className="modal-header bg-light border-bottom py-3 px-4">
+                <h5 className="modal-title fs-6 fw-bold text-dark mb-0">
                   {editingId ? 'Actualizar Ficha de Producto' : 'Incorporar Nuevo Producto'}
                 </h5>
-                <button type="button" className="btn-close" onClick={() => setShowModal(false)} />
+                <button
+                  type="button"
+                  className="btn-close p-1"
+                  onClick={() => setShowModal(false)}
+                  aria-label="Cerrar modal"
+                />
               </div>
               <form onSubmit={handleSave}>
                 <div className="modal-body p-4">
                   <div className="mb-3">
-                    <label className="form-label small fw-semibold text-muted text-uppercase">Nombre o Descripción Comercial *</label>
+                    <label className="form-label small fw-semibold text-muted text-uppercase" style={{ fontSize: '.7rem' }}>
+                      Nombre Comercial *
+                    </label>
                     <input
                       type="text"
-                      className="form-control form-control-sm"
+                      className="form-control"
                       value={form.nombre}
                       onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))}
                       placeholder="Ejemplo: Monitor LED 24 pulgadas"
                       required
                     />
                   </div>
-                  <div className="row g-2 mb-3">
+                  <div className="row g-2.5 mb-3">
                     <div className="col-6">
-                      <label className="form-label small fw-semibold text-muted text-uppercase">Categoría</label>
+                      <label className="form-label small fw-semibold text-muted text-uppercase" style={{ fontSize: '.7rem' }}>
+                        Categoría
+                      </label>
                       <select
-                        className="form-select form-select-sm"
+                        className="form-select"
                         value={form.categoria_id}
                         onChange={e => setForm(f => ({ ...f, categoria_id: e.target.value }))}
                       >
@@ -340,56 +383,66 @@ export default function Productos() {
                       </select>
                     </div>
                     <div className="col-6">
-                      <label className="form-label small fw-semibold text-muted text-uppercase">Código SKU</label>
+                      <label className="form-label small fw-semibold text-muted text-uppercase" style={{ fontSize: '.7rem' }}>
+                        Código SKU
+                      </label>
                       <input
                         type="text"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={form.sku}
                         onChange={e => setForm(f => ({ ...f, sku: e.target.value }))}
-                        placeholder="Identificador interno"
+                        placeholder="Identificador SKU"
                       />
                     </div>
                   </div>
-                  <div className="row g-2 mb-3">
+                  <div className="row g-2.5 mb-3">
                     <div className="col-6">
-                      <label className="form-label small fw-semibold text-muted text-uppercase">Precio de Venta (PEN)</label>
+                      <label className="form-label small fw-semibold text-muted text-uppercase" style={{ fontSize: '.7rem' }}>
+                        Precio de Venta (PEN)
+                      </label>
                       <input
                         type="number"
                         step="0.01"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={form.precio_venta}
                         onChange={e => setForm(f => ({ ...f, precio_venta: e.target.value }))}
                         min="0"
                       />
                     </div>
                     <div className="col-6">
-                      <label className="form-label small fw-semibold text-muted text-uppercase">Costo de Compra (PEN)</label>
+                      <label className="form-label small fw-semibold text-muted text-uppercase" style={{ fontSize: '.7rem' }}>
+                        Costo de Compra (PEN)
+                      </label>
                       <input
                         type="number"
                         step="0.01"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={form.precio_compra}
                         onChange={e => setForm(f => ({ ...f, precio_compra: e.target.value }))}
                         min="0"
                       />
                     </div>
                   </div>
-                  <div className="row g-2 mb-3">
+                  <div className="row g-2.5 mb-3">
                     <div className="col-6">
-                      <label className="form-label small fw-semibold text-muted text-uppercase">Stock Inicial</label>
+                      <label className="form-label small fw-semibold text-muted text-uppercase" style={{ fontSize: '.7rem' }}>
+                        Stock Inicial
+                      </label>
                       <input
                         type="number"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={form.stock}
                         onChange={e => setForm(f => ({ ...f, stock: e.target.value }))}
                         min="0"
                       />
                     </div>
                     <div className="col-6">
-                      <label className="form-label small fw-semibold text-muted text-uppercase">Nivel Mínimo Crítico</label>
+                      <label className="form-label small fw-semibold text-muted text-uppercase" style={{ fontSize: '.7rem' }}>
+                        Stock Mínimo Alerta
+                      </label>
                       <input
                         type="number"
-                        className="form-control form-control-sm"
+                        className="form-control"
                         value={form.stock_minimo}
                         onChange={e => setForm(f => ({ ...f, stock_minimo: e.target.value }))}
                         min="0"
@@ -397,11 +450,19 @@ export default function Productos() {
                     </div>
                   </div>
                 </div>
-                <div className="modal-footer border-top py-2">
-                  <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setShowModal(false)}>
+                <div className="modal-footer bg-light border-top py-2.5 px-4">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary btn-sm"
+                    onClick={() => setShowModal(false)}
+                  >
                     Cancelar
                   </button>
-                  <button type="submit" className="btn btn-sm btn-primary" disabled={saving}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-sm px-3"
+                    disabled={saving}
+                  >
                     {saving ? 'Procesando...' : 'Guardar Ficha'}
                   </button>
                 </div>
