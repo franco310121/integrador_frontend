@@ -1,14 +1,223 @@
-/* Navbar.css */
-.navbar {
+/* Navbar.css - Brand-aligned Navy & Gold Aesthetics with Dark Theme Support */
+
+.app-navbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  border-top: 3px solid #f5c531;
+  box-shadow: 0 2px 10px rgba(16, 42, 69, 0.05);
+  transition: all 0.2s ease-in-out;
+  min-height: 64px;
+}
+
+.navbar-logo-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #102a45 0%, #0a192f 100%);
+  border: 1.5px solid rgba(245, 197, 49, 0.5);
+  box-shadow: 0 2px 6px rgba(16, 42, 69, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.app-navbar .navbar-brand:hover .navbar-logo-badge {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(245, 197, 49, 0.35);
+  border-color: #f5c531;
+}
+
+.navbar-logo-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.navbar-brand-name {
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: #102a45;
+  user-select: none;
+}
+
+.text-gold {
+  color: #e5a914;
+}
+
+.navbar-vr {
+  width: 1.5px;
+  height: 26px;
+  background-color: #e2e8f0;
+  margin: 0 10px;
+}
+
+.navbar-page-title {
+  color: #102a45;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.navbar-page-sub {
+  font-size: 0.76rem;
+  color: #64748b;
+  line-height: 1.2;
+}
+
+/* Stock Alert Badge with Pulse */
+.badge-stock-alert {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  font-weight: 600;
+  font-size: 0.78rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(185, 28, 28, 0.08);
+}
+
+.badge-stock-alert:hover {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fca5a5;
+  transform: translateY(-1px);
+}
+
+.stock-alert-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #dc2626;
+  display: inline-block;
+  animation: pulse-dot 1.8s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.3);
+  }
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  width: 36px;
+  height: 36px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0 !important;
+  color: #102a45;
   transition: all 0.2s ease-in-out;
 }
 
-.navbar h5 {
-  font-size: 1.15rem;
-  letter-spacing: -0.01em;
+.theme-toggle-btn:hover {
+  background-color: #eef3f9;
+  border-color: #cbd5e1 !important;
+  transform: rotate(15deg) scale(1.05);
+  box-shadow: 0 2px 8px rgba(16, 42, 69, 0.12);
 }
 
-.navbar .badge {
-  font-weight: 500;
-  font-size: 0.8rem;
+/* User Profile Chip */
+.navbar-user-chip {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0 !important;
+  color: #102a45;
+  transition: all 0.2s ease-in-out;
+  padding: 4px 10px 4px 6px !important;
+}
+
+.navbar-user-chip:hover {
+  background: #ffffff;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 2px 8px rgba(16, 42, 69, 0.08);
+  transform: translateY(-1px);
+}
+
+.navbar-avatar {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #102a45 0%, #1b3a5c 100%);
+  border: 2px solid #f5c531;
+  font-size: 0.85rem;
+  box-shadow: 0 1px 4px rgba(16, 42, 69, 0.2);
+  flex-shrink: 0;
+}
+
+.navbar-user-name {
+  font-size: 0.82rem;
+  line-height: 1.1;
+  color: #102a45;
+}
+
+.navbar-user-role {
+  font-size: 0.68rem;
+  color: #d49b13;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+/* ==========================================================
+   Dark Theme (Fondo Oscuro Azulado) Overrides for Navbar
+   ========================================================== */
+
+[data-theme="dark"] .app-navbar,
+.theme-dark .app-navbar {
+  background: #081829;
+  border-bottom-color: #1a385c;
+  border-top-color: #f5c531;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .navbar-brand-name,
+.theme-dark .navbar-brand-name {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .navbar-vr,
+.theme-dark .navbar-vr {
+  background-color: #1a385c;
+}
+
+[data-theme="dark"] .navbar-page-title,
+.theme-dark .navbar-page-title {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .navbar-page-sub,
+.theme-dark .navbar-page-sub {
+  color: #8ea4bf;
+}
+
+[data-theme="dark"] .theme-toggle-btn,
+.theme-dark .theme-toggle-btn {
+  background-color: #0d2036;
+  border-color: #1e3e64 !important;
+  color: #f5c531;
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover,
+.theme-dark .theme-toggle-btn:hover {
+  background-color: #132e4d;
+  border-color: #f5c531 !important;
+  box-shadow: 0 0 10px rgba(245, 197, 49, 0.3);
+}
+
+[data-theme="dark"] .navbar-user-chip,
+.theme-dark .navbar-user-chip {
+  background: #0b1a2c;
+  border-color: #1a385c !important;
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .navbar-user-chip:hover,
+.theme-dark .navbar-user-chip:hover {
+  background: #0f2238;
+  border-color: #254e7d !important;
+  box-shadow: 0 4px 12px rgba(4, 11, 20, 0.5);
+}
+
+[data-theme="dark"] .navbar-user-name,
+.theme-dark .navbar-user-name {
+  color: #f1f5f9;
 }

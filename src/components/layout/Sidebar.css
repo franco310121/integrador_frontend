@@ -1,19 +1,184 @@
-/* Sidebar.css */
+/* Sidebar.css - Brand-aligned Navy & Gold Aesthetics with Dark Theme Support */
+
 .app-sidebar {
   width: var(--sidebar-width, 260px);
   min-height: 100vh;
+  background-color: #fcfdfd !important;
+  border-right: 1px solid #e2e8f0 !important;
+  box-shadow: 2px 0 8px rgba(16, 42, 69, 0.02);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
+.sidebar-logo-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #102a45 0%, #0a192f 100%);
+  border: 1.5px solid rgba(245, 197, 49, 0.5);
+  box-shadow: 0 2px 6px rgba(16, 42, 69, 0.2);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-brand:hover .sidebar-logo-badge {
+  transform: scale(1.05);
+  border-color: #f5c531;
+}
+
+.sidebar-logo-img {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+}
+
+.sidebar-brand-name {
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+  color: #102a45;
+  line-height: 1.1;
+}
+
+.sidebar-user-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-user-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(16, 42, 69, 0.05);
+}
+
+.sidebar-avatar {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #102a45 0%, #1b3a5c 100%);
+  border: 2px solid #f5c531;
+  font-size: 14px;
+  box-shadow: 0 1px 4px rgba(16, 42, 69, 0.2);
+  flex-shrink: 0;
+}
+
+.sidebar-user-role-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #926500;
+}
+
+.sidebar-section-title {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8c733e;
+  font-weight: 700;
+}
+
+/* Nav Links */
 .app-sidebar .nav-link {
-  transition: all 0.15s ease-in-out;
+  color: #475569 !important;
   font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 3px;
+  transition: all 0.15s ease-in-out;
+  border-left: 3px solid transparent;
 }
 
 .app-sidebar .nav-link:hover {
-  background-color: #f1f5f9;
+  background-color: #eef3f9;
+  color: #102a45 !important;
 }
 
 .app-sidebar .nav-link.active {
-  background-color: var(--primary-color, #102a45) !important;
+  background: linear-gradient(90deg, #102a45 0%, #17385c 100%) !important;
   color: #ffffff !important;
+  font-weight: 600;
+  border-left: 3.5px solid #f5c531 !important;
+  box-shadow: 0 3px 8px rgba(16, 42, 69, 0.2);
+}
+
+.app-sidebar .nav-link.active .badge {
+  background-color: #f5c531 !important;
+  color: #0a192f !important;
+}
+
+.sidebar-badge-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.sidebar-theme-container {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+/* ==========================================================
+   Dark Theme (Fondo Oscuro Azulado) Overrides for Sidebar
+   ========================================================== */
+
+[data-theme="dark"] .app-sidebar,
+.theme-dark .app-sidebar {
+  background-color: #071626 !important;
+  border-right-color: #1a385c !important;
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .sidebar-brand-name,
+.theme-dark .sidebar-brand-name {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .sidebar-user-card,
+.theme-dark .sidebar-user-card {
+  background: #0b1a2c;
+  border-color: #1a385c;
+}
+
+[data-theme="dark"] .sidebar-user-card:hover,
+.theme-dark .sidebar-user-card:hover {
+  background: #0e2238;
+  border-color: #244b78;
+}
+
+[data-theme="dark"] .sidebar-user-card .text-dark,
+.theme-dark .sidebar-user-card .text-dark {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .sidebar-user-role-badge,
+.theme-dark .sidebar-user-role-badge {
+  color: #f5c531;
+}
+
+[data-theme="dark"] .app-sidebar .nav-link,
+.theme-dark .app-sidebar .nav-link {
+  color: #8ea4bf !important;
+}
+
+[data-theme="dark"] .app-sidebar .nav-link:hover,
+.theme-dark .app-sidebar .nav-link:hover {
+  background-color: #0e243d;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .app-sidebar .nav-link.active,
+.theme-dark .app-sidebar .nav-link.active {
+  background: linear-gradient(90deg, #132e4d 0%, #1a3f68 100%) !important;
+  color: #ffffff !important;
+  border-left: 3.5px solid #f5c531 !important;
+  box-shadow: 0 4px 12px rgba(4, 11, 20, 0.6);
+}
+
+[data-theme="dark"] .sidebar-section-title,
+.theme-dark .sidebar-section-title {
+  color: #d4a31e;
+}
+
+[data-theme="dark"] .sidebar-theme-container,
+.theme-dark .sidebar-theme-container {
+  background-color: #0b1a2c;
+  border-color: #1a385c;
 }
