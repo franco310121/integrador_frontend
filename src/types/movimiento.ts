@@ -1,4 +1,4 @@
-export type TipoMovimiento = 'entrada' | 'salida' | 'ajuste';
+export type TipoMovimiento = 'venta' | 'compra' | 'devolucion' | 'entrada' | 'salida' | 'ajuste';
 
 export interface MovimientoStockDB {
   id?: number;
@@ -11,9 +11,10 @@ export interface MovimientoStockDB {
   usuarioId?: string | number;
   usuario_nombre?: string;
   usuarioNombre?: string;
-  tipo: TipoMovimiento;
+  tipo: TipoMovimiento | string;
   cantidad: number;
   motivo?: string | null;
+  deDonde?: string | null;
   fecha_movimiento?: string | null;
   fechaMovimiento?: string | null;
   productos?: { nombre?: string; sku?: string } | null;
