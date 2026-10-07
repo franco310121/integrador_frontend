@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Activity, BellRing, CalendarDays, Trash2, Wallet } from 'lucide-react';
+import { Activity, BellRing, CalendarDays, Sparkles, Trash2, Wallet } from 'lucide-react';
 import { addDays, dateKey, projectCashFlow, riskFor, type PlannedMovement, type Risk } from '../utils/cashFlow';
 import { formatCurrency } from '../utils/formatters';
 import './FlujoCaja.css';
@@ -10,6 +10,23 @@ import { moneyToCents, validDate } from '../utils/financialLedger';
 
 const tone = (risk: Risk) => risk === 'Alto' ? 'danger' : risk === 'Medio' ? 'warning' : 'success';
 const showDate = (key: string) => new Date(`${key}T12:00:00`).toLocaleDateString('es-PE');
+
+function buildExplanatoryMovements(startDate: string): PlannedMovement[] {
+  return [
+    { id: 'scen-1', date: addDays(startDate, 5), description: 'Cobro proyectado por facturación a clientes corporativos', type: 'income', amount: 8500 },
+    { id: 'scen-2', date: addDays(startDate, 10), description: 'Pago programado de compra de lote de laptops e inventario', type: 'expense', amount: 12000 },
+    { id: 'scen-3', date: addDays(startDate, 15), description: 'Pago de alquiler comercial y servicios básicos (luz/agua)', type: 'expense', amount: 2500 },
+    { id: 'scen-4', date: addDays(startDate, 22), description: 'Ventas proyectadas de mostrador POS fin de mes', type: 'income', amount: 4200 },
+    { id: 'scen-5', date: addDays(startDate, 28), description: 'Pago quincenal de planilla y personal operativo', type: 'expense', amount: 5800 },
+    { id: 'scen-6', date: addDays(startDate, 35), description: 'Cobro de contrato de mantenimiento de servidores', type: 'income', amount: 9800 },
+    { id: 'scen-7', date: addDays(startDate, 42), description: 'Reposición de inventario de accesorios y periféricos', type: 'expense', amount: 7500 },
+    { id: 'scen-8', date: addDays(startDate, 50), description: 'Ingresos proyectados por campaña comercial de fin de año', type: 'income', amount: 14500 },
+    { id: 'scen-9', date: addDays(startDate, 58), description: 'Pago de gratificaciones de ley y alquiler mensual', type: 'expense', amount: 6200 },
+    { id: 'scen-10', date: addDays(startDate, 68), description: 'Ventas estimadas de inicio de trimestre', type: 'income', amount: 8200 },
+    { id: 'scen-11', date: addDays(startDate, 78), description: 'Compra de suministros operativos Q1', type: 'expense', amount: 5000 },
+    { id: 'scen-12', date: addDays(startDate, 85), description: 'Cobro de renovación de licencias y proyectos', type: 'income', amount: 6500 },
+  ];
+}
 
 export default function FlujoCaja() {
   const { session } = useAuth();
@@ -29,11 +46,7 @@ function CashFlowForm({ userId }: { userId: string }) {
   const [opening, setOpening] = useState(initial.scenario ? String(initial.scenario.opening) : '15000');
   const [reserve, setReserve] = useState(initial.scenario ? String(initial.scenario.reserve) : '10000');
   const [view, setView] = useState<'weekly' | 'monthly'>('weekly');
-  const [movements, setMovements] = useState<PlannedMovement[]>(initial.scenario?.movements ?? [
-    { id: 'planned-1', date: addDays(start, 10), description: 'Cobro proyectado de factura a cliente corporativo', type: 'income', amount: 8500 },
-    { id: 'planned-2', date: addDays(start, 18), description: 'Pago programado de compra de lote de inventario', type: 'expense', amount: 4200 },
-    { id: 'planned-3', date: addDays(start, 30), description: 'Pago de alquiler mensual de local', type: 'expense', amount: 2200 },
-  ]);
+  const [movements, setMovements] = useState<PlannedMovement[]>(initial.scenario?.movements && initial.scenario.movements.length >= 5 ? initial.scenario.movements : buildExplanatoryMovements(start));
   const [date, setDate] = useState(start);
   const [description, setDescription] = useState('');
   const [type, setType] = useState<'income' | 'expense'>('income');
@@ -45,6 +58,34 @@ function CashFlowForm({ userId }: { userId: string }) {
   const result = ready ? projectCashFlow(start, Number(opening), Number(reserve), movements, view) : null;
   const changeOpening = (value: string) => { setOpening(value); setConfirmed(false); };
   const changeReserve = (value: string) => { setReserve(value); setConfirmed(false); };
+
+  function loadExplanatoryScenario() {
+    const startDate = dateKey(new Date());
+    setStart(startDate);
+    setOpening('15000');
+    setReserve('10000');
+    const fullMovements = buildExplanatoryMovements(startDate);
+    setMovements(fullMovements);
+    setConfirmed(true);
+    setError('');
+
+    if (userId && !initial.error) {
+      const next: CashScenario = {
+        start: startDate,
+        opening: 15000,
+        reserve: 10000,
+        movements: fullMovements,
+        savedAt: new Date().toISOString(),
+      };
+      try {
+        saveCashScenario(userId, next, saved);
+        setSaved(next);
+        setSaveMessage('Escenario completo de 90 días (12 operaciones) cargado y guardado para el Dashboard.');
+      } catch {
+        setSaveMessage('Escenario completo cargado en el formulario.');
+      }
+    }
+  }
 
   function saveScenario() {
     if (!ready || !userId || initial.error) return;
@@ -82,7 +123,12 @@ function CashFlowForm({ userId }: { userId: string }) {
       <ModelDataPanel />
 
       <section className="card p-3 p-md-4 mb-4" aria-labelledby="scenario-title">
-        <h2 id="scenario-title" className="h5"><Wallet size={20} aria-hidden="true" /> Configura tu escenario</h2>
+        <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <h2 id="scenario-title" className="h5 mb-0"><Wallet size={20} aria-hidden="true" /> Configura tu escenario</h2>
+          <button type="button" className="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1" onClick={loadExplanatoryScenario}>
+            <Sparkles size={16} /> Cargar Escenario Completo (90 días · 12 movimientos)
+          </button>
+        </div>
         <p className="text-muted small">Del {showDate(start)} al {showDate(end)}. El saldo inicial corresponde al inicio del primer día, antes de los movimientos previstos.</p>
         <div className="row g-3">
           <div className="col-md-4"><label htmlFor="cash-scenario-start" className="form-label">Fecha inicial del escenario</label><input id="cash-scenario-start" type="date" className="form-control" value={start} onChange={e => { setStart(e.target.value); setConfirmed(false); }} /></div>
