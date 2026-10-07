@@ -24,76 +24,94 @@ function getDefaultLedger(): FinancialLedger {
     const dt = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
     return dt.toISOString().slice(0, 10);
   };
-  return {
-    openingDate: d(30),
-    openingCents: 1500000,
-    movements: [
-      {
-        id: 'seed-mov-1',
-        date: d(25),
+  const movements: FinancialMovement[] = [];
+
+  for (let i = 59; i >= 1; i--) {
+    const dateStr = d(i);
+    const posAmountCents = Math.round((850 + ((i * 37) % 2200)) * 100);
+    movements.push({
+      id: `seed-pos-${i}`,
+      date: dateStr,
+      type: 'ingreso',
+      concept: `Ventas del día - Mostrador POS ${dateStr}`,
+      category: 'Cobro de venta',
+      amountCents: posAmountCents,
+      contact: 'Cliente General',
+      method: i % 2 === 0 ? 'Tarjeta' : 'Yape / Plin',
+      reference: `POS-${1000 + i}`,
+      status: 'activo',
+      createdAt: new Date(now.getTime() - i * 86400000).toISOString(),
+    });
+
+    if (i % 4 === 0) {
+      movements.push({
+        id: `seed-corp-${i}`,
+        date: dateStr,
         type: 'ingreso',
-        concept: 'Cobro de venta POS - Laptops y Monitores',
+        concept: 'Cobro de factura corporativa a cliente',
         category: 'Cobro de venta',
-        amountCents: 450000,
-        contact: 'Cliente General',
-        method: 'Tarjeta',
-        reference: 'F001-0089',
+        amountCents: Math.round((3500 + ((i * 83) % 4500)) * 100),
+        contact: 'Inversiones Santa Rosa E.I.R.L.',
+        method: 'Transferencia',
+        reference: `F001-${200 + i}`,
         status: 'activo',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'seed-mov-2',
-        date: d(20),
+        createdAt: new Date(now.getTime() - i * 86400000).toISOString(),
+      });
+    }
+
+    if (i % 7 === 0) {
+      movements.push({
+        id: `seed-purchase-${i}`,
+        date: dateStr,
         type: 'egreso',
         concept: 'Pago de compra de lote de inventario',
         category: 'Pago de compra',
-        amountCents: 650000,
+        amountCents: Math.round((4200 + ((i * 97) % 5000)) * 100),
         contact: 'Distribuidora Tech Perú S.A.C.',
         method: 'Transferencia',
-        reference: 'TR-98214',
+        reference: `TR-${500 + i}`,
         status: 'activo',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'seed-mov-3',
-        date: d(15),
+        createdAt: new Date(now.getTime() - i * 86400000).toISOString(),
+      });
+    }
+
+    if (i % 15 === 0) {
+      movements.push({
+        id: `seed-serv-${i}`,
+        date: dateStr,
+        type: 'egreso',
+        concept: 'Pago de servicios públicos y luz/agua',
+        category: 'Servicios',
+        amountCents: Math.round((450 + ((i * 19) % 350)) * 100),
+        contact: 'Enel / Sedapal',
+        method: 'Transferencia',
+        reference: `SERV-${i}`,
+        status: 'activo',
+        createdAt: new Date(now.getTime() - i * 86400000).toISOString(),
+      });
+    }
+
+    if (i % 30 === 0) {
+      movements.push({
+        id: `seed-rent-${i}`,
+        date: dateStr,
         type: 'egreso',
         concept: 'Pago de alquiler de local comercial',
         category: 'Alquiler',
-        amountCents: 180000,
+        amountCents: 220000,
         contact: 'Inmobiliaria San Isidro',
         method: 'Transferencia',
-        reference: 'REC-4412',
+        reference: `ALQ-${i}`,
         status: 'activo',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'seed-mov-4',
-        date: d(10),
-        type: 'ingreso',
-        concept: 'Cobro de venta corporativa',
-        category: 'Cobro de venta',
-        amountCents: 380000,
-        contact: 'Inversiones Santa Rosa E.I.R.L.',
-        method: 'Transferencia',
-        reference: 'F001-0095',
-        status: 'activo',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'seed-mov-5',
-        date: d(5),
-        type: 'ingreso',
-        concept: 'Ventas minoristas de accesorios y mouses',
-        category: 'Cobro de venta',
-        amountCents: 125000,
-        contact: 'Venta Mostrador',
-        method: 'Yape / Plin',
-        reference: 'OPER-33190',
-        status: 'activo',
-        createdAt: new Date().toISOString(),
-      },
-    ],
+        createdAt: new Date(now.getTime() - i * 86400000).toISOString(),
+      });
+    }
+  }
+
+  return {
+    openingDate: d(60),
+    openingCents: 2500000,
+    movements,
   };
 }
 
