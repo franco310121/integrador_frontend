@@ -17,6 +17,10 @@ import Usuarios from '../pages/Usuarios';
 import Profile from '../pages/Profile';
 import Register from '../pages/Register';
 import Reports from '../pages/Reports';
+import FlujoCaja from '../pages/FlujoCaja';
+import Empresa from '../pages/Empresa';
+import MovimientosFinancieros from '../pages/MovimientosFinancieros';
+import ImportacionFinanciera from '../pages/ImportacionFinanciera';
 
 export default function AppRoutes() {
   const { isLogged } = useAuth();
@@ -26,6 +30,10 @@ export default function AppRoutes() {
       <Route path="/login" element={isLogged() ? <Navigate to="/" replace /> : <Login />} />
 
       {/* Rutas protegidas */}
+      <Route path="/importacion-financiera" element={<ProtectedRoute><AppShell><ImportacionFinanciera /></AppShell></ProtectedRoute>} />
+      <Route path="/movimientos-financieros" element={<ProtectedRoute><AppShell><MovimientosFinancieros /></AppShell></ProtectedRoute>} />
+      <Route path="/empresa" element={<ProtectedRoute adminOnly><AppShell><Empresa /></AppShell></ProtectedRoute>} />
+      <Route path="/flujo-caja" element={<ProtectedRoute><AppShell><FlujoCaja /></AppShell></ProtectedRoute>} />
       <Route
         path="/"
         element={

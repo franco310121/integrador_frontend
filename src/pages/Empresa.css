@@ -1,0 +1,12 @@
+.empresa-page { max-width: 1240px; margin: 0 auto; }
+.empresa-page .empresa-hero { background: var(--primary-color); color: #fff; border-radius: 1rem; padding: 1.75rem; }
+.empresa-page .empresa-hero h1 { color: #fff; }
+.empresa-page .empresa-symbol { padding: 1rem; border-radius: 1rem; background: #ffffff20; }
+.empresa-page .card { border: 1px solid var(--border-color); border-radius: 1rem; box-shadow: 0 4px 18px #27187e05; }
+.empresa-page h2 svg { vertical-align: -3px; margin-right: .3rem; color: var(--primary-color); }
+.empresa-page .form-label { font-size: .875rem; font-weight: 600; }
+.empresa-page .form-control { min-height: 44px; }
+.empresa-page .empresa-summary-icon { color: var(--primary-color); background: var(--primary-light); border-radius: .85rem; padding: .8rem; width: fit-content; }
+.empresa-page dt { color: var(--text-muted); font-weight: 500; font-size: .8rem; margin-top: .9rem; }
+.empresa-page dd { font-size: .9rem; overflow-wrap: anywhere; }
+@media (max-width: 575px) { .empresa-page .empresa-hero { padding: 1.25rem; } .empresa-page .empresa-symbol { display: none; } }

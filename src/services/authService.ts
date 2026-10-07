@@ -1,11 +1,12 @@
 import api from './api';
 import type { UserSession, LoginResult } from '../types/auth';
 import { STORAGE_KEYS } from '../utils/constants';
+import { normalizeSession } from '../utils/session';
 
 export function getSession(): UserSession | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.SESSION);
-    return raw ? JSON.parse(raw) : null;
+    return raw ? normalizeSession(JSON.parse(raw)) : null;
   } catch {
     return null;
   }
@@ -26,19 +27,8 @@ export async function login(correo: string, password: string): Promise<LoginResu
       return { success: false, error: 'Respuesta inválida del servidor de autenticación.' };
     }
 
-    const rolNormalizado = (data.rol || data.role || 'vendedor').toLowerCase();
-
-    const session: UserSession = {
-      userId: data.userId,
-      correo: data.correo || correo,
-      username: data.username || correo.split('@')[0],
-      displayName: data.displayName || data.nombreCompleto || correo,
-      rol: rolNormalizado,
-      role: rolNormalizado,
-      token: data.token,
-      accessToken: data.token,
-      avatarUrl: data.avatarUrl || null,
-    };
+    const session = normalizeSession({ ...data, correo: data.correo || data.user?.correo || data.user?.email || correo });
+    if (!session) return { success: false, error: 'El servidor no devolvió un identificador válido de la cuenta.' };
 
     localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(session));
     return { success: true, session };

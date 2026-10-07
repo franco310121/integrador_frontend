@@ -48,7 +48,10 @@ export default function AppShell({ children }: AppShellProps) {
   const closeSidebar = () => setSidebarOpen(false);
 
   return (
-    <div className="d-flex w-100 min-vh-100 bg-app">
+    <div
+      className="finvora-app-shell d-flex w-100 min-vh-100"
+      style={{ backgroundColor: '#f7f7ff', color: '#19113e', colorScheme: 'light' }}
+    >
       <div
         className={`sidebar-backdrop ${sidebarOpen ? 'show' : ''}`}
         onClick={closeSidebar}
@@ -61,7 +64,10 @@ export default function AppShell({ children }: AppShellProps) {
         onClose={closeSidebar}
       />
 
-      <div className="d-flex flex-column flex-grow-1 min-w-0" style={{ minHeight: '100vh' }}>
+      <div
+        className="d-flex flex-column flex-grow-1"
+        style={{ minHeight: '100vh', minWidth: 0 }}
+      >
         <Navbar
           lowStockCount={lowStockCount}
           onToggleSidebar={toggleSidebar}
@@ -75,3 +81,4 @@ export default function AppShell({ children }: AppShellProps) {
     </div>
   );
 }
+

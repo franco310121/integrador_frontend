@@ -1,0 +1,11 @@
+.import-page { max-width: 1440px; margin: 0 auto; }
+.import-page .import-hero { background: var(--primary-color); color: #fff; border-radius: 1rem; padding: 1.75rem; }
+.import-page .import-hero h1 { color: #fff; }
+.import-page .card { border: 1px solid var(--border-color); border-radius: 1rem; box-shadow: 0 4px 18px #27187e05; }
+.import-page h2 svg { vertical-align: -3px; margin-right: .3rem; color: var(--primary-color); }
+.import-page .import-kpi, .import-page .import-totals { background: var(--primary-light); border-radius: .8rem; }
+.import-page .import-preview-table, .import-page .import-format-table { font-size: .85rem; }
+.import-page .import-text-cell { min-width: 160px; max-width: 300px; overflow-wrap: anywhere; }
+.import-page .import-notes-cell { min-width: 240px; max-width: 400px; overflow-wrap: anywhere; }
+.import-page summary { cursor: pointer; color: var(--primary-color); }
+@media (max-width: 575px) { .import-page .import-hero { padding: 1.25rem; } }

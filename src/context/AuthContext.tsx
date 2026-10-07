@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, type ReactNode }
 import { getSession, clearSession } from '../services/authService';
 import type { UserSession } from '../types/auth';
 import { STORAGE_KEYS } from '../utils/constants';
+import { normalizeSession } from '../utils/session';
 
 export interface AuthContextType {
   session: UserSession | null;
@@ -27,12 +28,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setSession = (newSession: UserSession | null) => {
-    if (newSession) {
-      localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(newSession));
+    const normalized = normalizeSession(newSession);
+    if (normalized) {
+      localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(normalized));
     } else {
       clearSession();
     }
-    setSessionState(newSession);
+    setSessionState(normalized);
   };
 
   const isAdmin    = () => session?.rol === 'admin'    || session?.role === 'admin';

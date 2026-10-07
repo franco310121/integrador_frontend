@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, type ReactNode } from 'react';
 
+// Se mantiene la firma anterior para no romper consumidores existentes.
+// El proveedor únicamente aplica y devuelve el tema claro.
 export type ThemeMode = 'light' | 'dark';
 
 export interface ThemeContextType {
@@ -10,52 +12,36 @@ export interface ThemeContextType {
 }
 
 const THEME_KEY = 'sm_theme';
-
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeMode>(() => {
-    try {
-      const saved = localStorage.getItem(THEME_KEY);
-      if (saved === 'light' || saved === 'dark') return saved;
-      return 'dark';
-    } catch {
-      return 'dark';
-    }
-  });
+const lightTheme: ThemeContextType = {
+  theme: 'light',
+  isDark: false,
+  // Compatibilidad temporal hasta retirar los botones de cambio de tema.
+  toggleTheme: () => {},
+  setTheme: (_mode: ThemeMode) => {},
+};
 
+export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
-      localStorage.setItem(THEME_KEY, theme);
-    } catch {}
+      // Sustituye cualquier preferencia oscura guardada anteriormente.
+      localStorage.setItem(THEME_KEY, 'light');
+    } catch {
+      // La aplicación también funciona si el navegador bloquea el almacenamiento.
+    }
 
     const root = document.documentElement;
-    root.setAttribute('data-theme', theme);
-    root.setAttribute('data-bs-theme', theme);
-
-    if (theme === 'dark') {
-      root.classList.add('theme-dark');
-      root.classList.remove('theme-light');
-      document.body.classList.add('theme-dark');
-      document.body.classList.remove('theme-light');
-    } else {
-      root.classList.add('theme-light');
-      root.classList.remove('theme-dark');
-      document.body.classList.add('theme-light');
-      document.body.classList.remove('theme-dark');
+    for (const element of [root, document.body]) {
+      element.setAttribute('data-theme', 'light');
+      element.setAttribute('data-bs-theme', 'light');
+      element.classList.remove('theme-dark');
+      element.classList.add('theme-light');
     }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setThemeState(prev => (prev === 'dark' ? 'light' : 'dark'));
-  };
-
-  const setTheme = (mode: ThemeMode) => {
-    setThemeState(mode);
-  };
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, isDark: theme === 'dark', toggleTheme, setTheme }}>
+    <ThemeContext.Provider value={lightTheme}>
       {children}
     </ThemeContext.Provider>
   );

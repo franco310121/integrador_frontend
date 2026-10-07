@@ -1,0 +1,14 @@
+.financial-page { max-width: 1440px; margin: 0 auto; }
+.financial-page .financial-hero { background: var(--primary-color); color: #fff; border-radius: 1rem; padding: 1.75rem; }
+.financial-page .financial-hero h1 { color: #fff; }
+.financial-page .card { border: 1px solid var(--border-color); border-radius: 1rem; box-shadow: 0 4px 18px #27187e05; }
+.financial-page h2 svg { vertical-align: -3px; margin-right: .3rem; color: var(--primary-color); }
+.financial-page .form-label { font-size: .875rem; font-weight: 600; }
+.financial-page .form-control, .financial-page .form-select { min-height: 44px; }
+.financial-page .financial-kpi { background: var(--primary-light); border-radius: .8rem; }
+.financial-page .financial-table { font-size: .85rem; }
+.financial-page .financial-concept { min-width: 180px; max-width: 280px; overflow-wrap: anywhere; }
+.financial-page .financial-reference { min-width: 100px; max-width: 180px; overflow-wrap: anywhere; }
+.financial-page .financial-cancelled td { color: var(--text-muted); }
+.financial-page .financial-cancel-actions { min-width: 190px; }
+@media (max-width: 575px) { .financial-page .financial-hero { padding: 1.25rem; } }
