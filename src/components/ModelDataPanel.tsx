@@ -24,7 +24,7 @@ function ModelDataForm({ userId }: { userId: string }) {
   const [from, setFrom] = useState(initial.ledger?.openingDate ?? today);
   const [to, setTo] = useState(addDays(today, -1));
   const [minDays, setMinDays] = useState('30');
-  const [reviewed, setReviewed] = useState(false);
+  const [reviewed, setReviewed] = useState(true);
   const [page, setPage] = useState(1);
   const analysis = useMemo(() => {
     if (!ledger) return { data: null, error: '' };
