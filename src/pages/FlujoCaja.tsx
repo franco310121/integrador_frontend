@@ -26,15 +26,19 @@ function CashFlowForm({ userId }: { userId: string }) {
   const [saveMessage, setSaveMessage] = useState(initial.error);
   const [start, setStart] = useState(initial.scenario?.start ?? dateKey(new Date()));
   const end = addDays(start, 89);
-  const [opening, setOpening] = useState(initial.scenario ? String(initial.scenario.opening) : '');
-  const [reserve, setReserve] = useState(initial.scenario ? String(initial.scenario.reserve) : '');
+  const [opening, setOpening] = useState(initial.scenario ? String(initial.scenario.opening) : '150000');
+  const [reserve, setReserve] = useState(initial.scenario ? String(initial.scenario.reserve) : '5000');
   const [view, setView] = useState<'weekly' | 'monthly'>('weekly');
-  const [movements, setMovements] = useState<PlannedMovement[]>(initial.scenario?.movements ?? []);
+  const [movements, setMovements] = useState<PlannedMovement[]>(initial.scenario?.movements ?? [
+    { id: 'planned-1', date: addDays(start, 10), description: 'Cobro proyectado de factura a cliente corporativo', type: 'income', amount: 8500 },
+    { id: 'planned-2', date: addDays(start, 18), description: 'Pago programado de compra de lote de inventario', type: 'expense', amount: 4200 },
+    { id: 'planned-3', date: addDays(start, 30), description: 'Pago de alquiler mensual de local', type: 'expense', amount: 2200 },
+  ]);
   const [date, setDate] = useState(start);
   const [description, setDescription] = useState('');
   const [type, setType] = useState<'income' | 'expense'>('income');
   const [amount, setAmount] = useState('');
-  const [confirmed, setConfirmed] = useState(Boolean(initial.scenario));
+  const [confirmed, setConfirmed] = useState(true);
   const [error, setError] = useState('');
   const valid = validDate(start) && moneyToCents(opening, true) !== null && moneyToCents(reserve) !== null && movements.every(item => item.date >= start && item.date <= end);
   const ready = valid && confirmed;
