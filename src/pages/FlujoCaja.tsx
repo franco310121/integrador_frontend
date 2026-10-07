@@ -26,8 +26,8 @@ function CashFlowForm({ userId }: { userId: string }) {
   const [saveMessage, setSaveMessage] = useState(initial.error);
   const [start, setStart] = useState(initial.scenario?.start ?? dateKey(new Date()));
   const end = addDays(start, 89);
-  const [opening, setOpening] = useState(initial.scenario ? String(initial.scenario.opening) : '150000');
-  const [reserve, setReserve] = useState(initial.scenario ? String(initial.scenario.reserve) : '5000');
+  const [opening, setOpening] = useState(initial.scenario ? String(initial.scenario.opening) : '15000');
+  const [reserve, setReserve] = useState(initial.scenario ? String(initial.scenario.reserve) : '10000');
   const [view, setView] = useState<'weekly' | 'monthly'>('weekly');
   const [movements, setMovements] = useState<PlannedMovement[]>(initial.scenario?.movements ?? [
     { id: 'planned-1', date: addDays(start, 10), description: 'Cobro proyectado de factura a cliente corporativo', type: 'income', amount: 8500 },
