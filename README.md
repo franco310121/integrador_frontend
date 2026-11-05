@@ -109,7 +109,7 @@ Configurar en el archivo `.env`:
 
 ```env
 # URL del Backend REST Spring Boot
-VITE_API_URL=https://stockmaster-backend-c1c6.onrender.com/api
+VITE_API_URL=https://integrador-backend-fuom.onrender.com/api
 
 # Para ejecución local del backend:
 # VITE_API_URL=http://localhost:8080/api

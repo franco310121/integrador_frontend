@@ -2,7 +2,7 @@ import axios, { type InternalAxiosRequestConfig } from 'axios';
 import { STORAGE_KEYS } from '../utils/constants';
 
 const API_BASE_URL: string =
-  import.meta.env?.VITE_API_URL || 'https://stockmaster-backend-c1c6.onrender.com/api';
+  import.meta.env?.VITE_API_URL || 'https://integrador-backend-fuom.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
