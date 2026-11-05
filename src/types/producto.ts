@@ -7,7 +7,7 @@ export interface CategoriaDB {
 }
 
 export interface ProductoDB {
-  id?: number;
+  id: number;
   categoria_id?: number | null;
   categoriaId?: number | null;
   categoria_nombre?: string | null;
@@ -16,17 +16,18 @@ export interface ProductoDB {
   nombre: string;
   name?: string;
   descripcion?: string | null;
-  precio_compra?: number | string | null;
-  precioCompra?: number | string | null;
-  precio_venta?: number | string | null;
-  precioVenta?: number | string | null;
-  stock?: number | string | null;
-  stock_minimo?: number | string | null;
-  stockMinimo?: number | string | null;
+  precio_compra?: number;
+  precioCompra: number;
+  precio_venta?: number;
+  precioVenta: number;
+  stock: number;
+  stock_minimo?: number;
+  stockMinimo?: number;
   estado?: string;
   imagen_url?: string | null;
   imagenUrl?: string | null;
   margen?: number | null;
+  margenGanancia?: number | null;
   stockLabel?: string | null;
   fecha_creacion?: string | null;
   fechaCreacion?: string | null;

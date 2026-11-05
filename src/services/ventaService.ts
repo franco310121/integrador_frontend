@@ -5,6 +5,22 @@ import { IGV_RATE } from '../utils/constants';
 function normalizeVenta(v: any): VentaDB {
   if (!v) return v;
   const fecha = v.fechaVenta ?? v.fecha_venta ?? v.date;
+  const mappedDetalles: DetalleVentaDB[] = (v.detalles || v.items || []).map((d: any) => ({
+    ...d,
+    id: d.id,
+    ventaId: d.ventaId ?? d.venta_id,
+    venta_id: d.ventaId ?? d.venta_id,
+    productoId: d.productoId ?? d.producto_id,
+    producto_id: d.productoId ?? d.producto_id,
+    productoNombre: d.productoNombre ?? d.producto_nombre ?? d.productName ?? '',
+    producto_nombre: d.productoNombre ?? d.producto_nombre ?? d.productName ?? '',
+    sku: d.sku,
+    cantidad: d.cantidad,
+    precioUnitario: Number(d.precioUnitario ?? d.precio_unitario ?? d.unitPrice ?? 0),
+    precio_unitario: Number(d.precioUnitario ?? d.precio_unitario ?? d.unitPrice ?? 0),
+    subtotal: Number(d.subtotal || 0),
+  }));
+  const metodoNombre = v.metodoPagoNombre ?? v.metodo_pago_nombre ?? v.metodoPago;
   return {
     ...v,
     id: v.id,
@@ -17,8 +33,9 @@ function normalizeVenta(v: any): VentaDB {
     cliente: v.cliente ?? v.customerName ?? '',
     metodoPagoId: v.metodoPagoId ?? v.metodo_pago_id,
     metodo_pago_id: v.metodoPagoId ?? v.metodo_pago_id,
-    metodoPagoNombre: v.metodoPagoNombre ?? v.metodo_pago_nombre,
-    metodo_pago_nombre: v.metodoPagoNombre ?? v.metodo_pago_nombre,
+    metodoPagoNombre: metodoNombre,
+    metodo_pago_nombre: metodoNombre,
+    metodoPago: metodoNombre,
     subtotal: Number(v.subtotal || 0),
     igv: Number(v.igv || 0),
     descuento: Number(v.descuento || 0),
@@ -27,21 +44,8 @@ function normalizeVenta(v: any): VentaDB {
     fechaVenta: fecha,
     fecha_venta: fecha,
     observaciones: v.observaciones,
-    detalles: (v.detalles || []).map((d: any) => ({
-      ...d,
-      id: d.id,
-      ventaId: d.ventaId ?? d.venta_id,
-      venta_id: d.ventaId ?? d.venta_id,
-      productoId: d.productoId ?? d.producto_id,
-      producto_id: d.productoId ?? d.producto_id,
-      productoNombre: d.productoNombre ?? d.producto_nombre ?? d.productName,
-      producto_nombre: d.productoNombre ?? d.producto_nombre ?? d.productName,
-      sku: d.sku,
-      cantidad: d.cantidad,
-      precioUnitario: Number(d.precioUnitario ?? d.precio_unitario ?? d.unitPrice ?? 0),
-      precio_unitario: Number(d.precioUnitario ?? d.precio_unitario ?? d.unitPrice ?? 0),
-      subtotal: Number(d.subtotal || 0),
-    })),
+    detalles: mappedDetalles,
+    items: mappedDetalles,
   };
 }
 
@@ -82,7 +86,7 @@ export async function createSale(params: {
   descuento?: number;
   observaciones?: string | null;
   items: { productoId: number; cantidad: number; precioUnitario: number }[];
-}): Promise<{ venta: VentaDB; numeroBoleta: string }> {
+}): Promise<VentaDB & { venta: VentaDB; numeroBoleta: string }> {
   const payload = {
     cliente: params.cliente,
     metodoPagoId: params.metodoPagoId || null,
@@ -98,6 +102,7 @@ export async function createSale(params: {
   const { data } = await api.post('/ventas', payload);
   const normalized = normalizeVenta(data);
   return {
+    ...normalized,
     venta: normalized,
     numeroBoleta: normalized.numeroBoleta || normalized.numero_boleta || '',
   };

@@ -137,20 +137,15 @@ export default function HistorialVentas() {
 
       {/* Encabezado y Navegación rápida */}
       <div className="d-flex flex-column flex-md-row md:align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 fw-bold mb-1 d-flex align-items-center gap-2">
-            <Receipt className="text-primary" size={28} />
-            Historial de Comprobantes
-          </h1>
-          <p className="text-muted small mb-0">
-            Registro cronológico, auditoría de boletas emitidas y control de anulaciones.
-          </p>
-        </div>
+        <h1 className="h4 fw-bold mb-0 d-flex align-items-center gap-2">
+          <Receipt className="text-primary" size={24} />
+          Boletas emitidas
+        </h1>
 
         <div className="d-flex align-items-center gap-2">
           <Link to="/ventas" className="btn btn-primary d-flex align-items-center gap-2 shadow-sm">
             <DollarSign size={16} />
-            <span>Nueva Venta (POS)</span>
+            <span>Nueva Venta</span>
           </Link>
           <Link to="/devoluciones" className="btn btn-outline-secondary d-flex align-items-center gap-2">
             <RotateCcw size={16} />
@@ -163,55 +158,49 @@ export default function HistorialVentas() {
       <div className="row g-3 mb-4">
         <div className="col-12 col-sm-6 col-xl-3">
           <div className="card border-0 shadow-sm rounded-4 p-3 bg-white">
-            <div className="d-flex align-items-center justify-content-between mb-2">
-              <span className="text-muted small fw-semibold">Total Facturado</span>
+            <div className="d-flex align-items-center justify-content-between mb-1">
+              <span className="text-muted small fw-semibold">Total vendido</span>
               <div className="p-2 bg-success bg-opacity-10 text-success rounded-3">
                 <TrendingUp size={18} />
               </div>
             </div>
-            <div className="h4 fw-bold text-dark mb-1">{formatCurrency(sumTotalEmitido)}</div>
-            <div className="small text-muted">{totalCompletadas.length} comprobantes válidos</div>
+            <div className="h4 fw-bold text-dark mb-0">{formatCurrency(sumTotalEmitido)}</div>
           </div>
         </div>
 
         <div className="col-12 col-sm-6 col-xl-3">
           <div className="card border-0 shadow-sm rounded-4 p-3 bg-white">
-            <div className="d-flex align-items-center justify-content-between mb-2">
-              <span className="text-muted small fw-semibold">Comprobantes Emitidos</span>
+            <div className="d-flex align-items-center justify-content-between mb-1">
+              <span className="text-muted small fw-semibold">Boletas emitidas</span>
               <div className="p-2 bg-primary bg-opacity-10 text-primary rounded-3">
                 <Receipt size={18} />
               </div>
             </div>
-            <div className="h4 fw-bold text-dark mb-1">{sales.length}</div>
-            <div className="small text-muted">{totalAnuladas} anulaciones registradas</div>
+            <div className="h4 fw-bold text-dark mb-0">{sales.length}</div>
           </div>
         </div>
 
         <div className="col-12 col-sm-6 col-xl-3">
           <div className="card border-0 shadow-sm rounded-4 p-3 bg-white">
-            <div className="d-flex align-items-center justify-content-between mb-2">
-              <span className="text-muted small fw-semibold">Ticket Promedio</span>
+            <div className="d-flex align-items-center justify-content-between mb-1">
+              <span className="text-muted small fw-semibold">Venta promedio</span>
               <div className="p-2 bg-info bg-opacity-10 text-info rounded-3">
                 <DollarSign size={18} />
               </div>
             </div>
-            <div className="h4 fw-bold text-dark mb-1">{formatCurrency(ticketPromedio)}</div>
-            <div className="small text-muted">Por comprobante efectivo</div>
+            <div className="h4 fw-bold text-dark mb-0">{formatCurrency(ticketPromedio)}</div>
           </div>
         </div>
 
         <div className="col-12 col-sm-6 col-xl-3">
           <div className="card border-0 shadow-sm rounded-4 p-3 bg-white">
-            <div className="d-flex align-items-center justify-content-between mb-2">
-              <span className="text-muted small fw-semibold">Tasa de Anulaciones</span>
+            <div className="d-flex align-items-center justify-content-between mb-1">
+              <span className="text-muted small fw-semibold">Anuladas</span>
               <div className="p-2 bg-danger bg-opacity-10 text-danger rounded-3">
                 <RotateCcw size={18} />
               </div>
             </div>
-            <div className="h4 fw-bold text-dark mb-1">
-              {sales.length > 0 ? ((totalAnuladas / sales.length) * 100).toFixed(1) + '%' : '0.0%'}
-            </div>
-            <div className="small text-muted">{totalAnuladas} reversiones al Kardex</div>
+            <div className="h4 fw-bold text-dark mb-0">{totalAnuladas}</div>
           </div>
         </div>
       </div>

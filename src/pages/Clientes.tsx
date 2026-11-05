@@ -222,10 +222,7 @@ export default function Clientes() {
     <>
       {/* Header */}
       <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
-        <div>
-          <h1 className="h4 mb-1 fw-bold text-dark">Gestión de Clientes</h1>
-          <p className="text-muted mb-0 small">Directorio de clientes comerciales para emisión de comprobantes (DNI / RUC)</p>
-        </div>
+        <h1 className="h4 mb-0 fw-bold text-dark">Clientes</h1>
         <button
           type="button"
           className="btn btn-primary d-inline-flex align-items-center gap-2 rounded-3 shadow-sm px-3.5 py-2"

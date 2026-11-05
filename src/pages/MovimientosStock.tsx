@@ -277,22 +277,17 @@ export default function MovimientosStock() {
     <div className="container-fluid p-3 p-md-4">
       {/* Encabezado */}
       <div className="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
-        <div>
-          <h1 className="h4 mb-1 fw-bold text-dark d-flex align-items-center gap-2">
-            <ArrowLeftRight className="text-primary" size={24} />
-            Movimientos de Stock (Kardex)
-          </h1>
-          <p className="text-muted mb-0 small">
-            Trazabilidad automática de compras (+), ventas (-) y devoluciones (+) con referencia de origen.
-          </p>
-        </div>
+        <h1 className="h4 mb-0 fw-bold text-dark d-flex align-items-center gap-2">
+          <ArrowLeftRight className="text-primary" size={24} />
+          Entradas y salidas de productos
+        </h1>
         <button
           type="button"
           className="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1.5 rounded-3 shadow-sm"
           onClick={exportCSV}
         >
           <Download size={14} />
-          <span>Exportar Kardex CSV</span>
+          <span>Exportar CSV</span>
         </button>
       </div>
 

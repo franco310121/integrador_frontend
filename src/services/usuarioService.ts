@@ -1,6 +1,6 @@
 import api from './api';
 import type { PerfilDB } from '../types/auth';
-import type { CreateUserData, UpdateUserData } from '../types/usuario';
+import type { CreateUserData, RolInfoResponse, UpdateUserData } from '../types/usuario';
 
 function normalizeUser(u: any): PerfilDB {
   if (!u) return u;
@@ -25,6 +25,11 @@ function normalizeUser(u: any): PerfilDB {
 export async function getUsers(): Promise<PerfilDB[]> {
   const { data } = await api.get('/usuarios');
   return (data || []).map(normalizeUser);
+}
+
+export async function getRolesDisponibles(): Promise<RolInfoResponse[]> {
+  const { data } = await api.get('/usuarios/roles');
+  return data || [];
 }
 
 export async function getUserById(id: number | string): Promise<PerfilDB> {
@@ -52,6 +57,13 @@ export async function updateUser(id: number | string, data: UpdateUserData): Pro
     avatarUrl: data.avatarUrl || undefined,
   };
   const { data: res } = await api.put(`/usuarios/${id}`, payload);
+  return normalizeUser(res);
+}
+
+export async function changeUserRole(id: number | string, rol: string): Promise<PerfilDB> {
+  const { data: res } = await api.patch(`/usuarios/${id}/rol`, {
+    rol: rol.toUpperCase(),
+  });
   return normalizeUser(res);
 }
 

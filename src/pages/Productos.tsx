@@ -178,10 +178,7 @@ export default function Productos() {
   return (
     <>
       <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h4 mb-0 fw-bold text-dark">Catálogo Maestro de Productos</h1>
-          <p className="text-muted mb-0 small">Administración de inventario, precios de venta y umbrales de reabastecimiento</p>
-        </div>
+        <h1 className="h4 mb-0 fw-bold text-dark">Mis productos</h1>
         {isAdmin() && (
           <button
             type="button"

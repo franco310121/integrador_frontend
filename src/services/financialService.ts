@@ -7,7 +7,7 @@ function isMovement(item: FinancialMovement): boolean {
     && typeof item.concept === 'string' && Boolean(item.concept.trim())
     && movementCategories[item.type].includes(item.category)
     && Number.isSafeInteger(item.amountCents) && item.amountCents > 0 && item.amountCents <= 100_000_000_000
-    && ['contact', 'reference', 'method'].every(key => typeof item[key] === 'string')
+    && ['contact', 'reference', 'method'].every(key => typeof item[key as keyof FinancialMovement] === 'string')
     && paymentMethods.includes(item.method) && ['activo', 'anulado'].includes(item.status)
     && typeof item.createdAt === 'string' && Number.isFinite(Date.parse(item.createdAt));
 }
@@ -18,7 +18,8 @@ function validateLedger(data: FinancialLedger) {
     throw new Error('El registro financiero contiene datos inválidos.');
   }
 }
-function getDefaultLedger(): FinancialLedger {
+
+export function getDefaultLedger(): FinancialLedger {
   const now = new Date();
   const d = (daysAgo: number) => {
     const dt = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
@@ -117,15 +118,7 @@ function getDefaultLedger(): FinancialLedger {
 
 export function loadFinancialLedger(userId: string): FinancialLedger | null {
   const raw = localStorage.getItem(keyFor(userId));
-  if (!raw) {
-    const defaultLedger = getDefaultLedger();
-    try {
-      localStorage.setItem(keyFor(userId), JSON.stringify(defaultLedger));
-    } catch {
-      /* ignorar error de escritura */
-    }
-    return defaultLedger;
-  }
+  if (!raw) return null;
   const data = JSON.parse(raw) as FinancialLedger;
   validateLedger(data);
   return data;

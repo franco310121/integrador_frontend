@@ -19,7 +19,7 @@ function validate(scenario: CashScenario) {
       && Number.isFinite(item.amount) && item.amount >= 0.01 && item.amount <= 1e9)
     || new Set(scenario.movements.map(item => item.id)).size !== scenario.movements.length) throw new Error('El escenario guardado contiene datos inválidos.');
 }
-function getDefaultScenario(): CashScenario {
+export function getDefaultScenario(): CashScenario {
   const startDate = new Date().toISOString().slice(0, 10);
   return {
     start: startDate,
@@ -45,15 +45,7 @@ function getDefaultScenario(): CashScenario {
 
 export function loadCashScenario(userId: string): CashScenario | null {
   const raw = localStorage.getItem(keyFor(userId));
-  if (!raw) {
-    const defaultScen = getDefaultScenario();
-    try {
-      localStorage.setItem(keyFor(userId), JSON.stringify(defaultScen));
-    } catch {
-      /* ignore */
-    }
-    return defaultScen;
-  }
+  if (!raw) return null;
   const scenario = JSON.parse(raw) as CashScenario;
   validate(scenario);
   return scenario;

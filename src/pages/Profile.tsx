@@ -85,10 +85,7 @@ export default function Profile() {
   return (
     <>
       <div className="d-flex align-items-center justify-content-between mb-4">
-        <div>
-          <h1 className="h4 mb-0 fw-bold text-dark">👤 Mi Perfil</h1>
-          <p className="text-muted mb-0 small">Configuración de cuenta e información personal</p>
-        </div>
+        <h1 className="h4 mb-0 fw-bold text-dark">Mi cuenta</h1>
       </div>
 
       {msg && (

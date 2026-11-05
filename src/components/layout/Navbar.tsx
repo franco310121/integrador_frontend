@@ -16,37 +16,37 @@ interface PageInfo {
 }
 
 const TITLES: Record<string, PageInfo> = {
-  '/importacion-financiera': { title: 'Importación financiera', sub: 'Carga y validación de datos de caja', icon: FileUp, tag: 'Finanzas' },
-  '/movimientos-financieros': { title: 'Movimientos financieros', sub: 'Ingresos, egresos e histórico de caja', icon: Wallet, tag: 'Finanzas' },
-  '/empresa': { title: 'Mi empresa', sub: 'Identificación y contacto de la MYPE', icon: Building2, tag: 'Administración' },
-  '/flujo-caja': { title: 'Flujo de caja', sub: 'Proyecciones y alertas de liquidez', icon: BarChart3, tag: 'Finanzas' },
-  '/':           { title: 'Dashboard',         sub: 'Resumen general del sistema',                      icon: LayoutDashboard, tag: 'Principal' },
-  '/dashboard':  { title: 'Dashboard',         sub: 'Resumen general del sistema',                      icon: LayoutDashboard, tag: 'Principal' },
-  '/inventory':  { title: 'Inventario',         sub: 'Gestión de productos y existencias',               icon: Package, tag: 'Catálogo'  },
-  '/productos':  { title: 'Inventario',         sub: 'Gestión de productos y existencias',               icon: Package, tag: 'Catálogo'  },
-  '/sales':           { title: 'Ventas (POS)',         sub: 'Terminal de ventas y catálogo comercial',          icon: ShoppingCart, tag: 'Comercial' },
-  '/ventas':          { title: 'Ventas (POS)',         sub: 'Terminal de ventas y catálogo comercial',          icon: ShoppingCart, tag: 'Comercial' },
-  '/comprobantes':    { title: 'Historial de Comprobantes', sub: 'Auditoría de boletas y facturas emitidas',   icon: Receipt, tag: 'Comprobantes' },
-  '/historial-ventas':{ title: 'Historial de Comprobantes', sub: 'Auditoría de boletas y facturas emitidas',   icon: Receipt, tag: 'Comprobantes' },
-  '/devoluciones':    { title: 'Devoluciones',         sub: 'Reingreso a stock y gestión de mermas',            icon: RotateCcw, tag: 'Operaciones' },
-  '/returns':         { title: 'Devoluciones',         sub: 'Reingreso a stock y gestión de mermas',            icon: RotateCcw, tag: 'Operaciones' },
-  '/clientes':        { title: 'Clientes',             sub: 'Directorio y registro por DNI o RUC',              icon: Users, tag: 'Directorio' },
-  '/customers':       { title: 'Clientes',             sub: 'Directorio y registro por DNI o RUC',              icon: Users, tag: 'Directorio' },
-  '/movements':  { title: 'Movimientos',        sub: 'Trazabilidad y auditoría de existencias (Kardex)', icon: ArrowLeftRight, tag: 'Kardex'    },
-  '/movimientos':{ title: 'Movimientos',        sub: 'Trazabilidad y auditoría de existencias (Kardex)', icon: ArrowLeftRight, tag: 'Kardex'    },
-  '/auditoria':  { title: 'Auditoría y Kardex', sub: 'Trazabilidad y libro de movimientos',             icon: ArrowLeftRight, tag: 'Kardex'    },
-  '/profile':    { title: 'Mi Perfil',          sub: 'Configuración de cuenta e información personal',   icon: UserRound, tag: 'Cuenta'    },
-  '/perfil':     { title: 'Mi Perfil',          sub: 'Configuración de cuenta e información personal',   icon: UserRound, tag: 'Cuenta'    },
-  '/purchase':   { title: 'Compras',            sub: 'Órdenes de compra y gestión de proveedores',      icon: ShoppingCart, tag: 'Gestión'   },
-  '/compras':    { title: 'Compras',            sub: 'Órdenes de compra y gestión de proveedores',      icon: ShoppingCart, tag: 'Gestión'   },
-  '/register':   { title: 'Registrar Producto', sub: 'Configura precios de productos ingresados',       icon: PlusCircle, tag: 'Catálogo'  },
-  '/registrar':  { title: 'Registrar Producto', sub: 'Configura precios de productos ingresados',       icon: PlusCircle, tag: 'Catálogo'  },
-  '/categories': { title: 'Categorías',         sub: 'Gestión y segmentación del catálogo',             icon: Tags, tag: 'Catálogo'  },
-  '/categorias': { title: 'Categorías',         sub: 'Gestión y segmentación del catálogo',             icon: Tags, tag: 'Catálogo'  },
-  '/users':      { title: 'Usuarios',           sub: 'Control de accesos y administración de roles',     icon: Users, tag: 'Seguridad' },
-  '/usuarios':   { title: 'Usuarios',           sub: 'Control de accesos y administración de roles',     icon: Users, tag: 'Seguridad' },
-  '/reports':    { title: 'Reportes',           sub: 'Análisis financiero, rentabilidad y balance',      icon: BarChart3, tag: 'Finanzas'  },
-  '/reportes':   { title: 'Reportes',           sub: 'Análisis financiero, rentabilidad y balance',      icon: BarChart3, tag: 'Finanzas'  },
+  '/importacion-financiera': { title: 'Cargar desde Excel (CSV)', sub: 'Sube tus ingresos y gastos desde una hoja de cálculo', icon: FileUp, tag: 'Mi dinero' },
+  '/movimientos-financieros': { title: 'Ingresos y gastos', sub: 'Registra el dinero que recibes y los pagos que realizas', icon: Wallet, tag: 'Mi dinero' },
+  '/empresa': { title: 'Datos de mi negocio', sub: 'Información y contacto de tu empresa', icon: Building2, tag: 'Mi negocio' },
+  '/flujo-caja': { title: 'Dinero disponible y proyecciones', sub: 'Estimación de tus próximos ingresos, gastos y alertas', icon: BarChart3, tag: 'Mi dinero' },
+  '/':           { title: 'Resumen de mi negocio', sub: '¿Cuánto dinero tienes hoy y cómo van tus ventas?', icon: LayoutDashboard, tag: 'Principal' },
+  '/dashboard':  { title: 'Resumen de mi negocio', sub: '¿Cuánto dinero tienes hoy y cómo van tus ventas?', icon: LayoutDashboard, tag: 'Principal' },
+  '/inventory':  { title: 'Mis productos',      sub: 'Consulta y actualiza precios y stock disponible',  icon: Package, tag: 'Tienda'  },
+  '/productos':  { title: 'Mis productos',      sub: 'Consulta y actualiza precios y stock disponible',  icon: Package, tag: 'Tienda'  },
+  '/sales':           { title: 'Vender (Punto de venta)', sub: 'Registra una venta rápida a tus clientes', icon: ShoppingCart, tag: 'Ventas' },
+  '/ventas':          { title: 'Vender (Punto de venta)', sub: 'Registra una venta rápida a tus clientes', icon: ShoppingCart, tag: 'Ventas' },
+  '/comprobantes':    { title: 'Boletas emitidas', sub: 'Consulta las ventas y comprobantes entregados',   icon: Receipt, tag: 'Ventas' },
+  '/historial-ventas':{ title: 'Boletas emitidas', sub: 'Consulta las ventas y comprobantes entregados',   icon: Receipt, tag: 'Ventas' },
+  '/devoluciones':    { title: 'Devoluciones',         sub: 'Registra productos devueltos por clientes',       icon: RotateCcw, tag: 'Tienda' },
+  '/returns':         { title: 'Devoluciones',         sub: 'Registra productos devueltos por clientes',       icon: RotateCcw, tag: 'Tienda' },
+  '/clientes':        { title: 'Clientes',             sub: 'Directorio de clientes por DNI o RUC',            icon: Users, tag: 'Ventas' },
+  '/customers':       { title: 'Clientes',             sub: 'Directorio de clientes por DNI o RUC',            icon: Users, tag: 'Ventas' },
+  '/movements':  { title: 'Entradas y salidas de productos', sub: 'Historial de cambios en tu mercadería', icon: ArrowLeftRight, tag: 'Tienda'    },
+  '/movimientos':{ title: 'Entradas y salidas de productos', sub: 'Historial de cambios en tu mercadería', icon: ArrowLeftRight, tag: 'Tienda'    },
+  '/auditoria':  { title: 'Historial de actividad', sub: 'Registro de acciones realizadas en el negocio',  icon: ArrowLeftRight, tag: 'Tienda'    },
+  '/profile':    { title: 'Mi cuenta',          sub: 'Tus datos personales y contraseña de acceso',      icon: UserRound, tag: 'Cuenta'    },
+  '/perfil':     { title: 'Mi cuenta',          sub: 'Tus datos personales y contraseña de acceso',      icon: UserRound, tag: 'Cuenta'    },
+  '/purchase':   { title: 'Compras a proveedores', sub: 'Registra ingreso de mercadería y proveedores',   icon: ShoppingCart, tag: 'Gestión'   },
+  '/compras':    { title: 'Compras a proveedores', sub: 'Registra ingreso de mercadería y proveedores',   icon: ShoppingCart, tag: 'Gestión'   },
+  '/register':   { title: 'Nuevo producto',     sub: 'Agrega un nuevo producto a tu tienda',            icon: PlusCircle, tag: 'Tienda'  },
+  '/registrar':  { title: 'Nuevo producto',     sub: 'Agrega un nuevo producto a tu tienda',            icon: PlusCircle, tag: 'Tienda'  },
+  '/categories': { title: 'Categorías',         sub: 'Organiza tus productos por tipo',                  icon: Tags, tag: 'Tienda'  },
+  '/categorias': { title: 'Categorías',         sub: 'Organiza tus productos por tipo',                  icon: Tags, tag: 'Tienda'  },
+  '/users':      { title: 'Equipo y permisos',  sub: 'Administra quién puede entrar y qué puede hacer',  icon: Users, tag: 'Equipo' },
+  '/usuarios':   { title: 'Equipo y permisos',  sub: 'Administra quién puede entrar y qué puede hacer',  icon: Users, tag: 'Equipo' },
+  '/reports':    { title: 'Reportes del negocio', sub: 'Resumen de ventas, compras y descargas en Excel', icon: BarChart3, tag: 'Mi dinero'  },
+  '/reportes':   { title: 'Reportes del negocio', sub: 'Resumen de ventas, compras y descargas en Excel', icon: BarChart3, tag: 'Mi dinero'  },
 };
 
 interface NavbarProps {
@@ -107,7 +107,6 @@ export default function Navbar({ lowStockCount = 0, onToggleSidebar }: NavbarPro
                 </span>
               )}
             </div>
-            <p className="navbar-page-sub mb-0 d-none d-md-block text-truncate">{page.sub}</p>
           </div>
         </div>
       </div>

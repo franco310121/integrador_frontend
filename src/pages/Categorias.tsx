@@ -140,11 +140,7 @@ export default function Categorias() {
     <section className="finvora-categorias" aria-label="Gestión de categorías">
       <style>{categoriasStyles}</style>
       <div className="d-flex align-items-center justify-content-between gap-3 mb-4 fv-hero">
-        <div>
-          <div className="fv-eyebrow">FINVORA / ORGANIZACIÓN DEL INVENTARIO</div>
-          <h1 className="h4 mb-0 fw-bold text-dark">Clasificación de Categorías</h1>
-          <p className="text-muted mb-0 small">Estructuración y jerarquía taxonómica de los artículos del inventario</p>
-        </div>
+        <h1 className="h4 mb-0 fw-bold text-dark">Categorías</h1>
         <div className="fv-hero-icon" aria-hidden="true"><Tags size={28} /></div>
       </div>
       {msg && (

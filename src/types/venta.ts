@@ -1,3 +1,5 @@
+import type { ProductoDB } from './producto';
+
 export interface MetodoPagoDB {
   id: number;
   nombre: string;
@@ -8,9 +10,9 @@ export interface DetalleVentaDB {
   venta_id?: number | null;
   ventaId?: number | null;
   producto_id?: number;
-  productoId?: number;
+  productoId: number;
   producto_nombre?: string;
-  productoNombre?: string;
+  productoNombre: string;
   sku?: string | null;
   cantidad: number;
   precio_unitario?: number;
@@ -31,6 +33,7 @@ export interface VentaDB {
   metodoPagoId?: number | null;
   metodo_pago_nombre?: string;
   metodoPagoNombre?: string;
+  metodoPago?: string;
   subtotal: number;
   igv: number;
   descuento?: number;
@@ -40,14 +43,17 @@ export interface VentaDB {
   fechaVenta?: string;
   observaciones?: string | null;
   detalles?: DetalleVentaDB[];
+  items?: DetalleVentaDB[];
 }
 
 export interface CarritoVentaItem {
-  productoId: number;
-  productoNombre: string;
-  sku: string | null;
+  producto: ProductoDB;
+  productoId?: number;
+  productoNombre?: string;
+  sku?: string | null;
   cantidad: number;
   precioUnitario: number;
-  stockDisponible: number;
+  subtotal: number;
+  stockDisponible?: number;
   stockMax?: number;
 }

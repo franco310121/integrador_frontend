@@ -14,7 +14,7 @@ export interface CreateUserData {
   correo: string;
   password: string;
   nombreCompleto: string;
-  rol: RolUsuario;
+  rol: RolUsuario | string;
 }
 
 export interface UpdateUserData {
@@ -23,4 +23,10 @@ export interface UpdateUserData {
   estado?: string;
   password?: string;
   avatarUrl?: string | null;
+}
+
+export interface RolInfoResponse {
+  rol: string;
+  descripcion: string;
+  permisos: string[];
 }

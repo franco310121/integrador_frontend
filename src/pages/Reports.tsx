@@ -123,10 +123,7 @@ export default function Reports() {
   return (
     <>
       <div className="d-flex align-items-center justify-content-between mb-4">
-        <div>
-          <h1 className="h4 mb-0 fw-bold text-dark">📊 Reportes Financieros y Rentabilidad</h1>
-          <p className="text-muted mb-0 small">Análisis consolidado de ventas, compras, márgenes y descarga de datos</p>
-        </div>
+        <h1 className="h4 mb-0 fw-bold text-dark">Reportes del negocio</h1>
       </div>
 
       {/* Filtros de Rango de Fechas y Exportación */}

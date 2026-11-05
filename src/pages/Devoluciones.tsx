@@ -212,15 +212,10 @@ export default function Devoluciones() {
 
       {/* Encabezado */}
       <div className="d-flex flex-column flex-md-row md:align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 fw-bold mb-1 d-flex align-items-center gap-2">
-            <RotateCcw className="text-warning" size={28} />
-            Gestión de Devoluciones
-          </h1>
-          <p className="text-muted small mb-0">
-            Reingreso a inventario o registro de merma con trazabilidad completa en Kardex.
-          </p>
-        </div>
+        <h1 className="h4 fw-bold mb-0 d-flex align-items-center gap-2">
+          <RotateCcw className="text-warning" size={24} />
+          Devoluciones
+        </h1>
 
         <div className="d-flex align-items-center gap-2">
           <Link to="/ventas" className="btn btn-outline-primary d-flex align-items-center gap-1.5">

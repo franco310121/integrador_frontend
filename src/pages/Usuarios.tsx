@@ -5,11 +5,20 @@ import {
   User,
   CheckCircle2,
   AlertCircle,
-  Power
+  Power,
+  KeyRound,
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import { getUsers, createUser, deactivateUser, activateUser } from '../services/usuarioService';
+import {
+  getUsers,
+  getRolesDisponibles,
+  createUser,
+  changeUserRole,
+  deactivateUser,
+  activateUser,
+} from '../services/usuarioService';
 import type { PerfilDB } from '../types/auth';
+import type { RolInfoResponse } from '../types/usuario';
 import Loader from '../components/feedback/Loader';
 import { formatDate } from '../utils/formatters';
 
@@ -18,6 +27,7 @@ const INITIAL_FORM = { correo: '', password: '', nombreCompleto: '', rol: 'vende
 export default function Usuarios() {
   const { session } = useAuth();
   const [users, setUsers]           = useState<PerfilDB[]>([]);
+  const [rolesInfo, setRolesInfo]   = useState<RolInfoResponse[]>([]);
   const [loading, setLoading]       = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [createForm, setCreateForm] = useState(INITIAL_FORM);
@@ -26,7 +36,15 @@ export default function Usuarios() {
   const [msgType, setMsgType]       = useState<'success' | 'danger'>('success');
 
   useEffect(() => {
-    getUsers().then(setUsers).finally(() => setLoading(false));
+    Promise.all([
+      getUsers(),
+      getRolesDisponibles().catch(() => []),
+    ])
+      .then(([uList, rList]) => {
+        setUsers(uList);
+        setRolesInfo(rList);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const showNotification = (message: string, type: 'success' | 'danger' = 'success') => {
@@ -65,6 +83,17 @@ export default function Usuarios() {
     }
   };
 
+  const handleToggleRole = async (user: PerfilDB, nuevoRol: string) => {
+    if (nuevoRol === user.rol) return;
+    try {
+      const updated = await changeUserRole(user.id, nuevoRol);
+      setUsers(prev => prev.map(u => (u.id === user.id ? updated : u)));
+      showNotification(`Rol de ${user.nombre_completo} actualizado a ${nuevoRol.toUpperCase()}.`, 'success');
+    } catch {
+      showNotification('No se pudo actualizar el rol del usuario.', 'danger');
+    }
+  };
+
   const handleToggleStatus = async (user: PerfilDB) => {
     const isCurrentlyActive = user.estado === 'activo';
     try {
@@ -87,17 +116,14 @@ export default function Usuarios() {
   return (
     <>
       <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h4 mb-0 fw-bold text-dark">Administración de Cuentas</h1>
-          <p className="text-muted mb-0 small">Gestión de usuarios del sistema, niveles de autorización y credenciales</p>
-        </div>
+        <h1 className="h4 mb-0 fw-bold text-dark">Equipo y permisos</h1>
         <button
           type="button"
           className="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm"
           onClick={() => setShowCreate(true)}
         >
           <UserPlus size={16} />
-          <span>Crear Nuevo Usuario</span>
+          <span>Nuevo Usuario</span>
         </button>
       </div>
 
@@ -144,10 +170,23 @@ export default function Usuarios() {
                   </td>
                   <td className="text-muted small">{u.correo}</td>
                   <td>
-                    <span className={`badge d-inline-flex align-items-center gap-1 py-1 px-2.5 rounded-pill ${u.rol === 'admin' ? 'badge-soft-primary' : 'badge-soft-success'}`}>
-                      {u.rol === 'admin' ? <ShieldCheck size={12} /> : <User size={12} />}
-                      <span>{u.rol === 'admin' ? 'Administrador' : 'Vendedor'}</span>
-                    </span>
+                    {u.id === session?.userId ? (
+                      <span className={`badge d-inline-flex align-items-center gap-1 py-1 px-2.5 rounded-pill ${u.rol === 'admin' ? 'badge-soft-primary' : 'badge-soft-success'}`}>
+                        {u.rol === 'admin' ? <ShieldCheck size={12} /> : <User size={12} />}
+                        <span>{u.rol === 'admin' ? 'Administrador' : 'Vendedor'}</span>
+                      </span>
+                    ) : (
+                      <select
+                        className="form-select form-select-sm"
+                        style={{ width: 150 }}
+                        value={u.rol}
+                        onChange={e => handleToggleRole(u, e.target.value)}
+                        aria-label={`Cambiar rol de ${u.nombre_completo}`}
+                      >
+                        <option value="admin">Administrador</option>
+                        <option value="vendedor">Vendedor</option>
+                      </select>
+                    )}
                   </td>
                   <td>
                     <span className={`badge py-1 px-2.5 rounded-pill ${u.estado === 'activo' ? 'badge-soft-success' : 'badge-soft-danger'}`}>

@@ -322,15 +322,10 @@ export default function Ventas() {
 
       {/* Barra Superior de Control y Accesos Rápidos */}
       <div className="d-flex flex-column flex-md-row md:align-items-center justify-content-between gap-3 mb-4">
-        <div>
-          <h1 className="h3 fw-bold mb-1 d-flex align-items-center gap-2">
-            <ShoppingCart className="text-primary" size={28} />
-            Terminal de Ventas (POS)
-          </h1>
-          <p className="text-muted small mb-0">
-            Catálogo interactivo separado con facturación instantánea y control de existencias.
-          </p>
-        </div>
+        <h1 className="h4 fw-bold mb-0 d-flex align-items-center gap-2">
+          <ShoppingCart className="text-primary" size={24} />
+          Vender (Punto de venta)
+        </h1>
 
         <div className="d-flex align-items-center gap-2">
           <Link

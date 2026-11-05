@@ -6,7 +6,6 @@ import {
   Package,
   AlertTriangle,
   TrendingUp,
-  Receipt,
   CheckCircle2,
   ArrowRight,
   ArrowLeftRight,
@@ -271,7 +270,6 @@ export default function Dashboard() {
   });
   const ingresoHoy = ventasHoy.reduce((a, s) => a + Number(s.total || 0), 0);
   const totalIngr  = sales.reduce((a, s) => a + Number(s.total || 0), 0);
-  const totalIGV   = sales.reduce((a, s) => a + Number(s.igv || 0), 0);
 
   const lowStock = products.filter(p => {
     const st = Number(p.stock || 0);
@@ -282,90 +280,76 @@ export default function Dashboard() {
 
   const kpis = [
     {
-      label: 'Facturación del Día',
+      label: 'Ventas realizadas hoy',
       value: formatCurrency(ingresoHoy),
-      meta: `${ventasHoy.length} ventas hoy`,
+      meta: `${ventasHoy.length} ${ventasHoy.length === 1 ? 'venta registrada hoy' : 'ventas registradas hoy'}`,
       icon: DollarSign,
       color: 'text-emerald-600',
       bg: 'bg-success-subtle text-success',
     },
     {
-      label: 'Total de Ventas',
-      value: String(sales.length),
-      meta: 'Comprobantes emitidos',
-      icon: ShoppingCart,
-      color: 'text-blue-600',
-      bg: 'bg-primary-subtle text-primary',
-    },
-    {
-      label: 'Catálogo Activo',
+      label: 'Productos en tu tienda',
       value: String(products.length),
-      meta: 'Productos registrados',
+      meta: 'Artículos listos para vender',
       icon: Package,
       color: 'text-indigo-600',
       bg: 'bg-info-subtle text-info',
     },
     {
-      label: 'Alertas de Stock',
+      label: 'Productos por agotarse',
       value: String(outStock.length + lowStock.length),
-      meta: outStock.length > 0 ? `${outStock.length} sin existencias` : lowStock.length > 0 ? `${lowStock.length} nivel crítico` : 'Inventario óptimo',
+      meta: outStock.length > 0 ? `${outStock.length} agotados — requieren compra` : lowStock.length > 0 ? `${lowStock.length} con pocas unidades` : 'Tienes buen stock en todo',
       icon: AlertTriangle,
       color: outStock.length > 0 ? 'text-danger' : lowStock.length > 0 ? 'text-warning' : 'text-success',
       bg: outStock.length > 0 ? 'bg-danger-subtle text-danger' : lowStock.length > 0 ? 'bg-warning-subtle text-warning' : 'bg-success-subtle text-success',
     },
     ...(isAdmin() ? [
       {
-      label: 'Facturación Histórica',
+        label: 'Total vendido acumulado',
         value: formatCurrency(totalIngr),
-        meta: 'Monto bruto consolidado',
+        meta: `${sales.length} boletas emitidas en total`,
         icon: TrendingUp,
         color: 'text-primary',
         bg: 'bg-primary-subtle text-primary',
-      },
-      {
-        label: 'IGV en Comprobantes',
-        value: formatCurrency(totalIGV),
-        meta: '18% tributario acumulado',
-        icon: Receipt,
-        color: 'text-purple-600',
-        bg: 'bg-secondary-subtle text-dark',
       },
     ] : []),
   ];
 
   return (
-    <section className="finvora-dashboard" aria-label="Panel de control Finvora">
+    <section className="finvora-dashboard" aria-label="Resumen de mi negocio">
       <style>{dashboardStyles}</style>
       {/* Header Banner */}
       <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4 fv-hero">
-        <div>
-          <div className="fv-eyebrow">FINVORA / PANEL DE CONTROL</div>
-          <div className="d-flex flex-wrap align-items-center gap-2 mb-2">
-            <h1 className="h4 mb-0 fw-bold text-dark">Bienvenido, {session?.displayName || session?.username}</h1>
-            <span className="badge badge-soft-primary px-2 py-1 rounded-pill">
-              <Sparkles size={12} className="me-1" />
-              {isAdmin() ? 'Administrador' : 'Ventas'}
-            </span>
-          </div>
-          <p className="text-muted mb-0 small">
-            Consulta tu caja, planificación financiera, ventas e inventario
-          </p>
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <h1 className="h4 mb-0 fw-bold text-dark">Hola, {session?.displayName || session?.username}</h1>
+          <span className="badge badge-soft-primary px-2 py-1 rounded-pill">
+            <Sparkles size={12} className="me-1" />
+            {isAdmin() ? 'Administrador' : 'Ventas'}
+          </span>
         </div>
-        <div className="d-flex gap-2 fv-hero-actions">
+        <div className="d-flex flex-wrap gap-2 fv-hero-actions">
+          <button
+            type="button"
+            className="btn btn-outline-primary d-inline-flex align-items-center gap-2 rounded-3 px-3"
+            onClick={() => navigate('/movimientos-financieros')}
+          >
+            <PlusCircle size={16} />
+            <span>Anotar ingreso o gasto</span>
+          </button>
           <button
             type="button"
             className="btn btn-primary d-inline-flex align-items-center gap-2 fv-primary-btn"
             onClick={() => navigate('/ventas')}
           >
             <ShoppingCart size={16} />
-            <span>Punto de Venta</span>
+            <span>Registrar una venta</span>
           </button>
         </div>
       </div>
 
       <FinancialDashboard />
-      <h2 className="h5 fw-bold mb-3">Ventas e inventario</h2>
-      {loading ? <Loader /> : operationalError ? <div className="alert alert-warning">No se pudieron actualizar ventas e inventario desde el servidor. El panel financiero muestra los datos locales disponibles.</div> : <>
+      <h2 className="h5 fw-bold mb-3">Ventas y mercadería</h2>
+      {loading ? <Loader /> : operationalError ? <div className="alert alert-warning">No se pudieron actualizar ventas e inventario desde el servidor.</div> : <>
       {/* KPI Cards Grid */}
       <div className="row g-3 mb-4">
         {kpis.map((k, i) => {
@@ -373,7 +357,7 @@ export default function Dashboard() {
           return (
             <div key={i} className={`col-12 col-sm-6 ${kpis.length > 4 ? 'col-xl-4' : 'col-xl-3'}`}>
               <div className="card h-100 p-3 fv-kpi">
-                <div className="d-flex align-items-center justify-content-between mb-2">
+                <div className="d-flex align-items-center justify-content-between mb-1">
                   <span className="text-muted fw-semibold small text-uppercase fv-kpi-label" style={{ fontSize: '.68rem', letterSpacing: '.05em' }}>
                     {k.label}
                   </span>
@@ -384,8 +368,7 @@ export default function Dashboard() {
                     <Icon size={16} />
                   </div>
                 </div>
-                <div className="h4 mb-1 fw-bold text-dark fv-kpi-value">{k.value}</div>
-                <div className="text-muted" style={{ fontSize: '.74rem' }}>{k.meta}</div>
+                <div className="h4 mb-0 fw-bold text-dark fv-kpi-value">{k.value}</div>
               </div>
             </div>
           );
@@ -422,8 +405,7 @@ export default function Dashboard() {
                   >
                     <CheckCircle2 size={24} />
                   </div>
-                  <div className="fw-semibold text-dark small">Inventario en estado óptimo</div>
-                  <div className="text-muted small mt-1">Todos los artículos registrados superan su stock mínimo.</div>
+                  <div className="fw-semibold text-dark small">Stock al día</div>
                 </div>
               ) : (
                 <div className="list-group list-group-flush">
@@ -466,58 +448,46 @@ export default function Dashboard() {
           <div className="card h-100 border-0 shadow-sm rounded-3">
             <div className="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
               <Sparkles size={18} className="text-primary" />
-              <span className="fw-bold text-dark small text-uppercase">Acceso Directo a Módulos</span>
+              <span className="fw-bold text-dark small text-uppercase">Accesos Rápidos</span>
             </div>
             <div className="card-body p-3">
               <div className="row g-3">
                 <div className="col-6">
                   <button
                     type="button"
-                    className="btn btn-outline-primary fv-module-featured w-100 p-3 text-start rounded-3 d-flex flex-column gap-2 h-100 shadow-none fv-module"
+                    className="btn btn-outline-primary fv-module-featured w-100 p-3 text-start rounded-3 d-flex align-items-center justify-content-between h-100 shadow-none fv-module"
                     onClick={() => navigate('/ventas')}
                   >
-                    <div className="d-flex align-items-center justify-content-between w-100">
-                      <ShoppingCart size={20} className="text-primary" />
-                      <ArrowRight size={14} className="text-muted" />
-                    </div>
-                    <div>
-                      <div className="fw-bold small text-dark">Punto de Venta</div>
-                      <small className="text-muted d-block" style={{ fontSize: '.72rem' }}>Emisión de boletas</small>
-                    </div>
+                    <span className="d-flex align-items-center gap-2 fw-bold small text-dark">
+                      <ShoppingCart size={18} className="text-primary" /> Punto de Venta
+                    </span>
+                    <ArrowRight size={14} className="text-muted" />
                   </button>
                 </div>
 
                 <div className="col-6">
                   <button
                     type="button"
-                    className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex flex-column gap-2 h-100 shadow-none fv-module"
+                    className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex align-items-center justify-content-between h-100 shadow-none fv-module"
                     onClick={() => navigate('/productos')}
                   >
-                    <div className="d-flex align-items-center justify-content-between w-100">
-                      <Package size={20} className="text-secondary" />
-                      <ArrowRight size={14} className="text-muted" />
-                    </div>
-                    <div>
-                      <div className="fw-bold small text-dark">Catálogo</div>
-                      <small className="text-muted d-block" style={{ fontSize: '.72rem' }}>Precios y stock</small>
-                    </div>
+                    <span className="d-flex align-items-center gap-2 fw-bold small text-dark">
+                      <Package size={18} className="text-secondary" /> Mis Productos
+                    </span>
+                    <ArrowRight size={14} className="text-muted" />
                   </button>
                 </div>
 
                 <div className="col-6">
                   <button
                     type="button"
-                    className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex flex-column gap-2 h-100 shadow-none fv-module"
+                    className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex align-items-center justify-content-between h-100 shadow-none fv-module"
                     onClick={() => navigate('/movimientos')}
                   >
-                    <div className="d-flex align-items-center justify-content-between w-100">
-                      <ArrowLeftRight size={20} className="text-secondary" />
-                      <ArrowRight size={14} className="text-muted" />
-                    </div>
-                    <div>
-                      <div className="fw-bold small text-dark">Kardex</div>
-                      <small className="text-muted d-block" style={{ fontSize: '.72rem' }}>Entradas y salidas</small>
-                    </div>
+                    <span className="d-flex align-items-center gap-2 fw-bold small text-dark">
+                      <ArrowLeftRight size={18} className="text-secondary" /> Entradas y Salidas
+                    </span>
+                    <ArrowRight size={14} className="text-muted" />
                   </button>
                 </div>
 
@@ -525,17 +495,13 @@ export default function Dashboard() {
                   <div className="col-6">
                     <button
                       type="button"
-                      className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex flex-column gap-2 h-100 shadow-none fv-module"
+                      className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex align-items-center justify-content-between h-100 shadow-none fv-module"
                       onClick={() => navigate('/compras')}
                     >
-                      <div className="d-flex align-items-center justify-content-between w-100">
-                        <Truck size={20} className="text-secondary" />
-                        <ArrowRight size={14} className="text-muted" />
-                      </div>
-                      <div>
-                        <div className="fw-bold small text-dark">Compras</div>
-                        <small className="text-muted d-block" style={{ fontSize: '.72rem' }}>Gestión de proveedores</small>
-                      </div>
+                      <span className="d-flex align-items-center gap-2 fw-bold small text-dark">
+                        <Truck size={18} className="text-secondary" /> Compras
+                      </span>
+                      <ArrowRight size={14} className="text-muted" />
                     </button>
                   </div>
                 )}
@@ -544,17 +510,13 @@ export default function Dashboard() {
                   <div className="col-6">
                     <button
                       type="button"
-                      className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex flex-column gap-2 h-100 shadow-none fv-module"
+                      className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex align-items-center justify-content-between h-100 shadow-none fv-module"
                       onClick={() => navigate('/categorias')}
                     >
-                      <div className="d-flex align-items-center justify-content-between w-100">
-                        <Tags size={20} className="text-secondary" />
-                        <ArrowRight size={14} className="text-muted" />
-                      </div>
-                      <div>
-                        <div className="fw-bold small text-dark">Categorías</div>
-                        <small className="text-muted d-block" style={{ fontSize: '.72rem' }}>Clasificación</small>
-                      </div>
+                      <span className="d-flex align-items-center gap-2 fw-bold small text-dark">
+                        <Tags size={18} className="text-secondary" /> Categorías
+                      </span>
+                      <ArrowRight size={14} className="text-muted" />
                     </button>
                   </div>
                 )}
@@ -563,17 +525,13 @@ export default function Dashboard() {
                   <div className="col-6">
                     <button
                       type="button"
-                      className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex flex-column gap-2 h-100 shadow-none fv-module"
+                      className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex align-items-center justify-content-between h-100 shadow-none fv-module"
                       onClick={() => navigate('/register')}
                     >
-                      <div className="d-flex align-items-center justify-content-between w-100">
-                        <PlusCircle size={20} className="text-secondary" />
-                        <ArrowRight size={14} className="text-muted" />
-                      </div>
-                      <div>
-                        <div className="fw-bold small text-dark">Reg. Producto</div>
-                        <small className="text-muted d-block" style={{ fontSize: '.72rem' }}>Pendientes de precio</small>
-                      </div>
+                      <span className="d-flex align-items-center gap-2 fw-bold small text-dark">
+                        <PlusCircle size={18} className="text-secondary" /> Nuevo Producto
+                      </span>
+                      <ArrowRight size={14} className="text-muted" />
                     </button>
                   </div>
                 )}
@@ -582,17 +540,13 @@ export default function Dashboard() {
                   <div className="col-6">
                     <button
                       type="button"
-                      className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex flex-column gap-2 h-100 shadow-none fv-module"
+                      className="btn btn-outline-secondary w-100 p-3 text-start rounded-3 d-flex align-items-center justify-content-between h-100 shadow-none fv-module"
                       onClick={() => navigate('/reports')}
                     >
-                      <div className="d-flex align-items-center justify-content-between w-100">
-                        <BarChart3 size={20} className="text-secondary" />
-                        <ArrowRight size={14} className="text-muted" />
-                      </div>
-                      <div>
-                        <div className="fw-bold small text-dark">Reportes</div>
-                        <small className="text-muted d-block" style={{ fontSize: '.72rem' }}>Rentabilidad y CSV</small>
-                      </div>
+                      <span className="d-flex align-items-center gap-2 fw-bold small text-dark">
+                        <BarChart3 size={18} className="text-secondary" /> Reportes
+                      </span>
+                      <ArrowRight size={14} className="text-muted" />
                     </button>
                   </div>
                 )}

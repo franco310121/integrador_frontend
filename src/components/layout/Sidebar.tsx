@@ -31,26 +31,29 @@ interface NavItem {
   label: string;
 }
 
-const NAV: NavItem[] = [
-  { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/flujo-caja', icon: BarChart3, label: 'Flujo de caja' },
-  { to: '/movimientos-financieros', icon: Wallet, label: 'Movimientos financieros' },
-  { to: '/importacion-financiera', icon: FileUp, label: 'Importación financiera' },
-  { to: '/inventory', icon: Package, label: 'Inventario' },
-  { to: '/sales', icon: ShoppingCart, label: 'Ventas (POS)' },
-  { to: '/comprobantes', icon: Receipt, label: 'Comprobantes' },
-  { to: '/devoluciones', icon: RotateCcw, label: 'Devoluciones' },
+const FINANZAS_NAV: NavItem[] = [
+  { to: '/', icon: LayoutDashboard, label: 'Resumen de mi negocio' },
+  { to: '/flujo-caja', icon: BarChart3, label: 'Dinero disponible' },
+  { to: '/movimientos-financieros', icon: Wallet, label: 'Ingresos y gastos' },
+  { to: '/importacion-financiera', icon: FileUp, label: 'Cargar desde Excel' },
+];
+
+const OPERACIONES_NAV: NavItem[] = [
+  { to: '/sales', icon: ShoppingCart, label: 'Vender (Punto de venta)' },
+  { to: '/inventory', icon: Package, label: 'Mis productos' },
   { to: '/clientes', icon: Users, label: 'Clientes' },
-  { to: '/movements', icon: ArrowLeftRight, label: 'Movimientos' },
-  { to: '/profile', icon: UserRound, label: 'Mi Perfil' },
+  { to: '/comprobantes', icon: Receipt, label: 'Boletas emitidas' },
+  { to: '/devoluciones', icon: RotateCcw, label: 'Devoluciones' },
+  { to: '/movements', icon: ArrowLeftRight, label: 'Entradas y salidas' },
+  { to: '/profile', icon: UserRound, label: 'Mi cuenta' },
 ];
 
 const ADMIN_NAV: NavItem[] = [
-  { to: '/empresa', icon: Building2, label: 'Empresa' },
-  { to: '/purchase', icon: ShoppingBag, label: 'Compras' },
-  { to: '/register', icon: PlusCircle, label: 'Reg. Producto' },
+  { to: '/empresa', icon: Building2, label: 'Datos de mi negocio' },
+  { to: '/purchase', icon: ShoppingBag, label: 'Compras a proveedores' },
+  { to: '/register', icon: PlusCircle, label: 'Nuevo producto' },
   { to: '/categories', icon: Tags, label: 'Categorías' },
-  { to: '/users', icon: ShieldCheck, label: 'Usuarios' },
+  { to: '/users', icon: ShieldCheck, label: 'Equipo y permisos' },
   { to: '/reports', icon: BarChart3, label: 'Reportes' },
 ];
 
@@ -118,14 +121,34 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
       </Link>
 
       <nav className="sidebar-nav d-flex flex-column flex-nowrap flex-grow-1 mb-2" aria-label="Navegación principal">
-        <div className="sidebar-section-title">Principal</div>
-        {NAV.map(item => {
+        <div className="sidebar-section-title">Mi dinero</div>
+        {FINANZAS_NAV.map(item => {
           const Icon = item.icon;
           return (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.to === '/'}
+              onClick={handleNavClick}
+              className={({ isActive }) =>
+                `nav-link d-flex align-items-center justify-content-between text-decoration-none ${isActive ? 'active' : ''}`
+              }
+            >
+              <div className="d-flex align-items-center gap-2">
+                <Icon size={18} strokeWidth={1.8} className="sidebar-item-icon" aria-hidden="true" />
+                <span>{item.label}</span>
+              </div>
+            </NavLink>
+          );
+        })}
+
+        <div className="sidebar-section-title mt-2">Ventas y tienda</div>
+        {OPERACIONES_NAV.map(item => {
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={item.to}
+              to={item.to}
               onClick={handleNavClick}
               className={({ isActive }) =>
                 `nav-link d-flex align-items-center justify-content-between text-decoration-none ${isActive ? 'active' : ''}`

@@ -19,6 +19,7 @@ function normalizeMovimiento(m: any): MovimientoStockDB {
     tipo: m.tipo ?? m.type ?? 'ajuste',
     cantidad: m.cantidad ?? m.quantity ?? 0,
     motivo: m.motivo ?? m.reason ?? null,
+    deDonde: m.deDonde ?? m.motivo ?? m.reason ?? null,
     fechaMovimiento: fecha,
     fecha_movimiento: fecha,
   };
@@ -42,14 +43,15 @@ export async function getMovements(params?: {
 }
 
 export async function createMovement(movimiento: {
-  productoId: number;
+  productoId?: number;
+  producto_id?: number;
   usuarioId?: number | string;
   tipo: string;
   cantidad: number;
   motivo?: string;
 }): Promise<MovimientoStockDB> {
   const payload = {
-    productoId: movimiento.productoId,
+    productoId: movimiento.productoId ?? movimiento.producto_id,
     tipo: movimiento.tipo.toLowerCase(),
     cantidad: movimiento.cantidad,
     motivo: movimiento.motivo || null,

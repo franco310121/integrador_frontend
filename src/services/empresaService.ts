@@ -1,3 +1,6 @@
+import api from './api';
+import type { EmpresaBackendRequest, EmpresaBackendResponse } from '../types/finanzas';
+
 export interface Empresa {
   razonSocial: string;
   nombreComercial: string;
@@ -35,4 +38,35 @@ export function saveEmpresa(userId: string, empresa: Empresa): StoredEmpresa {
   // Propagate storage failures so the interface never reports an unsuccessful save as successful.
   localStorage.setItem(storageKey(userId), JSON.stringify(record));
   return record;
+}
+
+export async function fetchEmpresaFromApi(): Promise<EmpresaBackendResponse | null> {
+  try {
+    const { data } = await api.get<EmpresaBackendResponse>('/empresa');
+    return data ?? null;
+  } catch (err: any) {
+    if (err?.response?.status === 404) return null;
+    throw err;
+  }
+}
+
+export async function saveEmpresaToApi(empresa: Empresa): Promise<EmpresaBackendResponse> {
+  const ubicacionExtra = [empresa.distrito, empresa.provincia, empresa.departamento]
+    .map(s => s.trim())
+    .filter(Boolean)
+    .join(', ');
+  const direccionCompleta = ubicacionExtra && !empresa.direccion.includes(ubicacionExtra)
+    ? `${empresa.direccion.trim()} (${ubicacionExtra})`
+    : empresa.direccion.trim();
+
+  const payload: EmpresaBackendRequest = {
+    nombreMype: empresa.razonSocial.trim() || empresa.nombreComercial.trim(),
+    ruc: empresa.ruc.trim(),
+    direccion: direccionCompleta,
+    telefono: empresa.telefono.trim() || undefined,
+    correo: empresa.correo.trim() || undefined,
+    sectorComercial: empresa.actividad.trim() || undefined,
+  };
+  const { data } = await api.put<EmpresaBackendResponse>('/empresa', payload);
+  return data;
 }

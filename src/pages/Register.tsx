@@ -122,10 +122,7 @@ export default function Register() {
   return (
     <>
       <div className="d-flex align-items-center justify-content-between mb-4">
-        <div>
-          <h1 className="h4 mb-0 fw-bold text-dark">✚ Registrar / Configurar Producto</h1>
-          <p className="text-muted mb-0 small">Asignación de precio de venta y SKU a mercancía recién ingresada</p>
-        </div>
+        <h1 className="h4 mb-0 fw-bold text-dark">Configurar producto</h1>
       </div>
 
       {msg && (
