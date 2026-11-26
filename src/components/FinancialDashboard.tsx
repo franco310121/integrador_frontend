@@ -251,6 +251,9 @@ function FinancialPanel({ userId }: { userId: string }) {
         </div>
       </div>
 
+      <details className="fd-details mb-3">
+        <summary className="fw-semibold">Ver planificación y análisis</summary>
+        <div className="pt-3">
       {/* 2. PRÓXIMOS MOVIMIENTOS */}
       {scenario && comparison && (
         <div className="card p-3 p-md-4 mb-3">
@@ -447,6 +450,9 @@ function FinancialPanel({ userId }: { userId: string }) {
           </div>
         </div>
       )}
+
+        </div>
+      </details>
 
       {/* 4. ALERTAS Y RECOMENDACIONES */}
       <div className="card p-3 p-md-4">

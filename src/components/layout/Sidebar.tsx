@@ -1,4 +1,4 @@
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   X,
   LogOut,
@@ -31,19 +31,22 @@ interface NavItem {
   label: string;
 }
 
-const FINANZAS_NAV: NavItem[] = [
+const NAV: NavItem[] = [
   { to: '/', icon: LayoutDashboard, label: 'Resumen de mi negocio' },
   { to: '/flujo-caja', icon: BarChart3, label: 'Dinero disponible' },
+  { to: '/sales', icon: ShoppingCart, label: 'Vender (Punto de venta)' },
+];
+
+const FINANCE_NAV: NavItem[] = [
   { to: '/movimientos-financieros', icon: Wallet, label: 'Ingresos y gastos' },
   { to: '/importacion-financiera', icon: FileUp, label: 'Cargar desde Excel' },
 ];
 
-const OPERACIONES_NAV: NavItem[] = [
-  { to: '/sales', icon: ShoppingCart, label: 'Vender (Punto de venta)' },
+const OPERATIONS_NAV: NavItem[] = [
   { to: '/inventory', icon: Package, label: 'Mis productos' },
-  { to: '/clientes', icon: Users, label: 'Clientes' },
   { to: '/comprobantes', icon: Receipt, label: 'Boletas emitidas' },
   { to: '/devoluciones', icon: RotateCcw, label: 'Devoluciones' },
+  { to: '/clientes', icon: Users, label: 'Clientes' },
   { to: '/movements', icon: ArrowLeftRight, label: 'Entradas y salidas' },
   { to: '/profile', icon: UserRound, label: 'Mi cuenta' },
 ];
@@ -64,8 +67,9 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: SidebarProps) {
-  const { session, setSession, isAdmin } = useAuth();
+  const { setSession, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     await logout();
@@ -77,7 +81,14 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
     if (onClose) onClose();
   };
 
-  const initial = (session?.displayName || session?.username || '?').charAt(0).toUpperCase();
+  const renderLink = (item: NavItem) => {
+    const Icon = item.icon;
+    return <NavLink key={item.to} to={item.to} end={item.to === '/'} onClick={handleNavClick}
+      className={({ isActive }) => `nav-link d-flex align-items-center justify-content-between text-decoration-none ${isActive ? 'active' : ''}`}>
+      <div className="d-flex align-items-center gap-2"><Icon size={18} strokeWidth={1.8} className="sidebar-item-icon" aria-hidden="true" /><span>{item.label}</span></div>
+      {item.to === '/inventory' && lowStockCount > 0 && <span className="badge rounded-pill sidebar-badge-count" aria-label={`${lowStockCount} alertas de stock`}>{lowStockCount}</span>}
+    </NavLink>;
+  };
 
   return (
     <aside className={`app-sidebar p-3 d-flex flex-column ${isOpen ? 'open' : ''}`} aria-label="Barra lateral">
@@ -88,7 +99,6 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
           </div>
           <div>
             <div className="sidebar-brand-name fw-bold">Finvora</div>
-            <div className="sidebar-brand-caption">Gestión empresarial</div>
           </div>
         </Link>
         <button
@@ -101,93 +111,19 @@ export default function Sidebar({ lowStockCount = 0, isOpen = false, onClose }: 
         </button>
       </div>
 
-      <Link
-        to="/profile"
-        onClick={handleNavClick}
-        className="sidebar-user-card d-flex align-items-center text-decoration-none gap-2 flex-shrink-0"
-        title="Mi Perfil"
-      >
-        <div className="sidebar-avatar rounded-circle d-inline-flex align-items-center justify-content-center fw-bold">
-          {initial}
-        </div>
-        <div className="overflow-hidden flex-grow-1">
-          <div className="sidebar-user-name fw-semibold text-truncate">
-            {session?.displayName || session?.username}
-          </div>
-          <div className="sidebar-user-role-badge">
-            {isAdmin() ? 'Administrador' : 'Vendedor'}
-          </div>
-        </div>
-      </Link>
-
       <nav className="sidebar-nav d-flex flex-column flex-nowrap flex-grow-1 mb-2" aria-label="Navegación principal">
-        <div className="sidebar-section-title">Mi dinero</div>
-        {FINANZAS_NAV.map(item => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/'}
-              onClick={handleNavClick}
-              className={({ isActive }) =>
-                `nav-link d-flex align-items-center justify-content-between text-decoration-none ${isActive ? 'active' : ''}`
-              }
-            >
-              <div className="d-flex align-items-center gap-2">
-                <Icon size={18} strokeWidth={1.8} className="sidebar-item-icon" aria-hidden="true" />
-                <span>{item.label}</span>
-              </div>
-            </NavLink>
-          );
-        })}
-
-        <div className="sidebar-section-title mt-2">Ventas y tienda</div>
-        {OPERACIONES_NAV.map(item => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={handleNavClick}
-              className={({ isActive }) =>
-                `nav-link d-flex align-items-center justify-content-between text-decoration-none ${isActive ? 'active' : ''}`
-              }
-            >
-              <div className="d-flex align-items-center gap-2">
-                <Icon size={18} strokeWidth={1.8} className="sidebar-item-icon" aria-hidden="true" />
-                <span>{item.label}</span>
-              </div>
-              {item.to === '/inventory' && lowStockCount > 0 && (
-                <span className="badge rounded-pill sidebar-badge-count" aria-label={`${lowStockCount} alertas de stock`}>
-                  {lowStockCount}
-                </span>
-              )}
-            </NavLink>
-          );
-        })}
-
-        {isAdmin() && (
-          <>
-            <div className="sidebar-section-title sidebar-section-admin">Administración</div>
-            {ADMIN_NAV.map(item => {
-              const Icon = item.icon;
-              return (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  onClick={handleNavClick}
-                  className={({ isActive }) =>
-                    `nav-link d-flex align-items-center gap-2 text-decoration-none ${isActive ? 'active' : ''}`
-                  }
-                >
-                  <Icon size={18} strokeWidth={1.8} className="sidebar-item-icon" aria-hidden="true" />
-                  <span>{item.label}</span>
-                </NavLink>
-              );
-            })}
-          </>
-        )}
+        {NAV.map(renderLink)}
+        {[
+          { title: 'Finanzas', items: FINANCE_NAV },
+          { title: 'Operaciones', items: OPERATIONS_NAV },
+          ...(isAdmin() ? [{ title: 'Administración', items: ADMIN_NAV }] : []),
+        ].map(group => <details key={`${group.title}-${location.pathname}`} className={`sidebar-group ${group.items.some(item => item.to === location.pathname) ? 'current' : ''}`}>
+          <summary className="sidebar-group-summary">
+            <span>{group.title}{group.items.find(item => item.to === location.pathname) && <small className="d-block">{group.items.find(item => item.to === location.pathname)?.label}</small>}</span>
+            {group.title === 'Operaciones' && lowStockCount > 0 && <span className="badge rounded-pill sidebar-badge-count">{lowStockCount}</span>}
+          </summary>
+          <div className="sidebar-group-links">{group.items.map(renderLink)}</div>
+        </details>)}
       </nav>
 
       <div className="sidebar-footer flex-shrink-0">

@@ -1,0 +1,91 @@
+{
+  "runAt": "2026-11-26T16:57:19.861Z",
+  "environment": "Frontend Vite local; API y datos financieros simulados en navegador; sin base de producción",
+  "results": [
+    {
+      "id": "UI-01",
+      "status": "APROBADO",
+      "observation": "Los análisis secundarios del Dashboard inician cerrados."
+    },
+    {
+      "id": "UI-02",
+      "status": "APROBADO",
+      "observation": "Las alertas críticas de caja e inventario siguen visibles."
+    },
+    {
+      "id": "UI-03",
+      "status": "APROBADO",
+      "observation": "El análisis financiero puede expandirse."
+    },
+    {
+      "id": "UI-04",
+      "status": "APROBADO",
+      "observation": "Ventas e inventario pueden expandirse."
+    },
+    {
+      "id": "UI-05",
+      "status": "APROBADO",
+      "observation": "El grupo Administración inicia cerrado fuera de sus rutas."
+    },
+    {
+      "id": "UI-06",
+      "status": "APROBADO",
+      "observation": "Las opciones de administración se recuperan desde el grupo."
+    },
+    {
+      "id": "UI-07",
+      "status": "APROBADO",
+      "observation": "El menú sigue compacto y señala el módulo actual."
+    },
+    {
+      "id": "UI-08",
+      "status": "APROBADO",
+      "observation": "Reportes muestra primero tres cifras y mantiene filtros y tablas cerrados."
+    },
+    {
+      "id": "UI-09",
+      "status": "APROBADO",
+      "observation": "El resumen responde al filtro aplicado."
+    },
+    {
+      "id": "UI-10",
+      "status": "APROBADO",
+      "observation": "El detalle de ventas se abre tras filtrar."
+    },
+    {
+      "id": "UI-11",
+      "status": "APROBADO",
+      "observation": "La exportación conserva el filtro activo."
+    },
+    {
+      "id": "UI-12",
+      "status": "APROBADO",
+      "observation": "El filtro aplicado permanece al volver a Reportes en la misma sesión."
+    },
+    {
+      "id": "UI-13",
+      "status": "APROBADO",
+      "observation": "Los detalles técnicos y la tabla de proyección inician cerrados."
+    },
+    {
+      "id": "UI-14",
+      "status": "APROBADO",
+      "observation": "Las alertas preventivas permanecen en la vista principal."
+    },
+    {
+      "id": "UI-15",
+      "status": "APROBADO",
+      "observation": "La proyección permite cambiar a vista mensual."
+    },
+    {
+      "id": "UI-16",
+      "status": "APROBADO",
+      "observation": "La vista mensual permanece al regresar durante la sesión."
+    },
+    {
+      "id": "UI-17",
+      "status": "APROBADO",
+      "observation": "En móvil el menú se abre y el vendedor no ve Administración."
+    }
+  ]
+}

@@ -16,14 +16,32 @@ import type { VentaDB } from '../types/venta';
 import type { CompraDB } from '../types/compra';
 import Loader from '../components/feedback/Loader';
 import { formatCurrency, formatDateTime } from '../utils/formatters';
+import { useAuth } from '../hooks/useAuth';
+
+const REPORT_FILTER_KEY = 'finvora:reportes:filtro:v1';
+function savedReportFilter(key: string): { from: string; to: string } {
+  try {
+    const value = JSON.parse(sessionStorage.getItem(key) || '{}');
+    return { from: typeof value.from === 'string' ? value.from : '', to: typeof value.to === 'string' ? value.to : '' };
+  } catch { return { from: '', to: '' }; }
+}
+function inDateRange<T>(items: T[], from: string, to: string, dateOf: (item: T) => string): T[] {
+  return items.filter(item => {
+    const date = dateOf(item).slice(0, 10);
+    return (!from || date >= from) && (!to || date <= to);
+  });
+}
 
 export default function Reports() {
+  const { session } = useAuth();
+  const reportFilterKey = `${REPORT_FILTER_KEY}:${encodeURIComponent(String(session?.userId ?? ''))}`;
   const [sales, setSales] = useState<VentaDB[]>([]);
   const [purchases, setPurchases] = useState<CompraDB[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const [filterFrom, setFilterFrom] = useState<string>('');
-  const [filterTo, setFilterTo] = useState<string>('');
+  const [savedFilter] = useState(() => savedReportFilter(reportFilterKey));
+  const [filterFrom, setFilterFrom] = useState<string>(savedFilter.from);
+  const [filterTo, setFilterTo] = useState<string>(savedFilter.to);
   const [filtV, setFiltV] = useState<VentaDB[]>([]);
   const [filtC, setFiltC] = useState<CompraDB[]>([]);
 
@@ -32,40 +50,16 @@ export default function Reports() {
       .then(([s, c]) => {
         setSales(s);
         setPurchases(c);
-        setFiltV(s);
-        setFiltC(c);
+        setFiltV(inDateRange(s, savedFilter.from, savedFilter.to, x => x.fechaVenta || x.fecha_venta || ''));
+        setFiltC(inDateRange(c, savedFilter.from, savedFilter.to, x => x.fechaCompra || x.fecha_compra || ''));
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [savedFilter]);
 
   const applyFilter = () => {
-    let s = [...sales];
-    let c = [...purchases];
-
-    if (filterFrom) {
-      s = s.filter(x => {
-        const fecha = (x.fechaVenta || x.fecha_venta || '').slice(0, 10);
-        return fecha >= filterFrom;
-      });
-      c = c.filter(x => {
-        const fecha = (x.fechaCompra || x.fecha_compra || '').slice(0, 10);
-        return fecha >= filterFrom;
-      });
-    }
-
-    if (filterTo) {
-      s = s.filter(x => {
-        const fecha = (x.fechaVenta || x.fecha_venta || '').slice(0, 10);
-        return fecha <= filterTo;
-      });
-      c = c.filter(x => {
-        const fecha = (x.fechaCompra || x.fecha_compra || '').slice(0, 10);
-        return fecha <= filterTo;
-      });
-    }
-
-    setFiltV(s);
-    setFiltC(c);
+    setFiltV(inDateRange(sales, filterFrom, filterTo, x => x.fechaVenta || x.fecha_venta || ''));
+    setFiltC(inDateRange(purchases, filterFrom, filterTo, x => x.fechaCompra || x.fecha_compra || ''));
+    sessionStorage.setItem(reportFilterKey, JSON.stringify({ from: filterFrom, to: filterTo }));
   };
 
   const clearFilter = () => {
@@ -73,6 +67,7 @@ export default function Reports() {
     setFilterTo('');
     setFiltV(sales);
     setFiltC(purchases);
+    sessionStorage.removeItem(reportFilterKey);
   };
 
   // KPIs
@@ -123,8 +118,19 @@ export default function Reports() {
   return (
     <>
       <div className="d-flex align-items-center justify-content-between mb-4">
-        <h1 className="h4 mb-0 fw-bold text-dark">Reportes del negocio</h1>
+        <div>
+          <h1 className="h4 mb-0 fw-bold text-dark">Reportes del negocio</h1>
+        </div>
       </div>
+
+      <div className="row g-3 mb-3" aria-label="Resumen de reportes">
+        <div className="col-md-4"><div className="card p-3 h-100"><span className="small text-muted">Ventas del período</span><strong className="h5 mt-2 mb-0">{formatCurrency(totalIngresos)}</strong></div></div>
+        <div className="col-md-4"><div className="card p-3 h-100"><span className="small text-muted">Compras del período</span><strong className="h5 mt-2 mb-0">{formatCurrency(totalCostos)}</strong></div></div>
+        <div className="col-md-4"><div className="card p-3 h-100"><span className="small text-muted">Diferencia entre ventas y compras</span><strong className={`h5 mt-2 mb-0 ${gananciaNet < 0 ? 'text-danger' : ''}`}>{formatCurrency(gananciaNet)}</strong></div></div>
+      </div>
+
+      <details className="card p-3 mb-3">
+        <summary className="fw-semibold text-primary">Filtrar período y exportar datos</summary>
 
       {/* Filtros de Rango de Fechas y Exportación */}
       <div className="card border-0 shadow-sm rounded-3 mb-4">
@@ -217,6 +223,11 @@ export default function Reports() {
           </div>
         </div>
       </div>
+      </details>
+
+      <details className="card p-3">
+        <summary className="fw-semibold text-primary">Ver indicadores, clientes y detalle de ventas</summary>
+        <div className="pt-3">
 
       {/* Tarjetas de KPIs */}
       <div className="row g-3 mb-4">
@@ -378,6 +389,8 @@ export default function Reports() {
           </table>
         </div>
       </div>
+        </div>
+      </details>
     </>
   );
 }

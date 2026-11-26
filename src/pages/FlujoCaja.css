@@ -1,16 +1,19 @@
 .cash-flow { max-width: 1360px; margin: 0 auto; }
 .cash-flow .cash-hero {
-  background: linear-gradient(125deg, #27187e 0%, #3925a3 100%);
-  color: white;
-  padding: 1.5rem 2rem;
-  border-radius: 1.25rem;
+  background: #fff;
+  color: var(--text-main);
+  padding: 1.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: .75rem;
 }
-.cash-flow .cash-hero h1 { color: white; }
+.cash-flow .cash-hero h1 { color: var(--text-main); }
 .cash-flow .card {
   border: 1px solid #e6e4f2;
-  border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(39, 24, 126, 0.04);
+  border-radius: .75rem;
+  box-shadow: none;
 }
+.cash-flow .cf-details > summary { cursor: pointer; }
+.cash-flow .cf-details > summary:focus-visible { outline: 3px solid #9b88df; outline-offset: 3px; }
 .cash-flow h2 svg { vertical-align: -3px; margin-right: .35rem; }
 .cash-flow .cash-table { font-size: .88rem; white-space: nowrap; }
 .cash-flow .cash-concept { min-width: 150px; max-width: 360px; overflow-wrap: anywhere; }
