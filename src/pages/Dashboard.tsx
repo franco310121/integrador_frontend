@@ -32,7 +32,7 @@ const dashboardStyles = `
 .finvora-dashboard {
   --fv-ink: #19113e;
   --fv-primary: #27187e;
-  --fv-muted: #727799;
+  --fv-muted: #5c6285;
   --fv-line: #e8e5f5;
   --fv-soft: #f7f7ff;
   color: var(--fv-ink);
@@ -46,7 +46,7 @@ const dashboardStyles = `
 .finvora-dashboard .text-dark { color: var(--fv-ink) !important; }
 .finvora-dashboard .text-muted { color: var(--fv-muted) !important; }
 .finvora-dashboard .text-primary { color: var(--fv-primary) !important; }
-.finvora-dashboard .text-secondary { color: #796aa8 !important; }
+.finvora-dashboard .text-secondary { color: #65528f !important; }
 .finvora-dashboard .border-bottom { border-color: var(--fv-line) !important; }
 .finvora-dashboard .fv-hero {
   position: relative;
@@ -191,7 +191,7 @@ const dashboardStyles = `
 }
 .finvora-dashboard .table thead th {
   background: #f9f8ff !important;
-  color: #77708f !important;
+  color: #5e5677 !important;
   font-size: .65rem;
   white-space: nowrap;
 }
