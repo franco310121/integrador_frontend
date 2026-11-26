@@ -91,7 +91,8 @@ test('CN-06 administrador navega a inventario y filtra por SKU',async({page})=>{
 });
 test('CN-07 reportes filtran y descargan CSV',async({page})=>{
   await login(page); await page.goto('/reports');
-  await expect(page.getByRole('heading',{name:'Reportes del negocio'})).toBeVisible();
+  await expect(page).toHaveURL(/\/reports$/);
+  await expect(page.getByRole('heading',{name:'Reportes del negocio',level:1,exact:true})).toBeVisible();
   await page.getByText('Filtrar período y exportar datos',{exact:true}).click();
   await page.locator('input[type=date]').nth(0).fill('2026-01-01');
   await page.locator('input[type=date]').nth(1).fill('2026-01-31');
