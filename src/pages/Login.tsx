@@ -58,7 +58,7 @@ export default function Login() {
           --sm-purple: #27187E;
           --sm-purple-dark: #1E1267;
           --sm-ink: #17133D;
-          --sm-muted: #6F7194;
+          --sm-muted: #5d6082;
           --sm-line: #E0E1F0;
           background: #F7F7FF;
           color: var(--sm-ink);
@@ -125,7 +125,7 @@ export default function Login() {
             <div className="sm-logo-wrap rounded-5 d-flex align-items-center justify-content-center p-5">
               <img src={logoImg} alt="StockMaster" className="img-fluid" style={{ maxWidth: '29rem', maxHeight: '13rem', objectFit: 'contain' }} />
             </div>
-            <p className="mt-4 mb-0 fw-medium" style={{ color: '#6F7194' }}>Controla tu inventario con claridad y confianza.</p>
+            <p className="mt-4 mb-0 fw-medium" style={{ color: '#5d6082' }}>Controla tu inventario con claridad y confianza.</p>
           </section>
 
           <main className="col-12 col-lg-6 d-flex justify-content-center">
@@ -137,7 +137,7 @@ export default function Login() {
               <header className="mb-4">
                 <span className="badge rounded-pill mb-3 px-3 py-2" style={{ color: '#27187E', backgroundColor: '#EFEDFF' }}>FINVORA</span>
                 <h1 id="login-title" className="h2 fw-bold mb-2" style={{ color: '#17133D', letterSpacing: '-.035em' }}>Iniciar sesión</h1>
-                <p className="mb-0" style={{ color: '#6F7194' }}>Ingresa tus credenciales corporativas para continuar.</p>
+                <p className="mb-0" style={{ color: '#5d6082' }}>Ingresa tus credenciales corporativas para continuar.</p>
               </header>
 
               {error && (
@@ -187,7 +187,7 @@ export default function Login() {
 
                 <div className="form-check mb-4">
                   <input type="checkbox" className="form-check-input" id="rememberCheck" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
-                  <label className="form-check-label small" htmlFor="rememberCheck" style={{ color: '#6F7194', cursor: 'pointer' }}>Recordar mi usuario</label>
+                  <label className="form-check-label small" htmlFor="rememberCheck" style={{ color: '#5d6082', cursor: 'pointer' }}>Recordar mi usuario</label>
                 </div>
 
                 <button type="submit" className="btn btn-primary btn-login w-100 fw-semibold d-flex align-items-center justify-content-center gap-2 rounded-3 text-white" disabled={loading}>
@@ -195,7 +195,7 @@ export default function Login() {
                 </button>
               </form>
 
-              <footer className="mt-4 pt-3 border-top text-center small" style={{ color: '#777995' }}>
+              <footer className="mt-4 pt-3 border-top text-center small" style={{ color: '#626681' }}>
                 <div className="d-flex align-items-center justify-content-center gap-2 mb-2">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
                   <span>Acceso seguro cifrado con TLS</span>
