@@ -1,0 +1,63 @@
+name: Finvora - Usabilidad y accesibilidad
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  usability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Instalar Playwright
+        run: npm install --no-save --package-lock=false @playwright/test@1.56.1 @axe-core/playwright@4.10.2
+      - run: npx playwright install --with-deps chromium
+      - name: Compilar frontend aislado
+        run: npm run build
+        env:
+          VITE_API_URL: /api
+      - name: Ejecutar usabilidad y accesibilidad
+        run: npx playwright test e2e/usability.spec.mjs
+      - name: Resumen de resultados
+        if: always()
+        run: |
+          node --input-type=module <<'JS' >> "$GITHUB_STEP_SUMMARY"
+          import fs from 'node:fs';
+          console.log('## Finvora — Usabilidad y accesibilidad');
+          console.log('Chromium, frontend compilado y API simulada; no utiliza datos de producción.');
+          const file = 'test-results/results.json';
+          if (!fs.existsSync(file)) { console.log('No se generó el reporte. Revisar pasos previos.'); process.exit(0); }
+          const {stats,suites} = JSON.parse(fs.readFileSync(file,'utf8'));
+          console.log('\n| Indicador | Total |\n|---|---:|');
+          for (const [label,key] of [['Aprobadas','expected'],['Fallidas','unexpected'],['Omitidas','skipped'],['Inestables','flaky']]) console.log('| '+label+' | '+stats[key]+' |');
+          console.log('\n| Caso | Resultado |\n|---|---|');
+          function walk(suite) {
+            for(const spec of suite.specs || []) console.log('| '+spec.title+' | '+(spec.ok?'APROBADO':'NO APROBADO')+' |');
+            for(const child of suite.suites || []) walk(child);
+          }
+          suites.forEach(walk);
+          console.log('\n### Auditoría axe: hallazgos por pantalla');
+          if (fs.existsSync('test-results/axe')) for (const name of fs.readdirSync('test-results/axe')) {
+            const a = JSON.parse(fs.readFileSync('test-results/axe/'+name,'utf8'));
+            console.log('\n**'+a.pantalla+'**: '+a.violations.length+' reglas con infracciones; '+a.incomplete.length+' reglas requieren revisión manual.');
+            for(const v of a.violations) console.log('- '+v.id+' ('+v.impact+'): '+v.nodes.length+' elementos. '+v.helpUrl);
+          }
+          JS
+      - name: Publicar evidencia
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Finvora-Usabilidad
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
