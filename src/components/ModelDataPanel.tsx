@@ -12,6 +12,7 @@ import type { DesempenoModeloResponse, RendimientoSistemaResponse } from '../typ
 import { dateKey, addDays } from '../utils/cashFlow';
 import { prepareModelData, modelDataCSV } from '../utils/modelData';
 import { formatCurrency } from '../utils/formatters';
+import { observedPerformance, formatMetric } from '../utils/predictivePerformance';
 
 export default function ModelDataPanel() {
   const { session } = useAuth();
@@ -50,7 +51,7 @@ function ModelDataForm({ userId }: { userId: string }) {
   const [testingPerf, setTestingPerf] = useState(false);
 
   useEffect(() => {
-    getDesempenoModelo().then(setDesempeno).catch(() => {});
+    getDesempenoModelo().then(setDesempeno).catch(() => setMessage('No se pudo consultar el desempeño predictivo.'));
     evaluarRendimientoSistema(20).then(setRendimiento).catch(() => {});
   }, []);
 
@@ -59,7 +60,7 @@ function ModelDataForm({ userId }: { userId: string }) {
     try {
       const res = await validarDesempenoModelo();
       setDesempeno(res);
-      setMessage(`Revisión completada: las estimaciones tienen un ${res.precisionActualCalculada}% de acierto.`);
+      setMessage(observedPerformance(res).message);
     } catch {
       setMessage('No se pudo comprobar la precisión en este momento.');
     } finally {
@@ -177,7 +178,7 @@ function ModelDataForm({ userId }: { userId: string }) {
         </span>
         {desempeno && (
           <span className="badge bg-success-subtle text-success">
-            Nivel de acierto actual: {desempeno.precisionActualCalculada}%
+            {observedPerformance(desempeno).label}
           </span>
         )}
       </summary>
@@ -365,7 +366,7 @@ function ModelDataForm({ userId }: { userId: string }) {
             <div className="p-3 border rounded-3 h-100 bg-light">
               <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
                 <h3 className="h6 fw-bold mb-0 d-flex align-items-center gap-2">
-                  <ShieldCheck size={18} className="text-primary" /> Precisión de las estimaciones
+                  <ShieldCheck size={18} className="text-primary" /> Desempeño predictivo
                 </h3>
                 <button
                   type="button"
@@ -373,21 +374,28 @@ function ModelDataForm({ userId }: { userId: string }) {
                   onClick={handleValidarModelo}
                   disabled={validatingModel}
                 >
-                  <RefreshCw size={14} /> {validatingModel ? 'Comprobando...' : 'Comprobar precisión'}
+                  <RefreshCw size={14} /> {validatingModel ? 'Comprobando...' : 'Evaluar desempeño'}
                 </button>
               </div>
               {desempeno ? (
                 <div className="small">
-                  <p className="mb-2 text-muted">{desempeno.mensajeValidacion}</p>
+                  <p className="mb-2 text-muted">{observedPerformance(desempeno).message}</p>
+                  <p className="mb-2"><strong>Algoritmo:</strong> {observedPerformance(desempeno).algorithm}</p>
                   <div className="d-flex flex-wrap gap-3">
                     <span>
-                      <strong>Nivel de acierto:</strong> {desempeno.precisionActualCalculada}%
+                      <strong>MAE:</strong> {formatMetric(observedPerformance(desempeno).mae, "S/ ")}
                     </span>
                     <span>
-                      <strong>Margen de variación:</strong> {desempeno.errorPorcentualMedio}%
+                      <strong>RMSE:</strong> {formatMetric(observedPerformance(desempeno).rmse, "S/ ")}
                     </span>
                     <span>
-                      <strong>Estado:</strong> {desempeno.estadoSaludModelo}
+                      <strong>MAPE:</strong> {formatMetric(observedPerformance(desempeno).mape, "", "%")}
+                    </span>
+                    <span><strong>Confianza:</strong> No estimada</span>
+                    <span><strong>Periodos cerrados:</strong> {observedPerformance(desempeno).periods ?? "N/D"}</span>
+                    <span><strong>Observaciones MAPE:</strong> {observedPerformance(desempeno).mapeCount ?? "N/D"}</span>
+                    <span>
+                      <strong>Estado:</strong> {observedPerformance(desempeno).label}
                     </span>
                   </div>
                 </div>
