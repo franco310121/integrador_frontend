@@ -214,6 +214,7 @@ export default function Productos() {
           <div className="d-flex align-items-center gap-2 flex-grow-1 flex-sm-grow-0">
             <select
               className="form-select form-select-sm"
+              aria-label="Filtrar por categoría"
               value={filterCat}
               onChange={e => setFilterCat(e.target.value)}
               style={{ minWidth: 170 }}
@@ -224,6 +225,7 @@ export default function Productos() {
 
             <select
               className="form-select form-select-sm"
+              aria-label="Filtrar por estado de stock"
               value={filterStock}
               onChange={e => setFilterStock(e.target.value)}
               style={{ minWidth: 160 }}
