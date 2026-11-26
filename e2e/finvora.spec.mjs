@@ -82,7 +82,8 @@ test('CN-06 administrador navega a inventario y filtra por SKU',async({page})=>{
   await login(page);
   await page.locator('nav summary').filter({hasText:'Operaciones'}).click();
   await page.getByRole('link',{name:'Mis productos'}).click();
-  await expect(page.getByRole('heading',{name:'Mis productos'})).toBeVisible();
+  await expect(page).toHaveURL(/\/inventory$/);
+  await expect(page.getByRole('heading',{name:'Mis productos',level:1,exact:true})).toBeVisible();
   await expect(page.getByText('Arroz QA',{exact:true})).toBeVisible();
   await page.getByPlaceholder('Buscar por nombre o SKU...').fill('QA-002');
   await expect(page.getByText('Leche QA',{exact:true})).toBeVisible();
@@ -127,5 +128,6 @@ test('CN-11 menú móvil permite navegación',async({page})=>{
   await login(page,{role:'vendedor'});
   await page.getByRole('button',{name:'Abrir menú'}).click();
   await page.getByRole('link',{name:'Dinero disponible'}).click();
-  await expect(page.getByRole('heading',{name:'Dinero disponible y proyecciones'})).toBeVisible();
+  await expect(page).toHaveURL(/\/flujo-caja$/);
+  await expect(page.getByRole('heading',{name:'Dinero disponible y proyecciones',level:1,exact:true})).toBeVisible();
 });
