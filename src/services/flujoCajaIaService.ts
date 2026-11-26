@@ -41,36 +41,8 @@ function writeLocalSimulaciones(items: SimulacionFinancieraResponse[]): void {
 export async function generarProyeccionIa(
   tipo: 'semanal' | 'mensual' = 'semanal'
 ): Promise<ProyeccionFlujoResponse> {
-  try {
-    const { data } = await api.post(`/flujo-caja-ia/proyecciones?tipo=${encodeURIComponent(tipo)}`);
-    return data;
-  } catch {
-    const dash = await getDashboardFinancieroIa().catch(() => null);
-    const candidate =
-      tipo === 'semanal'
-        ? dash?.proyeccionesSemanales?.[0]
-        : dash?.proyeccionesMensuales?.[0];
-    if (candidate) return candidate;
-    const today = new Date();
-    const inicio = today.toISOString().slice(0, 10);
-    const finDate = new Date(today);
-    finDate.setDate(finDate.getDate() + (tipo === 'semanal' ? 7 : 30));
-    const fin = finDate.toISOString().slice(0, 10);
-    const ing = tipo === 'semanal' ? 28500 : 114000;
-    const egr = tipo === 'semanal' ? 14200 : 56800;
-    return {
-      id: Date.now(),
-      modeloId: 1,
-      periodoInicio: inicio,
-      periodoFin: fin,
-      tipoProyeccion: tipo,
-      ingresoProyectado: ing,
-      egresoProyectado: egr,
-      saldoFinalEstimado: ing - egr,
-      nivelConfianza: 91.5,
-      fechaGeneracion: new Date().toISOString(),
-    };
-  }
+  const { data } = await api.post(`/flujo-caja-ia/proyecciones?tipo=${encodeURIComponent(tipo)}`);
+  return data;
 }
 
 export async function getDashboardFinancieroIa(): Promise<DashboardFinancieroResponse> {
