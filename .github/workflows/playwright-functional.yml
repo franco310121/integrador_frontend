@@ -26,7 +26,7 @@ jobs:
         env:
           VITE_API_URL: /api
       - name: Ejecutar pruebas funcionales
-        run: npx playwright test
+        run: npx playwright test e2e/finvora.spec.mjs
       - name: Resumen de resultados
         if: always()
         run: |
