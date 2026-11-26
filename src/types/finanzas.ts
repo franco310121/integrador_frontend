@@ -77,7 +77,7 @@ export interface ProyeccionFlujoResponse {
   ingresoProyectado: number;
   egresoProyectado: number;
   saldoFinalEstimado: number;
-  nivelConfianza: number;
+  nivelConfianza: number | null;
   fechaGeneracion: string;
 }
 
@@ -123,16 +123,20 @@ export interface DesempenoModeloResponse {
   idModelo: number;
   versionAlgoritmo: string;
   fechaEntrenamiento: string;
-  precisionHistorica: number;
-  precisionActualCalculada: number;
-  errorPorcentualMedio: number;
-  nivelConfianzaPromedio: number;
+  precisionHistorica: number | null;
+  precisionActualCalculada: number | null;
+  errorPorcentualMedio: number | null;
+  nivelConfianzaPromedio: number | null;
+  mae?: number | null;
+  rmse?: number | null;
+  observacionesEvaluadas?: number;
+  observacionesMape?: number;
   totalProyeccionesEvaluadas: number;
   ingresosRealesAcumulados: number;
   egresosRealesAcumulados: number;
-  ultimaProyeccionIngreso: number;
-  ultimaProyeccionEgreso: number;
-  estadoSaludModelo: 'OPTIMO' | 'ACEPTABLE' | 'REQUIERE_REENTRENAMIENTO' | string;
+  ultimaProyeccionIngreso: number | null;
+  ultimaProyeccionEgreso: number | null;
+  estadoSaludModelo: 'EVALUADO' | 'SIN_DATOS' | string;
   mensajeValidacion: string;
   fechaValidacion: string;
 }
