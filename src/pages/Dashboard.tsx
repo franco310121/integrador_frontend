@@ -36,10 +36,10 @@ const dashboardStyles = `
   --fv-line: #e8e5f5;
   --fv-soft: #f7f7ff;
   color: var(--fv-ink);
-  background: radial-gradient(ellipse at 95% 0%, #ede9fc 0%, transparent 42%), #f7f7ff;
-  border: 1px solid #eeebfa;
-  border-radius: 28px;
-  padding: clamp(18px, 2.5vw, 32px);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
   isolation: isolate;
   min-width: 0;
 }
@@ -51,23 +51,11 @@ const dashboardStyles = `
 .finvora-dashboard .fv-hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(22px, 3vw, 36px);
-  border: 1px solid #ffffff;
-  border-radius: 24px;
-  background: linear-gradient(120deg, #ffffff 25%, #f0edff 100%);
-  box-shadow: 0 12px 34px rgba(39, 24, 126, .05);
-}
-.finvora-dashboard .fv-hero::after {
-  content: '';
-  position: absolute;
-  width: 240px;
-  height: 240px;
-  right: -60px;
-  top: -120px;
-  border: 36px solid rgba(95, 66, 224, .035);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: -1;
+  padding: 18px 20px;
+  border: 1px solid var(--fv-line);
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: none;
 }
 .finvora-dashboard .fv-eyebrow {
   color: #64548f;
@@ -88,23 +76,23 @@ const dashboardStyles = `
   background: var(--fv-primary) !important;
   border: 1px solid var(--fv-primary) !important;
   color: #ffffff !important;
-  border-radius: 12px;
-  padding: 13px 20px;
-  box-shadow: 0 5px 12px rgba(39, 24, 126, .16) !important;
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: none !important;
   white-space: nowrap;
   font-size: .85rem;
   font-weight: 600;
 }
-.finvora-dashboard .fv-primary-btn:hover { background: #38249f !important; transform: translateY(-1px); }
+.finvora-dashboard .fv-primary-btn:hover { background: #38249f !important; }
 .finvora-dashboard .card {
   background: #ffffff !important;
   color: var(--fv-ink);
   border: 1px solid var(--fv-line) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 8px 26px rgba(39, 24, 126, .045) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
   overflow: hidden;
 }
-.finvora-dashboard .fv-kpi { padding: 22px !important; }
+.finvora-dashboard .fv-kpi { padding: 16px !important; }
 .finvora-dashboard .fv-kpi-label {
   text-transform: none !important;
   font-size: .78rem !important;
@@ -182,6 +170,9 @@ const dashboardStyles = `
 .finvora-dashboard .fv-module-featured { background: #efebff !important; border-color: #dfd6ff !important; }
 .finvora-dashboard .fv-history-btn { color: var(--fv-primary) !important; font-size: .75rem; font-weight: 600; }
 .finvora-dashboard .fv-history-btn:hover { color: #6243bd !important; }
+.finvora-dashboard .fv-details { border: 1px solid var(--fv-line); border-radius: 12px; background: #fff; padding: 12px 16px; }
+.finvora-dashboard .fv-details > summary { cursor: pointer; color: var(--fv-primary); }
+.finvora-dashboard .fv-details > summary:focus-visible { outline: 3px solid #9b88df; outline-offset: 3px; }
 .finvora-dashboard .table {
   --bs-table-bg: #ffffff;
   --bs-table-color: var(--fv-ink);
@@ -212,8 +203,8 @@ const dashboardStyles = `
   box-shadow: none !important;
 }
 @media (max-width: 575.98px) {
-  .finvora-dashboard { border-radius: 20px; padding: 14px; }
-  .finvora-dashboard .fv-hero { padding: 22px 18px; }
+  .finvora-dashboard { padding: 0; }
+  .finvora-dashboard .fv-hero { padding: 16px; }
   .finvora-dashboard .fv-primary-btn { width: 100%; justify-content: center; }
   .finvora-dashboard .fv-hero-actions { width: 100%; }
   .finvora-dashboard .card-header, .finvora-dashboard .card-body { padding: 18px !important; }
@@ -322,10 +313,6 @@ export default function Dashboard() {
       <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4 fv-hero">
         <div className="d-flex flex-wrap align-items-center gap-2">
           <h1 className="h4 mb-0 fw-bold text-dark">Hola, {session?.displayName || session?.username}</h1>
-          <span className="badge badge-soft-primary px-2 py-1 rounded-pill">
-            <Sparkles size={12} className="me-1" />
-            {isAdmin() ? 'Administrador' : 'Ventas'}
-          </span>
         </div>
         <div className="d-flex flex-wrap gap-2 fv-hero-actions">
           <button
@@ -348,6 +335,15 @@ export default function Dashboard() {
       </div>
 
       <FinancialDashboard />
+      {!loading && !operationalError && (outStock.length > 0 || lowStock.length > 0) && (
+        <div className="alert alert-warning d-flex flex-wrap align-items-center justify-content-between gap-2" role="alert">
+          <span><strong>Inventario requiere atención:</strong> {outStock.length} productos sin existencias y {lowStock.length} con stock bajo.</span>
+          <button type="button" className="btn btn-sm btn-outline-dark" onClick={() => navigate('/productos')}>Revisar inventario</button>
+        </div>
+      )}
+      <details className="fv-details">
+        <summary className="fw-semibold">Ver ventas, inventario y actividad reciente</summary>
+        <div className="pt-3">
       <h2 className="h5 fw-bold mb-3">Ventas y mercadería</h2>
       {loading ? <Loader /> : operationalError ? <div className="alert alert-warning">No se pudieron actualizar ventas e inventario desde el servidor.</div> : <>
       {/* KPI Cards Grid */}
@@ -613,6 +609,8 @@ export default function Dashboard() {
         </div>
       </div>
       </>}
+        </div>
+      </details>
     </section>
   );
 }

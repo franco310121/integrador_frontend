@@ -50,7 +50,7 @@ export default function AppShell({ children }: AppShellProps) {
   return (
     <div
       className="finvora-app-shell d-flex w-100 min-vh-100"
-      style={{ backgroundColor: '#f7f7ff', color: '#19113e', colorScheme: 'light' }}
+      style={{ backgroundColor: '#fafaff', color: '#19113e', colorScheme: 'light' }}
     >
       <div
         className={`sidebar-backdrop ${sidebarOpen ? 'show' : ''}`}

@@ -1613,6 +1613,9 @@ function CashFlowForm({ userId }: { userId: string }) {
       {/* 4. GRÁFICOS Y ALERTAS VISUALES (Tarjetas tipo calendario sin texto repetitivo) */}
       {result && (
         <>
+          <details className="card p-3 mb-4 cf-details">
+            <summary className="fw-semibold text-primary">Ver evolución semanal o mensual</summary>
+            <div className="pt-3">
           <section className="card p-3 p-md-4 mb-4" aria-labelledby="projection-title">
             <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
               <div className="d-flex align-items-center gap-2">
@@ -1747,6 +1750,8 @@ function CashFlowForm({ userId }: { userId: string }) {
               </div>
             </div>
           </section>
+            </div>
+          </details>
 
           {/* Tarjetas visuales de fechas clave (sin bloques de texto repetitivos) */}
           <section className="card p-3 p-md-4 mb-4" aria-labelledby="alerts-title">

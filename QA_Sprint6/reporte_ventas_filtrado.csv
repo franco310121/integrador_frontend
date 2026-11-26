@@ -1,0 +1,2 @@
+Boleta,Cliente,Subtotal,IGV,Descuento,Total,Estado,Fecha,Vendedor
+"B-001","Cliente A",100,18,0,118,"completada","2026-11-25T10:00:00","QA"

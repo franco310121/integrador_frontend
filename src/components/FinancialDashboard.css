@@ -90,3 +90,6 @@
 .financial-dashboard .fd-table {
   font-size: 0.88rem;
 }
+.financial-dashboard .fd-details { border: 1px solid var(--border-color); border-radius: .75rem; padding: .75rem 1rem; background: #fff; }
+.financial-dashboard .fd-details > summary { cursor: pointer; color: var(--primary-color); }
+.financial-dashboard .fd-details > summary:focus-visible { outline: 3px solid #9b88df; outline-offset: 3px; }

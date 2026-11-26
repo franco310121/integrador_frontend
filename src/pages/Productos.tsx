@@ -4,7 +4,6 @@ import {
   Plus,
   Edit2,
   Trash2,
-  SlidersHorizontal,
   PackageCheck,
   AlertCircle,
   PackageX,
@@ -177,12 +176,12 @@ export default function Productos() {
 
   return (
     <>
-      <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
+      <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-3">
         <h1 className="h4 mb-0 fw-bold text-dark">Mis productos</h1>
         {isAdmin() && (
           <button
             type="button"
-            className="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm"
+            className="btn btn-primary d-inline-flex align-items-center gap-2"
             onClick={openNew}
           >
             <Plus size={16} />
@@ -199,7 +198,7 @@ export default function Productos() {
       )}
 
       {/* Filter Toolbar */}
-      <div className="card border-0 shadow-sm rounded-3 mb-4">
+      <div className="card rounded-3 mb-3">
         <div className="card-body p-3 d-flex flex-wrap gap-2.5 align-items-center">
           <div className="position-relative flex-grow-1" style={{ minWidth: 220, maxWidth: 320 }}>
             <Search size={16} className="position-absolute text-muted" style={{ top: '50%', transform: 'translateY(-50%)', left: 12 }} />
@@ -237,27 +236,23 @@ export default function Productos() {
           </div>
 
           <div className="ms-auto text-muted small fw-medium">
-            <SlidersHorizontal size={14} className="me-1" />
-            <span>{filtered.length} ítems encontrados</span>
+            <span>{filtered.length} productos</span>
           </div>
         </div>
       </div>
 
       {/* Table Card */}
-      <div className="card border-0 shadow-sm rounded-3">
+      <div className="card rounded-3">
         <div className="table-responsive">
-          <table className="table table-hover align-middle mb-0">
+          <table className="table table-hover align-middle mb-0 inventory-table">
             <thead className="table-light">
               <tr>
-                <th style={{ width: 80 }}>Código</th>
-                <th>SKU</th>
-                <th>Descripción del Ítem</th>
+                <th>Producto</th>
                 <th>Categoría</th>
-                <th className="text-end">Precio Venta</th>
-                {isAdmin() && <th className="text-end">Costo Compra</th>}
-                <th className="text-center">Existencias</th>
-                <th style={{ width: 140 }}>Condición</th>
-                {isAdmin() && <th className="text-end" style={{ width: 140 }}>Acciones</th>}
+                <th className="text-end">Precio</th>
+                {isAdmin() && <th className="text-end">Costo</th>}
+                <th className="text-center">Stock</th>
+                {isAdmin() && <th className="text-end" style={{ width: 90 }}>Acciones</th>}
               </tr>
             </thead>
             <tbody>
@@ -269,23 +264,15 @@ export default function Productos() {
 
                 return (
                   <tr key={p.id}>
-                    <td className="text-muted small">#{p.id}</td>
-                    <td className="text-muted small font-monospace">{p.sku || '—'}</td>
-                    <td className="fw-semibold small text-dark">{p.nombre}</td>
-                    <td className="small">
-                      <span className="badge bg-light text-secondary border px-2 py-1">
-                        {p.categorias?.nombre || 'General'}
-                      </span>
-                    </td>
+                    <td><div className="fw-semibold small text-dark">{p.nombre}</div><div className="text-muted small font-monospace">{p.sku || `#${p.id}`}</div></td>
+                    <td className="small text-muted">{p.categorias?.nombre || 'General'}</td>
                     <td className="fw-bold small text-end text-dark">{formatCurrency(Number(p.precio_venta || 0))}</td>
                     {isAdmin() && (
                       <td className="text-muted small text-end">{formatCurrency(Number(p.precio_compra || 0))}</td>
                     )}
-                    <td className="small text-center fw-semibold">{stock}</td>
-                    <td>
-                      <span className={`badge py-1 px-2.5 rounded-pill ${isOut ? 'badge-soft-danger' : isLow ? 'badge-soft-warning' : 'badge-soft-success'}`}>
-                        {isOut ? 'Agotado' : isLow ? 'Stock Crítico' : 'Disponible'}
-                      </span>
+                    <td className="small text-center">
+                      <strong className={isOut ? 'text-danger' : isLow ? 'text-warning' : ''}>{stock}</strong>
+                      {(isOut || isLow) && <span className={`d-block small ${isOut ? 'text-danger' : 'text-warning'}`}>{isOut ? 'Agotado' : 'Bajo'}</span>}
                     </td>
                     {isAdmin() && (
                       <td className="text-end">
@@ -314,7 +301,7 @@ export default function Productos() {
               })}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={isAdmin() ? 9 : 8} className="text-center text-muted py-5 small">
+                  <td colSpan={isAdmin() ? 6 : 4} className="text-center text-muted py-5 small">
                     <PackageX size={36} className="mx-auto mb-2 text-muted opacity-50 d-block" />
                     No se encontraron productos que coincidan con los criterios establecidos.
                   </td>
