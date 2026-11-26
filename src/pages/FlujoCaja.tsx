@@ -416,7 +416,7 @@ function CashFlowForm({ userId }: { userId: string }) {
           </button>
           <button
             type="button"
-            className="btn btn-outline-light btn-sm fw-semibold d-inline-flex align-items-center gap-2 px-3 py-2"
+            className="btn btn-outline-primary btn-sm fw-semibold d-inline-flex align-items-center gap-2 px-3 py-2"
             disabled={loadingProyIa}
             onClick={() => handleGenerarProyeccionIa('mensual')}
           >
