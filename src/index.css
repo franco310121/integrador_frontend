@@ -8,12 +8,12 @@
   --bs-body-bg-rgb: 250, 250, 255;
   --bs-emphasis-color: #19113e;
   --bs-emphasis-color-rgb: 25, 17, 62;
-  --bs-secondary-color: #727799;
-  --bs-secondary-color-rgb: 114, 119, 153;
+  --bs-secondary-color: #5c6285;
+  --bs-secondary-color-rgb: 92, 98, 133;
   --bs-secondary-bg: #f0ecff;
   --bs-secondary-bg-rgb: 240, 236, 255;
-  --bs-tertiary-color: #727799;
-  --bs-tertiary-color-rgb: 114, 119, 153;
+  --bs-tertiary-color: #5c6285;
+  --bs-tertiary-color-rgb: 92, 98, 133;
   --bs-tertiary-bg: #faf9ff;
   --bs-tertiary-bg-rgb: 250, 249, 255;
   --bs-border-color: #e8e5f5;
@@ -34,7 +34,7 @@
   --bg-card-subtle: #fbfbfe;
   --border-color: #e8e5f5;
   --text-main: #19113e;
-  --text-muted: #727799;
+  --text-muted: #5c6285;
   --primary-color: #27187e;
   --primary-hover: #201166;
   --primary-light: #eeebff;
@@ -275,10 +275,15 @@ html, body, #root { color-scheme: light; }
 .btn-outline-primary { --bs-btn-color: #27187e; --bs-btn-border-color: #27187e; --bs-btn-hover-bg: #27187e; --bs-btn-hover-border-color: #27187e; --bs-btn-hover-color: #ffffff; --bs-btn-active-bg: #201166; --bs-btn-active-border-color: #201166; --bs-btn-active-color: #ffffff; }
 .btn-outline-secondary { --bs-btn-color: #62557f; --bs-btn-border-color: #ddd7ee; --bs-btn-hover-bg: #eeebff; --bs-btn-hover-color: #27187e; --bs-btn-hover-border-color: #c7bbea; }
 .table { --bs-table-bg: #ffffff; --bs-table-color: #19113e; --bs-table-border-color: #e8e5f5; --bs-table-hover-bg: #f7f5ff; --bs-table-hover-color: #19113e; --bs-table-striped-bg: #faf9ff; --bs-table-striped-color: #19113e; }
-.table-light { --bs-table-bg: #f9f8ff; --bs-table-color: #727799; --bs-table-border-color: #e8e5f5; }
+.table-light { --bs-table-bg: #f9f8ff; --bs-table-color: #5c6285; --bs-table-border-color: #e8e5f5; }
 .list-group-item, .modal-content { background-color: #ffffff; color: #19113e; border-color: #e8e5f5; }
 .modal-header, .modal-footer { border-color: #e8e5f5; }
 .btn-close { filter: none !important; }
 @media (prefers-reduced-motion: reduce) {
   html, body, .card, .btn, .form-control, .form-select, .sidebar-backdrop, .app-sidebar { transition: none !important; }
 }
+
+/* Accessible foregrounds for semantic status text on light surfaces. */
+.text-success { color: #146c43 !important; }
+.text-danger { color: #b02a37 !important; }
+.text-warning { color: #795600 !important; }
